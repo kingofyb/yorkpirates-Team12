@@ -9,20 +9,11 @@ import com.engteam14.yorkpirates.HealthBar;
 
 public class College extends GameObject {
 
-    public College(Array<Texture> frames, float fps){
-        super(frames, fps);
-    }
-
-    public College(Array<Texture> frames, float fps, int x, int y){
-        super(frames, fps, x, y);
-    }
-
-    public College(Array<Texture> frames, float fps, int x, int y, int width, int height){
+    public College(Array<Texture> frames, float fps, float x, float y, float width, float height, String name){
         super(frames, fps, x, y, width, height);
     }
 
     public void update(){
-
     }
 
 }
