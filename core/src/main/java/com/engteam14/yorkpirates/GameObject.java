@@ -9,8 +9,8 @@ import com.badlogic.gdx.utils.Array;
 public abstract class GameObject {
     Texture sprite;
     Animation<Texture> anim;
-    int x;
-    int y;
+    float x;
+    float y;
     int width;
     int height;
 
@@ -41,9 +41,9 @@ public abstract class GameObject {
         this.height = height;
     }
 
-    void move(int x, int y){
-        x += x * Gdx.graphics.getDeltaTime();
-        y += y * Gdx.graphics.getDeltaTime();
+    void move(float x, float y){
+        this.x += x * Gdx.graphics.getDeltaTime();
+        this.y += y * Gdx.graphics.getDeltaTime();
     }
 
     void draw(SpriteBatch batch, float elapsedTime){
