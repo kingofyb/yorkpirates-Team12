@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -15,9 +17,12 @@ public class GameScreen extends ScreenAdapter {
     Texture map;
 
     float elapsedTime = 0;
+    Vector3 followPos;
+    boolean followPlayer = false;
 
     public GameScreen(YorkPirates game){
         this.game = game;
+        followPos = game.camera.position;
         Array<Texture> sprites = new Array<Texture>();
         sprites.add(new Texture("boat1.png"), new Texture("boat2.png"));
         player = new Player(sprites, 2, (int)(game.camera.viewportWidth/2), (int)(game.camera.viewportHeight/2));
@@ -38,7 +43,11 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void update(){
-        player.update();
+        player.update(this, game.camera);
+        if(followPlayer) followPos = new Vector3(player.x + player.camdiff.x, player.y + player.camdiff.y, 0);
+        if(Math.abs(game.camera.position.x - followPos.x) > 10f || Math.abs(game.camera.position.y - followPos.y) > 10f){
+            game.camera.position.slerp(followPos, 0.013f);
+        }
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
             game.setScreen(new TitleScreen(game));
         }
