@@ -1,10 +1,13 @@
 package com.engteam14.yorkpirates;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -93,7 +96,7 @@ public class GameScreen extends ScreenAdapter {
         // Start drawing HUD
         HUDBatch.begin();
         game.font.draw(HUDBatch, points.GetString(), HUDCam.viewportHeight-HUDCam.viewportHeight*0.98f, HUDCam.viewportHeight*0.98f);
-        game.font.draw(HUDBatch, loot.GetString(), HUDCam.viewportWidth-(HUDCam.viewportHeight-HUDCam.viewportHeight*0.98f), HUDCam.viewportHeight*0.98f, 1f, 150, true);
+        game.font.draw(HUDBatch, loot.GetString(), HUDCam.viewportWidth-(HUDCam.viewportHeight-HUDCam.viewportHeight*0.98f), HUDCam.viewportHeight*0.98f, 1f, Align.right, true);
         HUDBatch.end();
         // End drawing HUD
     }
@@ -113,6 +116,13 @@ public class GameScreen extends ScreenAdapter {
         if(followPlayer) followPos = new Vector3(player.x, player.y, 0);
         if(Math.abs(game.camera.position.x - followPos.x) > 1f || Math.abs(game.camera.position.y - followPos.y) > 1f){
             game.camera.position.slerp(followPos, 0.1f);
+        }
+
+        // Temporary shortcut to endscreen
+        if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
+            game.setScreen(new EndScreen(game, elapsedTime, points, loot, true));
+        } else if(Gdx.input.isKeyPressed(Input.Keys.DEL)){
+            game.setScreen(new EndScreen(game, elapsedTime, points, loot, false));
         }
     }
 
