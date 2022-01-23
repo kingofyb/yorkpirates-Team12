@@ -13,34 +13,46 @@ public class GameScreen extends ScreenAdapter {
     public Player player;
     public ScoreManager points;
     public ScoreManager loot;
-    private GameObject testCollider;
-    private Array<College> colleges;
+    private final GameObject testCollider;
+    private final Array<College> colleges;
 
-    private SpriteBatch HUDBatch;
-    private OrthographicCamera HUDCam;
-    private Texture map;
+    private final SpriteBatch HUDBatch;
+    private final OrthographicCamera HUDCam;
+    private final Texture map;
 
     private float elapsedTime = 0;
     private Vector3 followPos;
     public boolean followPlayer = false;
 
+    /**
+     *  Initialises the main game screen, as well as relevant entities and data.
+     * @param game  Passes in the base game class for reference.
+     */
     public GameScreen(YorkPirates game){
         this.game = game;
         followPos = game.camera.position;
 
+        // Initialise HUD
         HUDBatch = new SpriteBatch();
         HUDCam = new OrthographicCamera();
         HUDCam.setToOrtho(false, game.camera.viewportWidth, game.camera.viewportHeight);
 
+        // Initialise points and loot managers
         points = new ScoreManager();
         loot = new ScoreManager();
 
+        // Initialise sprites array to be used generating GameObjects
         Array<Texture> sprites = new Array<>();
+
+        // Initialise player
         sprites.add(new Texture("boat1.png"), new Texture("boat2.png"));
         player = new Player(sprites, 2, game.camera.viewportWidth/2, game.camera.viewportHeight/2);
-        map = new Texture("testback.png");
         sprites.clear();
 
+        // Initialise map texture
+        map = new Texture("testback.png");
+
+        // Initialise colleges
         sprites.add(new Texture("tempCollege.png"));
         colleges = new Array<>(5);
         colleges.add(new College(sprites, 0, player.x+100f, player.y,20f, 40f, "testZero"));
@@ -50,10 +62,15 @@ public class GameScreen extends ScreenAdapter {
         colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "testFour"));
         sprites.clear();
 
+        // Temporary collidable GameObject for testing purposes
         sprites.add(new Texture("collider.png"));
         testCollider = new GameObject(sprites, 0, player.x+20f, player.y+30f, 40f, 20f);
     }
 
+    /**
+     *  Is called once every frame. Runs update(), renders the game and then the HUD.
+     * @param delta The time passed since the previously rendered frame.
+     */
     @Override
     public void render(float delta){
         elapsedTime += delta;
@@ -68,7 +85,7 @@ public class GameScreen extends ScreenAdapter {
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).draw(game.batch, 0);
         }
-        player.draw(game.batch, elapsedTime); // Player is last entity, only HUD drawn over them
+        player.draw(game.batch, elapsedTime); // Player is last entity, all else drawn before them
         game.batch.end();
         // End drawing batch
         HUDCam.update();
@@ -81,20 +98,30 @@ public class GameScreen extends ScreenAdapter {
         // End drawing HUD
     }
 
+    /**
+     *  Is called once every frame. Used for game calculations that take place before rendering.
+     */
     private void update(){
+        // Call update for every individual object
         player.update(this, game.camera);
         testCollider.update(this, game.camera);
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).update(this, game.camera);
         }
+
+        // Camera calculations based on player movement
         if(followPlayer) followPos = new Vector3(player.x, player.y, 0);
         if(Math.abs(game.camera.position.x - followPos.x) > 1f || Math.abs(game.camera.position.y - followPos.y) > 1f){
             game.camera.position.slerp(followPos, 0.1f);
         }
     }
 
+    /**
+     *  Disposes of disposables when game finishes execution.
+     */
     @Override
     public void dispose(){
-
+        HUDBatch.dispose();
+        map.dispose();
     }
 }
