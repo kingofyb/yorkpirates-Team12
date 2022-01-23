@@ -51,7 +51,7 @@ public class Player extends GameObject {
 
     private void ProcessCamera(GameScreen screen, OrthographicCamera camera) {
         camdiff = new Vector2(x - camera.position.x, y - camera.position.y);
-        if (Math.abs(camdiff.x) > camera.viewportWidth/2*0.4 || Math.abs(camdiff.y) > camera.viewportHeight/2*0.05){
+        if (Math.abs(camdiff.x) > camera.viewportWidth/2*0.1 || Math.abs(camdiff.y) > camera.viewportWidth/2*0.1){
                 screen.followPlayer = true;
         } else  screen.followPlayer = false;
     }

@@ -70,9 +70,9 @@ public class GameScreen extends ScreenAdapter {
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).update(this, game.camera);
         }
-        if(followPlayer) followPos = new Vector3(player.x + player.camdiff.x, player.y + player.camdiff.y, 0);
-        if(Math.abs(game.camera.position.x - followPos.x) > 10f || Math.abs(game.camera.position.y - followPos.y) > 10f){
-            game.camera.position.slerp(followPos, 0.013f);
+        if(followPlayer) followPos = new Vector3(player.x, player.y, 0);
+        if(Math.abs(game.camera.position.x - followPos.x) > 1f || Math.abs(game.camera.position.y - followPos.y) > 1f){
+            game.camera.position.slerp(followPos, 0.1f);
         }
     }
 
