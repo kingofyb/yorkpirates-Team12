@@ -1,30 +1,39 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen extends ScreenAdapter {
-    YorkPirates game;
-    Player player;
-    GameObject testCollider;
-    Array<College> colleges;
+    public YorkPirates game;
+    public Player player;
+    public ScoreManager points;
+    public ScoreManager loot;
+    private GameObject testCollider;
+    private Array<College> colleges;
 
-    Texture map;
+    private SpriteBatch HUDBatch;
+    private OrthographicCamera HUDCam;
+    private Texture map;
 
-    float elapsedTime = 0;
-    Vector3 followPos;
-    boolean followPlayer = false;
+    private float elapsedTime = 0;
+    private Vector3 followPos;
+    public boolean followPlayer = false;
 
     public GameScreen(YorkPirates game){
         this.game = game;
         followPos = game.camera.position;
+
+        HUDBatch = new SpriteBatch();
+        HUDCam = new OrthographicCamera();
+        HUDCam.setToOrtho(false, game.camera.viewportWidth, game.camera.viewportHeight);
+
+        points = new ScoreManager();
+        loot = new ScoreManager();
 
         Array<Texture> sprites = new Array<>();
         sprites.add(new Texture("boat1.png"), new Texture("boat2.png"));
@@ -59,9 +68,17 @@ public class GameScreen extends ScreenAdapter {
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).draw(game.batch, 0);
         }
-        player.draw(game.batch, elapsedTime); // Draw player last so over everything
+        player.draw(game.batch, elapsedTime); // Player is last entity, only HUD drawn over them
         game.batch.end();
         // End drawing batch
+        HUDCam.update();
+        HUDBatch.setProjectionMatrix(HUDCam.combined);
+        // Start drawing HUD
+        HUDBatch.begin();
+        game.font.draw(HUDBatch, points.GetString(), HUDCam.viewportHeight-HUDCam.viewportHeight*0.98f, HUDCam.viewportHeight*0.98f);
+        game.font.draw(HUDBatch, loot.GetString(), HUDCam.viewportWidth-(HUDCam.viewportHeight-HUDCam.viewportHeight*0.98f), HUDCam.viewportHeight*0.98f, 1f, 150, true);
+        HUDBatch.end();
+        // End drawing HUD
     }
 
     private void update(){

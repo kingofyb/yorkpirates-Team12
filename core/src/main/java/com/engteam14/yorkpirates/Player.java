@@ -7,26 +7,34 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 
 public class Player extends GameObject {
+
+    public static final int POINT_FREQ = 1000;
+    public static final double CAMERA_SLACK = 0.1;
 
     public Vector2 camdiff;
     private Vector2 oldpos;
     private float speed = 70f;
-    private boolean moving = false;
+    private long lastMovementScore;
     private int lastxdir;
     private int lastydir;
+    private boolean moving = false;
 
     public Player(Array<Texture> frames, float fps){
         super(frames, fps);
+        lastMovementScore = 0;
     }
 
     public Player(Array<Texture> frames, float fps, float x, float y){
         super(frames, fps, x, y);
+        lastMovementScore = 0;
     }
 
     public Player(Array<Texture> frames, float fps, float x, float y, float width, float height){
         super(frames, fps, x, y, width, height);
+        lastMovementScore = 0;
     }
 
     @Override
@@ -40,6 +48,10 @@ public class Player extends GameObject {
         if (horizontal != 0 || vertical != 0){
             move(speed*horizontal, speed*vertical);
             updateHitboxPos();
+            if (TimeUtils.timeSinceMillis(lastMovementScore) > POINT_FREQ){
+                lastMovementScore = TimeUtils.millis();
+                screen.points.Add(1);
+            }
             lastxdir = horizontal;
             lastydir = vertical;
             moving = true;
@@ -51,7 +63,7 @@ public class Player extends GameObject {
 
     private void ProcessCamera(GameScreen screen, OrthographicCamera camera) {
         camdiff = new Vector2(x - camera.position.x, y - camera.position.y);
-        if (Math.abs(camdiff.x) > camera.viewportWidth/2*0.1 || Math.abs(camdiff.y) > camera.viewportWidth/2*0.1){
+        if (Math.abs(camdiff.x) > camera.viewportWidth/2*CAMERA_SLACK || Math.abs(camdiff.y) > camera.viewportWidth/2*CAMERA_SLACK){
                 screen.followPlayer = true;
         } else  screen.followPlayer = false;
     }
