@@ -50,8 +50,8 @@ public class Player extends GameObject {
      * @param fps       The number of frames to be displayed per second.
      * @param x         The x coordinate within the map to initialise the object at.
      * @param y         The y coordinate within the map to initialise the object at.
-     * @param width     The size of the object in the x axis.
-     * @param height    The size of the object in the y axis.
+     * @param width     The size of the object in the x-axis.
+     * @param height    The size of the object in the y-axis.
      */
     public Player(Array<Texture> frames, float fps, float x, float y, float width, float height){
         super(frames, fps, x, y, width, height);
@@ -94,9 +94,7 @@ public class Player extends GameObject {
      */
     private void ProcessCamera(GameScreen screen, OrthographicCamera camera) {
         camdiff = new Vector2(x - camera.position.x, y - camera.position.y);
-        if (Math.abs(camdiff.x) > camera.viewportWidth/2*CAMERA_SLACK || Math.abs(camdiff.y) > camera.viewportWidth/2*CAMERA_SLACK){
-                screen.followPlayer = true;
-        } else  screen.followPlayer = false;
+        screen.followPlayer = Math.abs(camdiff.x) > camera.viewportWidth / 2 * CAMERA_SLACK || Math.abs(camdiff.y) > camera.viewportWidth / 2 * CAMERA_SLACK;
     }
 
     /**

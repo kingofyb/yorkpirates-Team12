@@ -25,7 +25,7 @@ public class GameObject {
      */
     public GameObject(Array<Texture> frames, float fps){
         sprite = frames.get(0);
-        anim = new Animation<Texture>(fps==0?0:(1f/fps), frames);
+        anim = new Animation<>(fps==0?0:(1f/fps), frames);
         x = 0;
         y = 0;
         width = sprite.getWidth();
@@ -42,7 +42,7 @@ public class GameObject {
      */
     public GameObject(Array<Texture> frames, float fps, float x, float y){
         sprite = frames.get(0);
-        anim = new Animation<Texture>(fps==0?0:(1f/fps), frames);
+        anim = new Animation<>(fps==0?0:(1f/fps), frames);
         this.x = x;
         this.y = y;
         width = sprite.getWidth();
@@ -56,12 +56,12 @@ public class GameObject {
      * @param fps       The number of frames to be displayed per second.
      * @param x         The x coordinate within the map to initialise the object at.
      * @param y         The y coordinate within the map to initialise the object at.
-     * @param width     The size of the object in the x axis.
-     * @param height    The size of the object in the y axis.
+     * @param width     The size of the object in the x-axis.
+     * @param height    The size of the object in the y-axis.
      */
     public GameObject(Array<Texture> frames, float fps, float x, float y, float width, float height){
         sprite = frames.get(0);
-        anim = new Animation<Texture>(fps==0?0:(1f/fps), frames);
+        anim = new Animation<>(fps==0?0:(1f/fps), frames);
         this.x = x;
         this.y = y;
         this.width = width;
@@ -70,9 +70,9 @@ public class GameObject {
     }
 
     /**
-     *  Moves the object within the x and y axis of the game world.
-     * @param x     The amount to move the object within the x axis.
-     * @param y     The amount to move the object within the y axis.
+     *  Moves the object within the x and y-axis of the game world.
+     * @param x     The amount to move the object within the x-axis.
+     * @param y     The amount to move the object within the y-axis.
      */
     void move(float x, float y){
         this.x += x * Gdx.graphics.getDeltaTime();
