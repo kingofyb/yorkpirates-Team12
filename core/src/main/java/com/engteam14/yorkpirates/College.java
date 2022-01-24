@@ -26,4 +26,7 @@ public class College extends GameObject {
     public void update(){
     }
 
+    public void hit(){
+
+    }
 }

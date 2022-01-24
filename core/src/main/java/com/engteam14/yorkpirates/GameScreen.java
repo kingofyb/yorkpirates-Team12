@@ -17,7 +17,8 @@ public class GameScreen extends ScreenAdapter {
     public ScoreManager points;
     public ScoreManager loot;
     private final GameObject testCollider;
-    private final Array<College> colleges;
+    public Array<College> colleges;
+    private Array<Projectile> projectiles;
 
     private final SpriteBatch HUDBatch;
     private final OrthographicCamera HUDCam;
@@ -44,6 +45,9 @@ public class GameScreen extends ScreenAdapter {
         points = new ScoreManager();
         loot = new ScoreManager();
 
+        // Initialise projectiles array to be used storing live projectiles
+        projectiles = new Array<>();
+
         // Initialise sprites array to be used generating GameObjects
         Array<Texture> sprites = new Array<>();
 
@@ -65,7 +69,7 @@ public class GameScreen extends ScreenAdapter {
         colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "testFour"));
         sprites.clear();
 
-        // Temporary collidable GameObject for testing purposes
+        // Temporary collide-able GameObject for testing purposes
         sprites.add(new Texture("collider.png"));
         testCollider = new GameObject(sprites, 0, player.x+20f, player.y+30f, 40f, 20f);
     }
@@ -87,6 +91,9 @@ public class GameScreen extends ScreenAdapter {
         testCollider.draw(game.batch, 0);
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).draw(game.batch, 0);
+        }
+        for(int i = 0; i < projectiles.size; i++) {
+            projectiles.get(i).draw(game.batch, 0);
         }
         player.draw(game.batch, elapsedTime); // Player is last entity, all else drawn before them
         game.batch.end();
@@ -110,6 +117,16 @@ public class GameScreen extends ScreenAdapter {
         testCollider.update(this, game.camera);
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).update(this, game.camera);
+        }
+
+        // Check for projectile creation, then call projectile update
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            Array<Texture> sprites = new Array<>();
+            sprites.add(new Texture("tempProjectile.png"));
+            projectiles.add(new Projectile(sprites, 0, player.x, player.y,Gdx.input.getX(), Gdx.input.getY()));
+        }
+        for(int i = 0; i < projectiles.size; i++) {
+            projectiles.get(i).update(this, game.camera);
         }
 
         // Camera calculations based on player movement
