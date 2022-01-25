@@ -105,16 +105,20 @@ public class Player extends GameObject {
     @Override
     public void draw(SpriteBatch batch, float elapsedTime){
         Texture frame = sprite;
-        float rx = x - width/2;
-        float rw = width;
         if (moving) {
             frame = anim.getKeyFrame(elapsedTime, true);
         }
-        if (lastxdir < 0 || (lastydir < 0 && lastxdir <= 0)){
-            rx += width;
-            rw = -rw;
-        }
-        batch.draw(frame, rx, y - height/2, rw, height);
+        float rotation = 0f;
+        if      (lastxdir == 1 && lastydir == 1)    rotation = 45f;
+        else if (lastxdir == 0 && lastydir == 1)    rotation = 90f;
+        else if (lastxdir == -1 && lastydir == 1)   rotation = 135f;
+        else if (lastxdir == -1 && lastydir == 0)   rotation = 180f;
+        else if (lastxdir == -1 && lastydir == -1)  rotation = 225f;
+        else if (lastxdir == 0 && lastydir == -1)   rotation = 270f;
+        else if (lastxdir == 1 && lastydir == -1)   rotation = 315f;
+
+        //batch.draw(frame, x - width/2, y - height/2, width, height);
+        batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
     }
 
     /**
