@@ -26,11 +26,10 @@ public class GameScreen extends ScreenAdapter {
 
     private float elapsedTime = 0;
     private Vector3 followPos;
-    public float elapsedTime = 0;
     public boolean followPlayer = false;
 
     /**
-     *  Initialises the main game screen, as well as relevant entities and data.
+     * Initialises the main game screen, as well as relevant entities and data.
      * @param game  Passes in the base game class for reference.
      */
     public GameScreen(YorkPirates game){
@@ -76,7 +75,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     /**
-     *  Is called once every frame. Runs update(), renders the game and then the HUD.
+     * Is called once every frame. Runs update(), renders the game and then the HUD.
      * @param delta The time passed since the previously rendered frame.
      */
     @Override
@@ -110,7 +109,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     /**
-     *  Is called once every frame. Used for game calculations that take place before rendering.
+     * Is called once every frame. Used for game calculations that take place before rendering.
      */
     private void update(){
         // Call update for every individual object
@@ -146,7 +145,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     /**
-     *  Disposes of disposables when game finishes execution.
+     * Disposes of disposables when game finishes execution.
      */
     @Override
     public void dispose(){
