@@ -16,6 +16,7 @@ public class Projectile extends GameObject{
     private final float dx;
     private final float dy;
     private static final float SPEED = 150f; // Projectile movement speed.
+    private static final float DAMAGE = 20f; // Projectile damage.
 
     /**
      * Generates a projectile object within the game with animated frame(s) and a hitbox.
@@ -52,7 +53,7 @@ public class Projectile extends GameObject{
 
         for(int i = 0; i < screen.colleges.size; i++) {
             if (overlaps(screen.colleges.get(i).hitbox)){
-                screen.colleges.get(i).hit();
+                screen.colleges.get(i).hit(screen,DAMAGE);
                 destroy(screen);
             }
         }
