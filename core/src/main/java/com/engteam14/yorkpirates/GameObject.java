@@ -19,7 +19,7 @@ public class GameObject {
     float height;
 
     /**
-     *  Generates a generic object within the game with animated frame(s) and a hitbox.
+     * Generates a generic object within the game with animated frame(s) and a hitbox.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
      */
@@ -34,7 +34,7 @@ public class GameObject {
     }
 
     /**
-     *  Generates a generic object within the game with animated frame(s) and a hitbox.
+     * Generates a generic object within the game with animated frame(s) and a hitbox.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
      * @param x         The x coordinate within the map to initialise the object at.
@@ -51,7 +51,7 @@ public class GameObject {
     }
 
     /**
-     *  Generates a generic object within the game with animated frame(s) and a hitbox.
+     * Generates a generic object within the game with animated frame(s) and a hitbox.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
      * @param x         The x coordinate within the map to initialise the object at.
@@ -70,7 +70,7 @@ public class GameObject {
     }
 
     /**
-     *  Moves the object within the x and y-axis of the game world.
+     * Moves the object within the x and y-axis of the game world.
      * @param x     The amount to move the object within the x-axis.
      * @param y     The amount to move the object within the y-axis.
      */
@@ -80,7 +80,7 @@ public class GameObject {
     }
 
     /**
-     *  Sets the object's hitbox, based upon it's x, y, width and height values.
+     * Sets the object's hitbox, based upon it's x, y, width and height values.
      */
     private void setHitbox(){
         hitbox = new Rectangle();
@@ -90,7 +90,7 @@ public class GameObject {
     }
 
     /**
-     *  Updates the object's hitbox location to match the object's rendered location.
+     * Updates the object's hitbox location to match the object's rendered location.
      */
     void updateHitboxPos() {
         hitbox.x = x - width/2;
@@ -98,9 +98,9 @@ public class GameObject {
     }
 
     /**
-     *  Checks if this object overlaps with another.
+     * Checks if this object overlaps with another.
      * @param rect  The other object to be checked against.
-     * @return      True if overlapping, false overwise.
+     * @return      True if overlapping, false otherwise.
      */
     public boolean overlaps(Rectangle rect){
         updateHitboxPos();
@@ -108,7 +108,7 @@ public class GameObject {
     }
 
     /**
-     *  Called once per frame. Used to perform calculations such as collision.
+     * Called once per frame. Used to perform calculations such as collision.
      * @param screen    The main game screen.
      * @param camera    The player camera.
      */
@@ -119,7 +119,7 @@ public class GameObject {
     }
 
     /**
-     *  Called when drawing the object.
+     * Called when drawing the object.
      * @param batch         The batch to draw the object within.
      * @param elapsedTime   The current time the game has been running for.
      */

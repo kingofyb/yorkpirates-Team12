@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.engteam14.yorkpirates.HealthBar;
 
@@ -12,10 +13,9 @@ public class College extends GameObject {
 
     private int collegeHealth;
     private HealthBar collegeBar;
-    public boolean enemy;
 
     private final String collegeName;
-    private static final int collegeMaxHealth = 200;
+    public static final int collegeMaxHealth = 200;
     private static final int pointsGained = 50;
     private static final int lootGained = 15;
 
@@ -28,15 +28,20 @@ public class College extends GameObject {
      * @param width     The size of the object in the x-axis.
      * @param height    The size of the object in the y-axis.
      * @param name      The name of the college.
-     * @param foe       Boolean determining whether college is an enemy.
+     * @param enemy     Boolean determining whether college is an enemy.
      */
-    public College(Array<Texture> frames, float fps, float x, float y, float width, float height, String name, boolean foe){
+    public College(Array<Texture> frames, float fps, float x, float y, float width, float height, String name, boolean enemy){
         super(frames, fps, x, y, width, height);
         collegeName = name;
         collegeHealth = collegeMaxHealth;
 
-        enemy = foe;
-        collegeBar = new HealthBar(enemy,collegeMaxHealth,collegeHealth,collegeName);
+        Array<Texture> sprites = new Array<>();
+        if(enemy){
+            sprites.add(new Texture("enemyHealthBar.png"));
+        }else{
+            sprites.add(new Texture("allyHealthBar.png"));
+        }
+        collegeBar = new HealthBar(this,sprites);
     }
 
     /**
@@ -46,7 +51,7 @@ public class College extends GameObject {
     public void hit(GameScreen screen, float damage){
         collegeHealth -= damage;
         if(collegeHealth > 0){
-            collegeBar.update(collegeHealth);
+            collegeBar.resize(collegeHealth);
         }else{
             screen.points.Add(pointsGained);
             screen.loot.Add(lootGained);
@@ -55,7 +60,22 @@ public class College extends GameObject {
         }
     }
 
+    /**
+     * Called when the college needs to be destroyed.
+     * @param screen    The main game screen.
+     */
     private void destroy(GameScreen screen){
         screen.colleges.removeValue(this,true);
+    }
+
+    /**
+     * Called when drawing the object.
+     * @param batch         The batch to draw the object within.
+     * @param elapsedTime   The current time the game has been running for.
+     */
+    @Override
+    public void draw(SpriteBatch batch, float elapsedTime){
+        batch.draw(anim.getKeyFrame(elapsedTime, true), x - width/2, y - height/2, width, height);
+        collegeBar.draw(batch, 0);
     }
 }
