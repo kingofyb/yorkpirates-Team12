@@ -18,7 +18,7 @@ public class GameScreen extends ScreenAdapter {
     public ScoreManager loot;
     private final GameObject testCollider;
     public Array<College> colleges;
-    private Array<Projectile> projectiles;
+    public Array<Projectile> projectiles;
 
     private final SpriteBatch HUDBatch;
     private final OrthographicCamera HUDCam;
@@ -120,12 +120,13 @@ public class GameScreen extends ScreenAdapter {
         }
 
         // Check for projectile creation, then call projectile update
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.X)){
             Array<Texture> sprites = new Array<>();
             sprites.add(new Texture("tempProjectile.png"));
-            projectiles.add(new Projectile(sprites, 0, player.x, player.y,Gdx.input.getX(), Gdx.input.getY()));
+            Vector3 mousePos = game.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+            projectiles.add(new Projectile(sprites, 0, player.x, player.y, mousePos.x, mousePos.y, game));
         }
-        for(int i = 0; i < projectiles.size; i++) {
+        for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this, game.camera);
         }
 
