@@ -26,6 +26,7 @@ public class GameScreen extends ScreenAdapter {
 
     private float elapsedTime = 0;
     private Vector3 followPos;
+    public float elapsedTime = 0;
     public boolean followPlayer = false;
 
     /**
@@ -53,7 +54,7 @@ public class GameScreen extends ScreenAdapter {
 
         // Initialise player
         sprites.add(new Texture("boat1.png"), new Texture("boat2.png"));
-        player = new Player(sprites, 2, game.camera.viewportWidth/2, game.camera.viewportHeight/2);
+        player = new Player(sprites, 2, game.camera.viewportWidth/2, game.camera.viewportHeight/2, 34, 16);
         sprites.clear();
 
         // Initialise map texture
