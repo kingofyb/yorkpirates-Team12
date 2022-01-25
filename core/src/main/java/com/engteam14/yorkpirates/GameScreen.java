@@ -18,7 +18,7 @@ public class GameScreen extends ScreenAdapter {
     public ScoreManager loot;
     private final GameObject testCollider;
     public Array<College> colleges;
-    private Array<Projectile> projectiles;
+    public Array<Projectile> projectiles;
 
     private final SpriteBatch HUDBatch;
     private final OrthographicCamera HUDCam;
@@ -63,11 +63,11 @@ public class GameScreen extends ScreenAdapter {
         // Initialise colleges
         sprites.add(new Texture("tempCollege.png"));
         colleges = new Array<>(5);
-        colleges.add(new College(sprites, 0, player.x+100f, player.y,20f, 40f, "testZero"));
-        colleges.add(new College(sprites, 0, player.x+50f, player.y-50f,20f, 40f, "testOne"));
-        colleges.add(new College(sprites, 0, player.x+100f, player.y+50f,20f, 40f, "testTwo"));
-        colleges.add(new College(sprites, 0, player.x+50f, player.y+50f,20f, 40f, "testThree"));
-        colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "testFour"));
+        colleges.add(new College(sprites, 0, player.x+100f, player.y,20f, 40f, "testZero",true));
+        colleges.add(new College(sprites, 0, player.x+50f, player.y-50f,20f, 40f, "testOne",true));
+        colleges.add(new College(sprites, 0, player.x+100f, player.y+50f,20f, 40f, "testTwo",true));
+        colleges.add(new College(sprites, 0, player.x+50f, player.y+50f,20f, 40f, "testThree",true));
+        colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "testFour",true));
         sprites.clear();
 
         // Temporary collide-able GameObject for testing purposes
@@ -121,12 +121,13 @@ public class GameScreen extends ScreenAdapter {
         }
 
         // Check for projectile creation, then call projectile update
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.X)){
             Array<Texture> sprites = new Array<>();
             sprites.add(new Texture("tempProjectile.png"));
-            projectiles.add(new Projectile(sprites, 0, player.x, player.y,Gdx.input.getX(), Gdx.input.getY()));
+            Vector3 mousePos = game.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
+            projectiles.add(new Projectile(sprites, 0, player.x, player.y, mousePos.x, mousePos.y, game));
         }
-        for(int i = 0; i < projectiles.size; i++) {
+        for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this, game.camera);
         }
 
