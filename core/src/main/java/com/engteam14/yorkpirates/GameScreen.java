@@ -65,11 +65,11 @@ public class GameScreen extends ScreenAdapter {
         // Initialise colleges
         sprites.add(new Texture("tempCollege.png"));
         colleges = new Array<>();
-        colleges.add(new College(sprites, 0, player.x+100f, player.y,20f, 40f, "testZero",player,enemyTeam));
-        colleges.add(new College(sprites, 0, player.x+50f, player.y-50f,20f, 40f, "testOne",player,enemyTeam));
-        colleges.add(new College(sprites, 0, player.x+100f, player.y+50f,20f, 40f, "testTwo",player,enemyTeam));
-        colleges.add(new College(sprites, 0, player.x+50f, player.y+50f,20f, 40f, "testThree",player,enemyTeam));
-        colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "testFour",player,playerTeam));
+        colleges.add(new College(sprites, 0, player.x+100f, player.y,20f, 40f, "testZero",enemyTeam));
+        colleges.add(new College(sprites, 0, player.x+50f, player.y-50f,20f, 40f, "testOne",enemyTeam));
+        colleges.add(new College(sprites, 0, player.x+100f, player.y+50f,20f, 40f, "testTwo",enemyTeam));
+        colleges.add(new College(sprites, 0, player.x+50f, player.y+50f,20f, 40f, "testThree",enemyTeam));
+        colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "testFour",playerTeam));
         sprites.clear();
 
         // Temporary collide-able GameObject for testing purposes
@@ -127,7 +127,7 @@ public class GameScreen extends ScreenAdapter {
             Array<Texture> sprites = new Array<>();
             sprites.add(new Texture("tempProjectile.png"));
             Vector3 mousePos = game.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-            projectiles.add(new Projectile(sprites, 0, player.x, player.y, mousePos.x, mousePos.y, playerTeam));
+            projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
         }
         for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this, game.camera);

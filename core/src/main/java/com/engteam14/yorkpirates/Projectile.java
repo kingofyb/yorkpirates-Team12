@@ -5,8 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.max;
+import static java.lang.Math.*;
 
 public class Projectile extends GameObject{
 
@@ -22,20 +21,21 @@ public class Projectile extends GameObject{
      * Generates a projectile object within the game with animated frame(s) and a hitbox.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
-     * @param start_x   The x coordinate within the map to initialise the object at.
-     * @param start_y   The y coordinate within the map to initialise the object at.
+     * @param origin    The object which the projectile originates from.
      * @param goal_x    The x coordinate within the map the object is moving towards.
      * @param goal_y    The y coordinate within the map the object is moving towards.
      * @param team      The team of the projectile.
      */
-    public Projectile(Array<Texture> frames, float fps, float start_x, float start_y, float goal_x, float goal_y, String team) {
-        super(frames, fps, start_x, start_y,5f,5f,team);
+    public Projectile(Array<Texture> frames, float fps, GameObject origin, float goal_x, float goal_y, String team) {
+        super(frames, fps, origin.x, origin.y, 5f,5f,team);
 
-        float changeInX = goal_x - start_x;
-        float changeInY = goal_y - start_y;
+        float changeInX = goal_x - origin.x;
+        float changeInY = goal_y - origin.y;
         float scaleFactor = max(abs(changeInX),abs(changeInY));
         dx = changeInX / scaleFactor;
         dy = changeInY / scaleFactor;
+
+        move(origin.hitbox.width * dx, origin.hitbox.height * dy);
 
         distanceTravelled = 0;
                 //max(game.camera.viewportWidth, game.camera.viewportHeight);

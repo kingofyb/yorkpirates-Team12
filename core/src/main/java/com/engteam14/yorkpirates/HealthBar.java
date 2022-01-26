@@ -29,6 +29,10 @@ public class HealthBar extends GameObject {
         currentHealth = maxHealth;
     }
 
+    /**
+     * Generates a college object within the game with animated frame(s) and a hitbox.
+     * @param currentValue  The current health value of the attached object
+     */
     public void resize(float currentValue){
         currentHealth = currentValue;
         this.width = startWidth * (currentHealth/maxHealth);
