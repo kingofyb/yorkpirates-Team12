@@ -112,14 +112,7 @@ public class Player extends GameObject {
         if (moving) {
             frame = anim.getKeyFrame(elapsedTime, true);
         }
-        float rotation = 0f;
-        if      (lastxdir == 1 && lastydir == 1)    rotation = 45f;
-        else if (lastxdir == 0 && lastydir == 1)    rotation = 90f;
-        else if (lastxdir == -1 && lastydir == 1)   rotation = 135f;
-        else if (lastxdir == -1 && lastydir == 0)   rotation = 180f;
-        else if (lastxdir == -1 && lastydir == -1)  rotation = 225f;
-        else if (lastxdir == 0 && lastydir == -1)   rotation = 270f;
-        else if (lastxdir == 1 && lastydir == -1)   rotation = 315f;
+        float rotation = (float) Math.toDegrees(Math.atan2(lastydir, lastxdir));
 
         //batch.draw(frame, x - width/2, y - height/2, width, height);
         batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
