@@ -22,10 +22,9 @@ public class HealthBar extends GameObject {
      * @param frames    The animation frames, or a single sprite.
      */
     public HealthBar(College entity,Array<Texture> frames) {
-        super(frames, 0, entity.x, entity.y + entity.height/2 + 2f, entity.width, 2f);
+        super(frames, 0, entity.x, entity.y + entity.height/2 + 2f, entity.width, 2f, entity.team);
 
         startWidth = entity.width;
-
         maxHealth = College.collegeMaxHealth;
         currentHealth = maxHealth;
     }

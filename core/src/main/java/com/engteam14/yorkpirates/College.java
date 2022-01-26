@@ -9,13 +9,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.engteam14.yorkpirates.HealthBar;
 
+import java.util.Objects;
+
 public class College extends GameObject {
+
+    public static final int collegeMaxHealth = 200;
+
 
     private int collegeHealth;
     private HealthBar collegeBar;
 
+    private final Player player;
     private final String collegeName;
-    public static final int collegeMaxHealth = 200;
     private static final int pointsGained = 50;
     private static final int lootGained = 15;
 
@@ -28,35 +33,47 @@ public class College extends GameObject {
      * @param width     The size of the object in the x-axis.
      * @param height    The size of the object in the y-axis.
      * @param name      The name of the college.
-     * @param enemy     Boolean determining whether college is an enemy.
+     * @param team      The team the college is on.
      */
-    public College(Array<Texture> frames, float fps, float x, float y, float width, float height, String name, boolean enemy){
-        super(frames, fps, x, y, width, height);
+    public College(Array<Texture> frames, float fps, float x, float y, float width, float height, String name, Player player, String team){
+        super(frames, fps, x, y, width, height, team);
         collegeName = name;
         collegeHealth = collegeMaxHealth;
+        this.player = player;
 
         Array<Texture> sprites = new Array<>();
-        if(enemy){
-            sprites.add(new Texture("enemyHealthBar.png"));
-        }else{
+        if(Objects.equals(team, player.team)){
             sprites.add(new Texture("allyHealthBar.png"));
+        }else{
+            sprites.add(new Texture("enemyHealthBar.png"));
         }
         collegeBar = new HealthBar(this,sprites);
     }
 
     /**
      * Called when a projectile hits them.
-     * @param damage    The damage dealt by the projectile.
+     * @param damage            The damage dealt by the projectile.
+     * @param projectileTeam    The team of the projectile.
      */
-    public void hit(GameScreen screen, float damage){
+    public void hit(GameScreen screen, float damage, String projectileTeam){
+        if(Objects.equals(team, projectileTeam)){ // Checks if projectile and college are on the same time
+            return;
+        }
         collegeHealth -= damage;
         if(collegeHealth > 0){
             collegeBar.resize(collegeHealth);
         }else{
-            screen.points.Add(pointsGained);
-            screen.loot.Add(lootGained);
-            collegeBar = null;
-            destroy(screen);
+            if(!Objects.equals(team, player.team)){ // Checks if the college is an enemy of the player
+                screen.points.Add(pointsGained);
+                screen.loot.Add(lootGained);
+                Array<Texture> sprites = new Array<>();
+                sprites.add(new Texture("allyHealthBar.png"));
+                collegeBar = new HealthBar(this,sprites);
+                team = player.team;
+            }else{
+                collegeBar = null;
+                destroy(screen);
+            }
         }
     }
 

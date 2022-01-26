@@ -28,6 +28,9 @@ public class GameScreen extends ScreenAdapter {
     private Vector3 followPos;
     public boolean followPlayer = false;
 
+    public static final String playerTeam = "PLAYER";
+    public static final String enemyTeam = "ENEMY";
+
     /**
      * Initialises the main game screen, as well as relevant entities and data.
      * @param game  Passes in the base game class for reference.
@@ -53,7 +56,7 @@ public class GameScreen extends ScreenAdapter {
 
         // Initialise player
         sprites.add(new Texture("boat1.png"), new Texture("boat2.png"));
-        player = new Player(sprites, 2, game.camera.viewportWidth/2, game.camera.viewportHeight/2, 34, 16);
+        player = new Player(sprites, 2, game.camera.viewportWidth/2, game.camera.viewportHeight/2, 34, 16, playerTeam);
         sprites.clear();
 
         // Initialise map texture
@@ -62,16 +65,16 @@ public class GameScreen extends ScreenAdapter {
         // Initialise colleges
         sprites.add(new Texture("tempCollege.png"));
         colleges = new Array<>();
-        colleges.add(new College(sprites, 0, player.x+100f, player.y,20f, 40f, "testZero",false));
-        colleges.add(new College(sprites, 0, player.x+50f, player.y-50f,20f, 40f, "testOne",true));
-        colleges.add(new College(sprites, 0, player.x+100f, player.y+50f,20f, 40f, "testTwo",true));
-        colleges.add(new College(sprites, 0, player.x+50f, player.y+50f,20f, 40f, "testThree",true));
-        colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "testFour",true));
+        colleges.add(new College(sprites, 0, player.x+100f, player.y,20f, 40f, "testZero",player,enemyTeam));
+        colleges.add(new College(sprites, 0, player.x+50f, player.y-50f,20f, 40f, "testOne",player,enemyTeam));
+        colleges.add(new College(sprites, 0, player.x+100f, player.y+50f,20f, 40f, "testTwo",player,enemyTeam));
+        colleges.add(new College(sprites, 0, player.x+50f, player.y+50f,20f, 40f, "testThree",player,enemyTeam));
+        colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "testFour",player,playerTeam));
         sprites.clear();
 
         // Temporary collide-able GameObject for testing purposes
         sprites.add(new Texture("collider.png"));
-        testCollider = new GameObject(sprites, 0, player.x+20f, player.y+30f, 40f, 20f);
+        testCollider = new GameObject(sprites, 0, player.x+20f, player.y+30f, 40f, 20f,playerTeam);
     }
 
     /**
@@ -124,7 +127,7 @@ public class GameScreen extends ScreenAdapter {
             Array<Texture> sprites = new Array<>();
             sprites.add(new Texture("tempProjectile.png"));
             Vector3 mousePos = game.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-            projectiles.add(new Projectile(sprites, 0, player.x, player.y, mousePos.x, mousePos.y, game));
+            projectiles.add(new Projectile(sprites, 0, player.x, player.y, mousePos.x, mousePos.y, playerTeam));
         }
         for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this, game.camera);

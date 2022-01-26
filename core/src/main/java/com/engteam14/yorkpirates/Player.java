@@ -11,24 +11,26 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public class Player extends GameObject {
 
-    private static final int POINT_FREQ = 1000; // How often the player gains points by moving.
-    private static final double CAMERA_SLACK = 0.1; // What percentage of the screen the player can move in before the camera follows.
-    private static final float SPEED = 70f; // Player movement speed.
-
     public Vector2 camdiff;
     private Vector2 oldpos;
-    private long lastMovementScore;
+
     private int lastxdir;
     private int lastydir;
     private boolean moving = false;
+    private long lastMovementScore;
+
+    private static final int POINT_FREQ = 1000; // How often the player gains points by moving.
+    private static final double CAMERA_SLACK = 0.1; // What percentage of the screen the player can move in before the camera follows.
+    private static final float SPEED = 70f; // Player movement speed.
 
     /**
      *  Generates a player object within the game with animated frame(s) and a hitbox.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
+     * @param team      The team the player is on.
      */
-    public Player(Array<Texture> frames, float fps){
-        super(frames, fps);
+    public Player(Array<Texture> frames, float fps, String team){
+        super(frames, fps,team);
         lastMovementScore = 0;
     }
 
@@ -38,9 +40,10 @@ public class Player extends GameObject {
      * @param fps       The number of frames to be displayed per second.
      * @param x         The x coordinate within the map to initialise the object at.
      * @param y         The y coordinate within the map to initialise the object at.
+     * @param team      The team the player is on.
      */
-    public Player(Array<Texture> frames, float fps, float x, float y){
-        super(frames, fps, x, y);
+    public Player(Array<Texture> frames, float fps, float x, float y, String team){
+        super(frames, fps, x, y, team);
         lastMovementScore = 0;
     }
 
@@ -52,9 +55,10 @@ public class Player extends GameObject {
      * @param y         The y coordinate within the map to initialise the object at.
      * @param width     The size of the object in the x-axis.
      * @param height    The size of the object in the y-axis.
+     * @param team      The team the player is on.
      */
-    public Player(Array<Texture> frames, float fps, float x, float y, float width, float height){
-        super(frames, fps, x, y, width, height);
+    public Player(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
+        super(frames, fps, x, y, width, height, team);
         lastMovementScore = 0;
     }
 
