@@ -6,6 +6,9 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -22,7 +25,8 @@ public class GameScreen extends ScreenAdapter {
 
     private final SpriteBatch HUDBatch;
     private final OrthographicCamera HUDCam;
-    private final Texture map;
+    private OrthogonalTiledMapRenderer tiledMapRenderer;
+
 
     private float elapsedTime = 0;
     private Vector3 followPos;
@@ -30,6 +34,8 @@ public class GameScreen extends ScreenAdapter {
 
     public static final String playerTeam = "PLAYER";
     public static final String enemyTeam = "ENEMY";
+    public static TiledMap tiledMap;
+
 
     /**
      * Initialises the main game screen, as well as relevant entities and data.
@@ -60,7 +66,9 @@ public class GameScreen extends ScreenAdapter {
         sprites.clear();
 
         // Initialise map texture
-        map = new Texture("testback.png");
+        //map = new Texture("testback.png");
+        tiledMap = new TmxMapLoader().load("Pirate12.tmx");
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         // Initialise colleges
         sprites.add(new Texture("tempCollege.png"));
@@ -90,7 +98,9 @@ public class GameScreen extends ScreenAdapter {
         ScreenUtils.clear(0.1f, 0.6f, 0.6f, 1.0f);
         // Begin drawing batch
         game.batch.begin();
-        game.batch.draw(map,0,0); // Draw map first so behind everything
+//        game.batch.draw(map,0,0); // Draw map first so behind everything
+        tiledMapRenderer.setView(game.camera);
+        tiledMapRenderer.render();
         testCollider.draw(game.batch, 0);
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).draw(game.batch, 0);
@@ -108,6 +118,7 @@ public class GameScreen extends ScreenAdapter {
         game.font.draw(HUDBatch, points.GetString(), HUDCam.viewportHeight-HUDCam.viewportHeight*0.98f, HUDCam.viewportHeight*0.98f);
         game.font.draw(HUDBatch, loot.GetString(), HUDCam.viewportWidth-(HUDCam.viewportHeight-HUDCam.viewportHeight*0.98f), HUDCam.viewportHeight*0.98f, 1f, Align.right, true);
         HUDBatch.end();
+        HUDCam.update();
         // End drawing HUD
     }
 
@@ -153,6 +164,6 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void dispose(){
         HUDBatch.dispose();
-        map.dispose();
+        tiledMap.dispose();
     }
 }
