@@ -122,12 +122,7 @@ public class GameScreen extends ScreenAdapter {
         HUDCam.update();
         // End drawing HUD
     }
-    public static boolean isCellBlocked(float x, float y) {
-        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Edges");
-        TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
 
-        return cell.getTile() != null ;
-    }
     /**
      * Is called once every frame. Used for game calculations that take place before rendering.
      */
