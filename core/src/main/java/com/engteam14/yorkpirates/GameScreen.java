@@ -34,7 +34,6 @@ public class GameScreen extends ScreenAdapter {
     private Music instrumental;
     private float audioVolume;
 
-
     private float elapsedTime = 0;
     private Vector3 followPos;
     public boolean followPlayer = false;
@@ -57,16 +56,12 @@ public class GameScreen extends ScreenAdapter {
         HUDCam = new OrthographicCamera();
         HUDCam.setToOrtho(false, game.camera.viewportWidth, game.camera.viewportHeight);
 
-
-
         //initialise sound
-        instrumental = Gdx.audio.newMusic(Gdx.files.internal("assets/Pirate1_Theme1.ogg"));
+        instrumental = Gdx.audio.newMusic(Gdx.files.internal("Pirate1_Theme1.ogg"));
         audioVolume = 0.80f;
         instrumental.setLooping(true);
         instrumental.setVolume(audioVolume);
         instrumental.play();
-
-
 
         // Initialise points and loot managers
         points = new ScoreManager();
@@ -158,16 +153,13 @@ public class GameScreen extends ScreenAdapter {
 
         // Check for projectile creation, then call projectile update
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-            Vector3 mouseVect = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
-            Vector3 mousePos = game.camera.unproject(mouseVect);
-            if (mousePos.x <= 20f && mousePos.y <=  20f ) {
-                dispose();
-            }else{
-                Array<Texture> sprites = new Array<>();
-                sprites.add(new Texture("tempProjectile.png"));
-                projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
-            }
-            }
+            Vector3 mouseVector = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
+            Vector3 mousePos = game.camera.unproject(mouseVector);
+
+            Array<Texture> sprites = new Array<>();
+            sprites.add(new Texture("tempProjectile.png"));
+            projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
+        }
         for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this, game.camera);
         }
@@ -194,6 +186,5 @@ public class GameScreen extends ScreenAdapter {
         HUDBatch.dispose();
         tiledMap.dispose();
         instrumental.dispose();
-
     }
 }
