@@ -56,7 +56,7 @@ public class HUD {
         table2.add().size(GameScreen.viewp.getCamera().viewportWidth-128,64);
         button1.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    System.out.append("touched");
+                                    GameScreen.gameEnd(true );
                                 }
                             });
         buttonMute.addListener(new ClickListener() {

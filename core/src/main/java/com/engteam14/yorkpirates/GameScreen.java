@@ -23,12 +23,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameScreen extends ScreenAdapter {
-    public YorkPirates game;
+    public static YorkPirates game;
     public Player player;
-    public ScoreManager points;
+    public static ScoreManager points;
     public static FitViewport viewp;
 
-    public ScoreManager loot;
+    public static ScoreManager loot;
     private final GameObject testCollider;
 
     public Array<College> colleges;
@@ -39,7 +39,7 @@ public class GameScreen extends ScreenAdapter {
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     public static Music instrumental;
 
-    private float elapsedTime = 0;
+    private static float elapsedTime = 0;
     private Vector3 followPos;
     public boolean followPlayer = false;
 
@@ -201,7 +201,7 @@ public class GameScreen extends ScreenAdapter {
         instrumental.dispose();
     }
 
-    public void gameEnd(boolean win){
+    public static void gameEnd(boolean win){
         game.setScreen(new EndScreen(game, elapsedTime, points, loot, win));
     }
 }
