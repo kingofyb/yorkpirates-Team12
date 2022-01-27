@@ -94,7 +94,7 @@ public class GameScreen extends ScreenAdapter {
         colleges.add(new College(sprites, 0, player.x+50f, player.y-50f,20f, 40f, "testOne",enemyTeam));
         colleges.add(new College(sprites, 0, player.x+100f, player.y+50f,20f, 40f, "testTwo",enemyTeam));
         colleges.add(new College(sprites, 0, player.x+50f, player.y+50f,20f, 40f, "testThree",enemyTeam));
-        colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "testFour",playerTeam));
+        colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "Home",playerTeam));
         sprites.clear();
 
         // Temporary collide-able GameObject for testing purposes
@@ -171,9 +171,7 @@ public class GameScreen extends ScreenAdapter {
         }
 
         // Temporary shortcut to endscreen
-        if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
-            gameEnd(true);
-        } else if(Gdx.input.isKeyPressed(Input.Keys.DEL)){
+        if(Gdx.input.isKeyPressed(Input.Keys.DEL)){
             gameEnd(false);
         }
     }

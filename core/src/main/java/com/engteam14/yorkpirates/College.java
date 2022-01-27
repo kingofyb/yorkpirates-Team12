@@ -60,7 +60,7 @@ public class College extends GameObject {
     public void update(GameScreen screen, OrthographicCamera camera){
         float playerX = screen.player.x;
         float playerY = screen.player.y;
-        float detectionRadius = 75f;
+        float detectionRadius = 90f;
         nearPlayer = abs(this.x - playerX) < (detectionRadius*1.5) && abs(this.y - playerY) < detectionRadius;
 
         if(nearPlayer){
@@ -70,6 +70,21 @@ public class College extends GameObject {
                     Array<Texture> sprites = new Array<>();
                     sprites.add(new Texture("tempProjectile.png"));
                     screen.projectiles.add(new Projectile(sprites, 0, this, playerX, playerY, team));
+                }
+            }else if(Objects.equals(collegeName, "Home")){
+                if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
+                    boolean victory = true;
+                    for(int i = 0; i < screen.colleges.size; i++) {
+                        if(!Objects.equals(screen.colleges.get(i).team, GameScreen.playerTeam)){
+                            victory = false;
+                        }
+                    }
+                    if(victory){
+                        screen.gameEnd(true);
+                    }else{
+                        //Display Message "Still need to defeat ALL colleges to complete the game"
+                    }
+
                 }
             }
             if (overlaps(screen.player.hitbox)){

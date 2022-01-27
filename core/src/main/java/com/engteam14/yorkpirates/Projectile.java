@@ -17,7 +17,7 @@ public class Projectile extends GameObject{
     private final float dx;
     private final float dy;
     private final float projectileSpeed; // Projectile movement speed.
-    private static final float maxDistance = 15000f; // Projectile max range.
+    private static final float maxDistance = 7500f; // Projectile max range.
     private static final float projectileDamage = 20f; // Projectile damage.
 
     /**
