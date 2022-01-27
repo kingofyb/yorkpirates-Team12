@@ -43,8 +43,7 @@ public class GameScreen extends ScreenAdapter {
     private final SpriteBatch HUDBatch;
     private final OrthographicCamera HUDCam;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
-    private Music instrumental;
-    private float audioVolume;
+    public static Music instrumental;
 
 
     private float elapsedTime = 0;
@@ -76,9 +75,8 @@ public class GameScreen extends ScreenAdapter {
 
         //initialise sound
         instrumental = Gdx.audio.newMusic(Gdx.files.internal("assets/Pirate1_Theme1.ogg"));
-        audioVolume = 0.80f;
         instrumental.setLooping(true);
-        instrumental.setVolume(audioVolume);
+        instrumental.setVolume(0.8f);
         instrumental.play();
 
 
@@ -159,8 +157,6 @@ public class GameScreen extends ScreenAdapter {
         HUDBatch.begin();
         game.font.draw(HUDBatch, points.GetString(), 0+HUDCam.viewportHeight*0.03f , HUDCam.viewportHeight*0.98f);
         game.font.draw(HUDBatch, loot.GetString(), HUDCam.viewportWidth*0.98f, HUDCam.viewportHeight*0.98f, 1f, Align.right, true);
-        HUDBatch.draw(quitB, 0, 0);
-        HUDBatch.draw(muteB, HUDCam.viewportWidth-16f, 0);
         HUD.renderStage();
         HUDBatch.end();
         HUDCam.update();
@@ -182,22 +178,11 @@ public class GameScreen extends ScreenAdapter {
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             Vector3 mouseVect = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
             Vector3 mousePos = game.camera.unproject(mouseVect);
-            if (mousePos.x <= 20f && mousePos.y <=  20f ) {
-                dispose();
-            }else if (mousePos.x>=HUDCam.viewportWidth-20f && mousePos.y<=20f){
-
-                if (instrumental.getVolume() == 0) {
-                    instrumental.setVolume(1f);
-                }else{
-                    instrumental.setVolume(0);
-
-                }
-            }else{
-                Array<Texture> sprites = new Array<>();
-                sprites.add(new Texture("tempProjectile.png"));
-                projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
+            Array<Texture> sprites = new Array<>();
+            sprites.add(new Texture("tempProjectile.png"));
+            projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
             }
-            }
+
         for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this, game.camera);
         }

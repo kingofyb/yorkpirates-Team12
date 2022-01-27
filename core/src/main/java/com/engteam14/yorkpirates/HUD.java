@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 
 
 public class HUD {
@@ -18,13 +20,21 @@ public class HUD {
         //initialise the stage
 
         stage1 = new Stage(GameScreen.viewp);
+        Gdx.input.setInputProcessor(stage1);
+
         Table table = new Table();
-        table.setFillParent(true);
-        Table table2 = new Table();
-        table.setPosition(190, 142);
-        table2.setSize(64, 64);
-        table.setSize(260, 195);
         table.setPosition(0, 0);
+        table.setSize(GameScreen.viewp.getCamera().viewportWidth , GameScreen.viewp.getCamera().viewportWidth-50);
+        table.setPosition(0, 0);
+        table.setDebug(true);
+
+        Table table2 = new Table();
+        table2.setSize(GameScreen.viewp.getCamera().viewportWidth , 64);
+        table2.setDebug(true);
+       // table2.setPosition(-GameScreen.viewp.getCamera().viewportWidth*0.48f, 0);
+
+        Table table3 = new Table();
+
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
         TextureAtlas.AtlasRegion region = atlas.findRegion("imagename");
@@ -37,16 +47,32 @@ public class HUD {
 
 
         Button button1 = new Button(skin);
+        Button buttonMute = new TextButton("Mute",skin);
+        table2.add(button1).size(64,64).left();
+        table2.add().size(GameScreen.viewp.getCamera().viewportWidth-128,64);
+        table2.add(buttonMute).size(64,64).right();
 
-        table2.add(button1).size(64,64);
-        button1.addListener(new InputListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                return false;
-                }
-            });
+        table2.align(Align.left | Align.bottom);
+        table2.add().size(GameScreen.viewp.getCamera().viewportWidth-128,64);
+        button1.addListener(new ClickListener() {
+                                public void clicked(InputEvent event, float x, float y) {
+                                    System.out.append("touched");
+                                }
+                            });
+        buttonMute.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                if (GameScreen.instrumental.getVolume() == 0) {
+                    GameScreen.instrumental.setVolume(1);
+                } else {
+                    GameScreen.instrumental.setVolume(0);
+                    }
+
+            }
+        });
         table.row();
         stage1.addActor(table);
         stage1.addActor(table2);
+
     }
     public static void renderStage(){
         stage1.draw();
