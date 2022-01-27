@@ -3,6 +3,8 @@ package com.engteam14.yorkpirates;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,17 +18,21 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen extends ScreenAdapter {
+    private final Texture quitB;
     public YorkPirates game;
     public Player player;
     public ScoreManager points;
     public ScoreManager loot;
     private final GameObject testCollider;
+
     public Array<College> colleges;
     public Array<Projectile> projectiles;
 
     private final SpriteBatch HUDBatch;
     private final OrthographicCamera HUDCam;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
+    private Music instrumental;
+    private float audioVolume;
 
 
     private float elapsedTime = 0;
@@ -51,6 +57,17 @@ public class GameScreen extends ScreenAdapter {
         HUDCam = new OrthographicCamera();
         HUDCam.setToOrtho(false, game.camera.viewportWidth, game.camera.viewportHeight);
 
+
+
+        //initialise sound
+        instrumental = Gdx.audio.newMusic(Gdx.files.internal("assets/Pirate1_Theme1.ogg"));
+        audioVolume = 0.80f;
+        instrumental.setLooping(true);
+        instrumental.setVolume(audioVolume);
+        instrumental.play();
+
+
+
         // Initialise points and loot managers
         points = new ScoreManager();
         loot = new ScoreManager();
@@ -60,10 +77,14 @@ public class GameScreen extends ScreenAdapter {
 
         // Initialise sprites array to be used generating GameObjects
         Array<Texture> sprites = new Array<>();
+     //   Array<Texture> buttons = new Array<>();
+
+        //Initialise HUD Quit button.
+        quitB = new Texture("exitButton.png");
 
         // Initialise player
-        sprites.add(new Texture("boat1.png"), new Texture("boat2.png"));
-        player = new Player(sprites, 2, game.camera.viewportWidth/2, game.camera.viewportHeight/2, 34, 16, playerTeam);
+        sprites.add(new Texture("ship (4).png"), new Texture("ship (4).png"));
+        player = new Player(sprites, 2, game.camera.viewportWidth/2, game.camera.viewportHeight/2, 32, 16, playerTeam);
         sprites.clear();
 
         // Initialise map texture
@@ -116,8 +137,9 @@ public class GameScreen extends ScreenAdapter {
         HUDBatch.setProjectionMatrix(HUDCam.combined);
         // Start drawing HUD
         HUDBatch.begin();
-        game.font.draw(HUDBatch, points.GetString(), HUDCam.viewportHeight-HUDCam.viewportHeight*0.98f, HUDCam.viewportHeight*0.98f);
-        game.font.draw(HUDBatch, loot.GetString(), HUDCam.viewportWidth-(HUDCam.viewportHeight-HUDCam.viewportHeight*0.98f), HUDCam.viewportHeight*0.98f, 1f, Align.right, true);
+        game.font.draw(HUDBatch, points.GetString(), 0+HUDCam.viewportHeight*0.03f , HUDCam.viewportHeight*0.98f);
+        game.font.draw(HUDBatch, loot.GetString(), HUDCam.viewportWidth*0.98f, HUDCam.viewportHeight*0.98f, 1f, Align.right, true);
+        HUDBatch.draw(quitB, 0, 0);
         HUDBatch.end();
         HUDCam.update();
         // End drawing HUD
@@ -136,11 +158,16 @@ public class GameScreen extends ScreenAdapter {
 
         // Check for projectile creation, then call projectile update
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-            Array<Texture> sprites = new Array<>();
-            sprites.add(new Texture("tempProjectile.png"));
-            Vector3 mousePos = game.camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-            projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
-        }
+            Vector3 mouseVect = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
+            Vector3 mousePos = game.camera.unproject(mouseVect);
+            if (mousePos.x <= 20f && mousePos.y <=  20f ) {
+                dispose();
+            }else{
+                Array<Texture> sprites = new Array<>();
+                sprites.add(new Texture("tempProjectile.png"));
+                projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
+            }
+            }
         for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this, game.camera);
         }
@@ -166,5 +193,7 @@ public class GameScreen extends ScreenAdapter {
     public void dispose(){
         HUDBatch.dispose();
         tiledMap.dispose();
+        instrumental.dispose();
+
     }
 }
