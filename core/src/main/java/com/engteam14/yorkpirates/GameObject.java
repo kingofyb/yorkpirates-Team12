@@ -17,6 +17,8 @@ public class GameObject {
     float width;
     float height;
     String team;
+    int maxHealth;
+    float currentHealth;
 
     /**
      * Generates a generic object within the game with animated frame(s) and a hitbox.
@@ -25,14 +27,7 @@ public class GameObject {
      * @param team      The team the object is on.
      */
     public GameObject(Array<Texture> frames, float fps, String team){
-        sprite = frames.get(0);
-        anim = new Animation<>(fps==0?0:(1f/fps), frames);
-        x = 0;
-        y = 0;
-        width = sprite.getWidth();
-        height = sprite.getHeight();
-        setHitbox();
-        this.team = team;
+        this(frames,fps,0,0,team);
     }
 
     /**
@@ -44,14 +39,7 @@ public class GameObject {
      * @param team      The team the object is on.
      */
     public GameObject(Array<Texture> frames, float fps, float x, float y, String team){
-        sprite = frames.get(0);
-        anim = new Animation<>(fps==0?0:(1f/fps), frames);
-        this.x = x;
-        this.y = y;
-        width = sprite.getWidth();
-        height = sprite.getHeight();
-        setHitbox();
-        this.team = team;
+        this(frames,fps,x,y,frames.get(0).getWidth(),frames.get(0).getHeight(),team);
     }
 
     /**
@@ -73,6 +61,21 @@ public class GameObject {
         this.height = height;
         setHitbox();
         this.team = team;
+    }
+
+    void setMaxHealth(int mh){
+        maxHealth = mh;
+        currentHealth = maxHealth;
+    }
+
+    /**
+     * Called when a projectile hits the object.
+     * @param screen            The main game screen.
+     * @param damage            The damage dealt by the projectile.
+     * @param projectileTeam    The team of the projectile.
+     */
+    public void takeDamage(GameScreen screen, float damage, String projectileTeam){
+        currentHealth -= damage;
     }
 
     /**
@@ -111,17 +114,6 @@ public class GameObject {
     public boolean overlaps(Rectangle rect){
         updateHitboxPos();
         return hitbox.overlaps(rect);
-    }
-
-    /**
-     * Called once per frame. Used to perform calculations such as collision.
-     * @param screen    The main game screen.
-     * @param camera    The player camera.
-     */
-    public void update(GameScreen screen, OrthographicCamera camera){
-        if (overlaps(screen.player.hitbox)){
-            screen.player.hit(screen, camera, this);
-        }
     }
 
     /**

@@ -15,20 +15,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameScreen extends ScreenAdapter {
-    private final Texture quitB;
-    private final Texture muteB;
     public YorkPirates game;
     public Player player;
     public ScoreManager points;
@@ -44,7 +38,6 @@ public class GameScreen extends ScreenAdapter {
     private final OrthographicCamera HUDCam;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     public static Music instrumental;
-
 
     private float elapsedTime = 0;
     private Vector3 followPos;
@@ -62,7 +55,6 @@ public class GameScreen extends ScreenAdapter {
     public GameScreen(YorkPirates game){
         this.game = game;
         followPos = game.camera.position;
-        System.out.println("Gamescreen1");
 
         // Initialise HUD
         HUDBatch = new SpriteBatch();
@@ -71,15 +63,12 @@ public class GameScreen extends ScreenAdapter {
         viewp = new FitViewport( Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), HUDCam); // change this to your needed viewport
 
 
-        System.out.println("gamescreen2");
 
         //initialise sound
-        instrumental = Gdx.audio.newMusic(Gdx.files.internal("assets/Pirate1_Theme1.ogg"));
+        instrumental = Gdx.audio.newMusic(Gdx.files.internal("Pirate1_Theme1.ogg"));
         instrumental.setLooping(true);
         instrumental.setVolume(0.8f);
         instrumental.play();
-
-
 
         // Initialise points and loot managers
         points = new ScoreManager();
@@ -92,9 +81,7 @@ public class GameScreen extends ScreenAdapter {
         Array<Texture> sprites = new Array<>();
      //   Array<Texture> buttons = new Array<>();
 
-        //Initialise HUD buttons.
-        quitB = new Texture("exitButton.png");
-        muteB = new Texture("muteButton.png");
+
         // Initialise player
         sprites.add(new Texture("ship (4).png"), new Texture("ship (4).png"));
         player = new Player(sprites, 2, game.camera.viewportWidth/2, game.camera.viewportHeight/2, 32, 16, playerTeam);
@@ -108,11 +95,11 @@ public class GameScreen extends ScreenAdapter {
         // Initialise colleges
         sprites.add(new Texture("tempCollege.png"));
         colleges = new Array<>();
-        colleges.add(new College(sprites, 0, player.x+100f, player.y,20f, 40f, "testZero",enemyTeam));
-        colleges.add(new College(sprites, 0, player.x+50f, player.y-50f,20f, 40f, "testOne",enemyTeam));
-        colleges.add(new College(sprites, 0, player.x+100f, player.y+50f,20f, 40f, "testTwo",enemyTeam));
-        colleges.add(new College(sprites, 0, player.x+50f, player.y+50f,20f, 40f, "testThree",enemyTeam));
-        colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "testFour",playerTeam));
+        colleges.add(new College(sprites, 0, player.x+100f, player.y,20f, 40f, "testZero",enemyTeam,player));
+        colleges.add(new College(sprites, 0, player.x+50f, player.y-50f,20f, 40f, "testOne",enemyTeam,player));
+        colleges.add(new College(sprites, 0, player.x+100f, player.y+250f,20f, 40f, "testTwo",enemyTeam,player));
+        colleges.add(new College(sprites, 0, player.x+50f, player.y+50f,20f, 40f, "testThree",enemyTeam,player));
+        colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "Home",playerTeam,player));
         sprites.clear();
 
         // Temporary collide-able GameObject for testing purposes
@@ -141,14 +128,18 @@ public class GameScreen extends ScreenAdapter {
 //        game.batch.draw(map,0,0); // Draw map first so behind everything
         tiledMapRenderer.setView(game.camera);
         tiledMapRenderer.render();
-        testCollider.draw(game.batch, 0);
-        for(int i = 0; i < colleges.size; i++) {
-            colleges.get(i).draw(game.batch, 0);
-        }
         for(int i = 0; i < projectiles.size; i++) {
             projectiles.get(i).draw(game.batch, 0);
         }
+        for(int i = 0; i < colleges.size; i++) {
+            colleges.get(i).draw(game.batch, 0);
+        }
         player.draw(game.batch, elapsedTime); // Player is last entity, all else drawn before them
+        game.font.getData().setScale(0.5f);
+        int tx = (int)(player.x/16f);
+        int ty = (int)(player.y/16f);
+        game.font.draw(game.batch, new Vector2(tx,ty).toString(), player.x+player.width/2, player.y+player.height/2);
+        game.font.getData().setScale(1f);
         game.batch.end();
         // End drawing batch
         HUDCam.update();
@@ -169,20 +160,19 @@ public class GameScreen extends ScreenAdapter {
     private void update(){
         // Call update for every individual object
         player.update(this, game.camera);
-        testCollider.update(this, game.camera);
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).update(this, game.camera);
         }
 
         // Check for projectile creation, then call projectile update
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
-            Vector3 mouseVect = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
-            Vector3 mousePos = game.camera.unproject(mouseVect);
+            Vector3 mouseVector = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
+            Vector3 mousePos = game.camera.unproject(mouseVector);
+
             Array<Texture> sprites = new Array<>();
             sprites.add(new Texture("tempProjectile.png"));
             projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
-            }
-
+        }
         for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this, game.camera);
         }
@@ -193,11 +183,11 @@ public class GameScreen extends ScreenAdapter {
             game.camera.position.slerp(followPos, 0.1f);
         }
 
-        // Temporary shortcut to endscreen
-        if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
-            game.setScreen(new EndScreen(game, elapsedTime, points, loot, true));
-        } else if(Gdx.input.isKeyPressed(Input.Keys.DEL)){
-            game.setScreen(new EndScreen(game, elapsedTime, points, loot, false));
+        // Temporary shortcut to End Screen
+        if(Gdx.input.isKeyPressed(Input.Keys.DEL)){
+            gameEnd(false);
+        }else if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+            Gdx.app.exit();
         }
     }
 
@@ -209,6 +199,9 @@ public class GameScreen extends ScreenAdapter {
         HUDBatch.dispose();
         tiledMap.dispose();
         instrumental.dispose();
+    }
 
+    public void gameEnd(boolean win){
+        game.setScreen(new EndScreen(game, elapsedTime, points, loot, win));
     }
 }

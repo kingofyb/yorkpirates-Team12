@@ -5,17 +5,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Objects;
+
 import static java.lang.Math.*;
 
 public class Projectile extends GameObject{
 
     private float distanceTravelled;
+    private final GameObject origin;
 
     private final float dx;
     private final float dy;
-    private static final float maxDistance = 15000f; // Projectile movement speed.
-    private static final float SPEED = 150f; // Projectile movement speed.
-    private static final float DAMAGE = 20f; // Projectile damage.
+    private final float projectileSpeed; // Projectile movement speed.
+    private static final float maxDistance = 7500f; // Projectile max range.
+    private static final float projectileDamage = 20f; // Projectile damage.
 
     /**
      * Generates a projectile object within the game with animated frame(s) and a hitbox.
@@ -29,31 +32,47 @@ public class Projectile extends GameObject{
     public Projectile(Array<Texture> frames, float fps, GameObject origin, float goal_x, float goal_y, String team) {
         super(frames, fps, origin.x, origin.y, 5f,5f,team);
 
+        this.origin = origin;
+
         float changeInX = goal_x - origin.x;
         float changeInY = goal_y - origin.y;
         float scaleFactor = max(abs(changeInX),abs(changeInY));
         dx = changeInX / scaleFactor;
         dy = changeInY / scaleFactor;
 
-        move(origin.hitbox.width * dx, origin.hitbox.height * dy);
+        move(origin.hitbox.width * 2* dx, origin.hitbox.height * 2 * dy);
 
         distanceTravelled = 0;
-                //max(game.camera.viewportWidth, game.camera.viewportHeight);
+        if(Objects.equals(team, GameScreen.playerTeam)){
+            projectileSpeed = 150f;
+        }else{
+            projectileSpeed = 50f;
+        }
     }
 
     /**
      * Called once per frame. Used to perform calculations such as projectile movement and collision detection.
      * @param screen    The main game screen.
      */
-    @Override
     public void update(GameScreen screen, OrthographicCamera camera){
         // Movement Calculations
-        move(SPEED*dx, SPEED*dy);
-        distanceTravelled += SPEED;
+        move(projectileSpeed*dx, projectileSpeed*dy);
+        distanceTravelled += projectileSpeed;
 
-        for(int i = 0; i < screen.colleges.size; i++) {
-            if (overlaps(screen.colleges.get(i).hitbox)){
-                screen.colleges.get(i).hit(screen,DAMAGE,team);
+        if(origin == screen.player){
+            for(int i = 0; i < screen.colleges.size; i++) {
+                if (overlaps(screen.colleges.get(i).hitbox)){
+                    if(!Objects.equals(team, screen.colleges.get(i).team)){ // Checks if projectile and college are on the same time
+                        screen.colleges.get(i).takeDamage(screen,projectileDamage,team);
+                    }
+                    destroy(screen);
+                }
+            }
+        }else{
+            if (overlaps(screen.player.hitbox)){
+                if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if projectile and player are on the same time
+                    screen.player.takeDamage(screen,projectileDamage,team);
+                }
                 destroy(screen);
             }
         }
