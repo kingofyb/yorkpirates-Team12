@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class TitleScreen extends ScreenAdapter {
     private final YorkPirates game;
 
-    private static final float LOGO_SCALE = 0.33f;
+    private static final float logoScale = 0.33f;
 
     private final Texture title;
 
@@ -33,8 +33,8 @@ public class TitleScreen extends ScreenAdapter {
         game.batch.setProjectionMatrix(game.camera.combined);
         ScreenUtils.clear(0.6f, 0.6f, 1.0f, 1.0f);
         game.batch.begin();
-        float newheight = title.getHeight()*(game.camera.viewportWidth*LOGO_SCALE / title.getWidth());
-        game.batch.draw(title, game.camera.viewportWidth*((1-LOGO_SCALE)/2), game.camera.viewportHeight/2-newheight/2, game.camera.viewportWidth*LOGO_SCALE, newheight);
+        float newheight = title.getHeight()*(game.camera.viewportWidth*logoScale / title.getWidth());
+        game.batch.draw(title, game.camera.viewportWidth*((1-logoScale)/2), game.camera.viewportHeight/2-newheight/2, game.camera.viewportWidth*logoScale, newheight);
         game.batch.end();
     }
 

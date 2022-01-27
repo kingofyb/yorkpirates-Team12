@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class YorkPirates extends Game {
 
-	public static final int SCREEN_TO_PIXEL_RATIO = 16; // Determines the pixel ratio of the game.
+	public static final int screenToPixelRatio = 16; // Determines the pixel ratio of the game.
 
 	OrthographicCamera camera;
 	SpriteBatch batch;
@@ -21,7 +21,7 @@ public class YorkPirates extends Game {
 	@Override
 	public void create () {
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 16*SCREEN_TO_PIXEL_RATIO, 9*SCREEN_TO_PIXEL_RATIO);
+		camera.setToOrtho(false, 16*screenToPixelRatio, 9*screenToPixelRatio);
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		setScreen(new TitleScreen(this));

@@ -12,9 +12,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class HealthBar extends GameObject {
 
-    private final float maxHealth;
     private final float startWidth;
-    private float currentHealth;
 
     /**
      * Generates a college object within the game with animated frame(s) and a hitbox.
@@ -25,8 +23,7 @@ public class HealthBar extends GameObject {
         super(frames, 0, entity.x, entity.y + entity.height/2 + 2f, entity.width, 2f, entity.team);
 
         startWidth = entity.width;
-        maxHealth = entity.MaxHealth;
-        currentHealth = maxHealth;
+        setMaxHealth(entity.maxHealth);
     }
 
     /**
@@ -35,7 +32,7 @@ public class HealthBar extends GameObject {
      */
     public void resize(float currentValue){
         currentHealth = currentValue;
-        this.width = startWidth * (currentHealth/maxHealth);
+        this.width = startWidth * (currentValue/maxHealth);
     }
 
     /**

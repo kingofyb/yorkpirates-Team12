@@ -22,7 +22,7 @@ public class College extends GameObject {
     private final String collegeName;
     private static final int pointsGained = 50;
     private static final int lootGained = 15;
-    private static final int SHOOT_FREQ = 1000; // How often the college can shoot.
+    private static final int shootFrequency = 1000; // How often the college can shoot.
     private long lastShotFired;
 
     /**
@@ -65,7 +65,7 @@ public class College extends GameObject {
 
         if(nearPlayer){
             if(!Objects.equals(team, GameScreen.playerTeam)) { // Checks if the college is an enemy of the player
-                if (TimeUtils.timeSinceMillis(lastShotFired) > SHOOT_FREQ){
+                if (TimeUtils.timeSinceMillis(lastShotFired) > shootFrequency){
                     lastShotFired = TimeUtils.millis();
                     Array<Texture> sprites = new Array<>();
                     sprites.add(new Texture("tempProjectile.png"));

@@ -17,8 +17,8 @@ public class GameObject {
     float width;
     float height;
     String team;
-    int MaxHealth;
-    int currentHealth;
+    int maxHealth;
+    float currentHealth;
 
     /**
      * Generates a generic object within the game with animated frame(s) and a hitbox.
@@ -64,8 +64,8 @@ public class GameObject {
     }
 
     void setMaxHealth(int mh){
-        MaxHealth = mh;
-        currentHealth = MaxHealth;
+        maxHealth = mh;
+        currentHealth = maxHealth;
     }
 
     /**
