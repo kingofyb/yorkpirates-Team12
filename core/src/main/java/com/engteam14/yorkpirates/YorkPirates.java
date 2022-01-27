@@ -5,11 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Array;
 
 public class YorkPirates extends Game {
 
-	public static final int SCREEN_TO_PIXEL_RATIO = 16; // Determines the pixel ratio of the game.
+	public static final int screenToPixelRatio = 16; // Determines the pixel ratio of the game.
 
 	OrthographicCamera camera;
 	SpriteBatch batch;
@@ -22,7 +23,7 @@ public class YorkPirates extends Game {
 	@Override
 	public void create () {
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 16*SCREEN_TO_PIXEL_RATIO, 9*SCREEN_TO_PIXEL_RATIO);
+		camera.setToOrtho(false, 16*screenToPixelRatio, 9*screenToPixelRatio);
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 
@@ -36,8 +37,6 @@ public class YorkPirates extends Game {
 			}
 			edges.insert(0, newrow);
 		}
-		System.out.println(edges.get(0).get(3));
-
 		setScreen(new TitleScreen(this));
 	}
 
