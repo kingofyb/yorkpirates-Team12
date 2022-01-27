@@ -9,10 +9,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import java.util.Objects;
+
 public class Player extends GameObject {
 
     public Vector2 camdiff;
     private Vector2 oldpos;
+    private HealthBar playerHealth;
 
     private int lastxdir;
     private int lastydir;
@@ -30,8 +33,7 @@ public class Player extends GameObject {
      * @param team      The team the player is on.
      */
     public Player(Array<Texture> frames, float fps, String team){
-        super(frames, fps,team);
-        lastMovementScore = 0;
+        this(frames, fps,0,0,team);
     }
 
     /**
@@ -43,8 +45,7 @@ public class Player extends GameObject {
      * @param team      The team the player is on.
      */
     public Player(Array<Texture> frames, float fps, float x, float y, String team){
-        super(frames, fps, x, y, team);
-        lastMovementScore = 0;
+        this(frames,fps,x,y,frames.get(0).getWidth(),frames.get(0).getHeight(),team);
     }
 
     /**
@@ -60,6 +61,11 @@ public class Player extends GameObject {
     public Player(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
         super(frames, fps, x, y, width, height, team);
         lastMovementScore = 0;
+
+        setMaxHealth(200);
+        Array<Texture> sprites = new Array<>();
+        sprites.add(new Texture("allyHealthBar.png"));
+        playerHealth = new HealthBar(this,sprites);
     }
 
     /**
@@ -92,6 +98,35 @@ public class Player extends GameObject {
     }
 
     /**
+     * Moves the player within the x and y-axis of the game world.
+     * @param x     The amount to move the object within the x-axis.
+     * @param y     The amount to move the object within the y-axis.
+     */
+    @Override
+    void move(float x, float y){
+        this.x += x * Gdx.graphics.getDeltaTime();
+        this.y += y * Gdx.graphics.getDeltaTime();
+        playerHealth.move(this.x, this.y + height/2 + 2f);
+    }
+
+    /**
+     * Called when a projectile hits the college.
+     * @param screen            The main game screen.
+     * @param damage            The damage dealt by the projectile.
+     * @param projectileTeam    The team of the projectile.
+     */
+    @Override
+    public void takeDamage(GameScreen screen, float damage, String projectileTeam){
+        currentHealth -= damage;
+        if(currentHealth > 0){
+            playerHealth.resize(currentHealth);
+        }else{
+            playerHealth = null;
+            screen.gameEnd(false);
+        }
+    }
+
+    /**
      *  Called after update(), calculates whether the camera should follow the player and passes it to the game screen.
      * @param screen    The main game screen.
      * @param camera    The player camera.
@@ -116,6 +151,8 @@ public class Player extends GameObject {
 
         //batch.draw(frame, x - width/2, y - height/2, width, height);
         batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
+        if(!(playerHealth == null)) playerHealth.draw(batch, 0);
+
     }
 
     /**

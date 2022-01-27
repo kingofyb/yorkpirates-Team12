@@ -16,10 +16,7 @@ import static java.lang.Math.abs;
 
 public class College extends GameObject {
 
-    public static final int collegeMaxHealth = 200;
     public boolean nearPlayer = false;
-
-    private int collegeHealth;
     private HealthBar collegeBar;
 
     private final String collegeName;
@@ -42,7 +39,7 @@ public class College extends GameObject {
     public College(Array<Texture> frames, float fps, float x, float y, float width, float height, String name, String team){
         super(frames, fps, x, y, width, height, team);
         collegeName = name;
-        collegeHealth = collegeMaxHealth;
+        setMaxHealth(500);
         lastShotFired = 0;
 
         Array<Texture> sprites = new Array<>();
@@ -63,17 +60,18 @@ public class College extends GameObject {
     public void update(GameScreen screen, OrthographicCamera camera){
         float playerX = screen.player.x;
         float playerY = screen.player.y;
-        float detectionRadius = 1500f;
-        nearPlayer = abs(this.x - playerX) < detectionRadius || abs(this.y - playerY) < detectionRadius;
+        float detectionRadius = 75f;
+        nearPlayer = abs(this.x - playerX) < (detectionRadius*1.5) && abs(this.y - playerY) < detectionRadius;
 
         if(nearPlayer){
-            if (TimeUtils.timeSinceMillis(lastShotFired) > SHOOT_FREQ){
-                lastShotFired = TimeUtils.millis();
+            if(!Objects.equals(team, GameScreen.playerTeam)) { // Checks if the college is an enemy of the player
+                if (TimeUtils.timeSinceMillis(lastShotFired) > SHOOT_FREQ){
+                    lastShotFired = TimeUtils.millis();
+                    Array<Texture> sprites = new Array<>();
+                    sprites.add(new Texture("tempProjectile.png"));
+                    screen.projectiles.add(new Projectile(sprites, 0, this, playerX, playerY, team));
+                }
             }
-            Array<Texture> sprites = new Array<>();
-            sprites.add(new Texture("tempProjectile.png"));
-            screen.projectiles.add(new Projectile(sprites, 0, this, playerX, playerY, team));
-
             if (overlaps(screen.player.hitbox)){
                 screen.player.hit(screen, camera, this);
             }
@@ -81,17 +79,16 @@ public class College extends GameObject {
     }
 
     /**
-     * Called when a projectile hits them.
+     * Called when a projectile hits the college.
+     * @param screen            The main game screen.
      * @param damage            The damage dealt by the projectile.
      * @param projectileTeam    The team of the projectile.
      */
-    public void hit(GameScreen screen, float damage, String projectileTeam){
-        if(Objects.equals(team, projectileTeam)){ // Checks if projectile and college are on the same time
-            return;
-        }
-        collegeHealth -= damage;
-        if(collegeHealth > 0){
-            collegeBar.resize(collegeHealth);
+    @Override
+    public void takeDamage(GameScreen screen, float damage, String projectileTeam){
+        currentHealth -= damage;
+        if(currentHealth > 0){
+            collegeBar.resize(currentHealth);
         }else{
             if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if the college is an enemy of the player
                 screen.points.Add(pointsGained);

@@ -119,11 +119,11 @@ public class GameScreen extends ScreenAdapter {
         tiledMapRenderer.setView(game.camera);
         tiledMapRenderer.render();
         testCollider.draw(game.batch, 0);
-        for(int i = 0; i < colleges.size; i++) {
-            colleges.get(i).draw(game.batch, 0);
-        }
         for(int i = 0; i < projectiles.size; i++) {
             projectiles.get(i).draw(game.batch, 0);
+        }
+        for(int i = 0; i < colleges.size; i++) {
+            colleges.get(i).draw(game.batch, 0);
         }
         player.draw(game.batch, elapsedTime); // Player is last entity, all else drawn before them
         game.batch.end();
@@ -172,9 +172,9 @@ public class GameScreen extends ScreenAdapter {
 
         // Temporary shortcut to endscreen
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
-            game.setScreen(new EndScreen(game, elapsedTime, points, loot, true));
+            gameEnd(true);
         } else if(Gdx.input.isKeyPressed(Input.Keys.DEL)){
-            game.setScreen(new EndScreen(game, elapsedTime, points, loot, false));
+            gameEnd(false);
         }
     }
 
@@ -186,5 +186,9 @@ public class GameScreen extends ScreenAdapter {
         HUDBatch.dispose();
         tiledMap.dispose();
         instrumental.dispose();
+    }
+
+    public void gameEnd(boolean win){
+        game.setScreen(new EndScreen(game, elapsedTime, points, loot, win));
     }
 }

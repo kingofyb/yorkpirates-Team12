@@ -21,11 +21,11 @@ public class HealthBar extends GameObject {
      * @param entity    The college which this bar is attached to.
      * @param frames    The animation frames, or a single sprite.
      */
-    public HealthBar(College entity,Array<Texture> frames) {
+    public HealthBar(GameObject entity,Array<Texture> frames) {
         super(frames, 0, entity.x, entity.y + entity.height/2 + 2f, entity.width, 2f, entity.team);
 
         startWidth = entity.width;
-        maxHealth = College.collegeMaxHealth;
+        maxHealth = entity.MaxHealth;
         currentHealth = maxHealth;
     }
 
@@ -36,5 +36,16 @@ public class HealthBar extends GameObject {
     public void resize(float currentValue){
         currentHealth = currentValue;
         this.width = startWidth * (currentHealth/maxHealth);
+    }
+
+    /**
+     * Moves the object within the x and y-axis of the game world.
+     * @param x     The amount to move the object within the x-axis.
+     * @param y     The amount to move the object within the y-axis.
+     */
+    @Override
+    void move(float x, float y){
+        this.x = x;
+        this.y = y;
     }
 }
