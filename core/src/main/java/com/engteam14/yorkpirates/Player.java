@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 public class Player extends GameObject {
 
     public Vector2 camdiff;
-    private Vector2 oldpos;
 
     private int lastxdir;
     private int lastydir;
@@ -24,31 +23,7 @@ public class Player extends GameObject {
     private static final float SPEED = 70f; // Player movement speed.
 
     /**
-     *  Generates a player object within the game with animated frame(s) and a hitbox.
-     * @param frames    The animation frames, or a single sprite.
-     * @param fps       The number of frames to be displayed per second.
-     * @param team      The team the player is on.
-     */
-    public Player(Array<Texture> frames, float fps, String team){
-        super(frames, fps,team);
-        lastMovementScore = 0;
-    }
-
-    /**
-     *  Generates a player object within the game with animated frame(s) and a hitbox.
-     * @param frames    The animation frames, or a single sprite.
-     * @param fps       The number of frames to be displayed per second.
-     * @param x         The x coordinate within the map to initialise the object at.
-     * @param y         The y coordinate within the map to initialise the object at.
-     * @param team      The team the player is on.
-     */
-    public Player(Array<Texture> frames, float fps, float x, float y, String team){
-        super(frames, fps, x, y, team);
-        lastMovementScore = 0;
-    }
-
-    /**
-     *  Generates a generic object within the game with animated frame(s) and a hitbox.
+     *  Generates a player object within the game with animated frame(s).
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
      * @param x         The x coordinate within the map to initialise the object at.
@@ -67,9 +42,8 @@ public class Player extends GameObject {
      * @param screen    The main game screen.
      * @param camera    The player camera.
      */
-    @Override
     public void update(GameScreen screen, OrthographicCamera camera){
-        oldpos = new Vector2(x,y);
+        Vector2 oldpos = new Vector2(x, y);
         // Movement Calculations
         int horizontal = ((Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) ? 1 : 0)
                 - ((Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) ? 1 : 0);
@@ -77,18 +51,44 @@ public class Player extends GameObject {
                 - ((Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) ? 1 : 0);
         if (horizontal != 0 || vertical != 0){
             move(SPEED*horizontal, SPEED*vertical);
-            updateHitboxPos();
-            if (TimeUtils.timeSinceMillis(lastMovementScore) > POINT_FREQ){
-                lastMovementScore = TimeUtils.millis();
-                screen.points.Add(1);
+            if (safeMove(screen.game.edges)) {
+                if (TimeUtils.timeSinceMillis(lastMovementScore) > POINT_FREQ) {
+                    lastMovementScore = TimeUtils.millis();
+                    screen.points.Add(1);
+                }
+                lastxdir = horizontal;
+                lastydir = vertical;
+                moving = true;
+            } else {    // Collision
+                Vector2 newpos = new Vector2(x, y);
+                x = oldpos.x;
+                if (!safeMove(screen.game.edges)) {
+                    x = newpos.x;
+                    y = oldpos.y;
+                    if (!safeMove(screen.game.edges)) {
+                        x = oldpos.x;
+                    }
+                }
+                moving = false;
             }
-            lastxdir = horizontal;
-            lastydir = vertical;
-            moving = true;
         } else moving = false;
 
         // Camera Calculations
         ProcessCamera(screen, camera);
+    }
+
+    /**
+     *  Calculate if the current player position is safe to be in.
+     * @param edges A 2d array containing safe/unsafe positions to be in.
+     * @return      If the current position is safe.
+     */
+    private Boolean safeMove(Array<Array<Boolean>> edges){
+        return (
+            edges.get((int)((y+height/2)/16)).get((int)((x+width/2)/16)) &&
+            edges.get((int)((y+height/2)/16)).get((int)((x-width/2)/16)) &&
+            edges.get((int)((y-height/2)/16)).get((int)((x+width/2)/16)) &&
+            edges.get((int)((y-height/2)/16)).get((int)((x-width/2)/16))
+        );
     }
 
     /**
@@ -116,28 +116,5 @@ public class Player extends GameObject {
 
         //batch.draw(frame, x - width/2, y - height/2, width, height);
         batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
-    }
-
-    /**
-     *  Called by another object if the player hits them.
-     * @param screen    The main game screen.
-     * @param camera    The player camera.
-     * @param source    The object the player hit.
-     */
-    public void hit(GameScreen screen, OrthographicCamera camera, GameObject source){
-        Vector2 newpos = new Vector2(x, y);
-        x = oldpos.x;
-        updateHitboxPos();
-        if (source.overlaps(hitbox)) {
-            x = newpos.x;
-            y = oldpos.y;
-            updateHitboxPos();
-            if (source.overlaps(hitbox)) {
-                x = oldpos.x;
-                updateHitboxPos();
-            }
-        }
-        moving = false;
-        ProcessCamera(screen, camera);
     }
 }

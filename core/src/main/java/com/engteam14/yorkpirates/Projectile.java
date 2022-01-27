@@ -45,7 +45,6 @@ public class Projectile extends GameObject{
      * Called once per frame. Used to perform calculations such as projectile movement and collision detection.
      * @param screen    The main game screen.
      */
-    @Override
     public void update(GameScreen screen, OrthographicCamera camera){
         // Movement Calculations
         move(SPEED*dx, SPEED*dy);

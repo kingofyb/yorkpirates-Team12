@@ -59,7 +59,6 @@ public class College extends GameObject {
      * @param screen    The main game screen.
      * @param camera    The player camera.
      */
-    @Override
     public void update(GameScreen screen, OrthographicCamera camera){
         float playerX = screen.player.x;
         float playerY = screen.player.y;
@@ -73,10 +72,6 @@ public class College extends GameObject {
             Array<Texture> sprites = new Array<>();
             sprites.add(new Texture("tempProjectile.png"));
             screen.projectiles.add(new Projectile(sprites, 0, this, playerX, playerY, team));
-
-            if (overlaps(screen.player.hitbox)){
-                screen.player.hit(screen, camera, this);
-            }
         }
     }
 

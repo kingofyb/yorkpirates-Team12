@@ -114,17 +114,6 @@ public class GameObject {
     }
 
     /**
-     * Called once per frame. Used to perform calculations such as collision.
-     * @param screen    The main game screen.
-     * @param camera    The player camera.
-     */
-    public void update(GameScreen screen, OrthographicCamera camera){
-        if (overlaps(screen.player.hitbox)){
-            screen.player.hit(screen, camera, this);
-        }
-    }
-
-    /**
      * Called when drawing the object.
      * @param batch         The batch to draw the object within.
      * @param elapsedTime   The current time the game has been running for.
