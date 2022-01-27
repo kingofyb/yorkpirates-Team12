@@ -81,6 +81,7 @@ public class Player extends GameObject {
                 moving = false;
             }
         } else moving = false;
+        updateHitboxPos();
 
         // Camera Calculations
         ProcessCamera(screen, camera);
