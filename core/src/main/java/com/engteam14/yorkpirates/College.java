@@ -62,7 +62,6 @@ public class College extends GameObject {
      * @param screen    The main game screen.
      * @param camera    The player camera.
      */
-    @Override
     public void update(GameScreen screen, OrthographicCamera camera){
         direction.move();
         float playerX = screen.player.x;
@@ -93,9 +92,6 @@ public class College extends GameObject {
                     }
 
                 }
-            }
-            if (overlaps(screen.player.hitbox)){
-                screen.player.hit(screen, camera, this);
             }
         }
     }

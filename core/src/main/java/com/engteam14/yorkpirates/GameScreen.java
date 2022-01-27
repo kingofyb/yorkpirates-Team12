@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -118,7 +119,6 @@ public class GameScreen extends ScreenAdapter {
 //        game.batch.draw(map,0,0); // Draw map first so behind everything
         tiledMapRenderer.setView(game.camera);
         tiledMapRenderer.render();
-        testCollider.draw(game.batch, 0);
         for(int i = 0; i < projectiles.size; i++) {
             projectiles.get(i).draw(game.batch, 0);
         }
@@ -126,6 +126,11 @@ public class GameScreen extends ScreenAdapter {
             colleges.get(i).draw(game.batch, 0);
         }
         player.draw(game.batch, elapsedTime); // Player is last entity, all else drawn before them
+        game.font.getData().setScale(0.5f);
+        int tx = (int)(player.x/16f);
+        int ty = (int)(player.y/16f);
+        game.font.draw(game.batch, new Vector2(tx,ty).toString(), player.x+player.width/2, player.y+player.height/2);
+        game.font.getData().setScale(1f);
         game.batch.end();
         // End drawing batch
         HUDCam.update();
@@ -146,7 +151,6 @@ public class GameScreen extends ScreenAdapter {
     private void update(){
         // Call update for every individual object
         player.update(this, game.camera);
-        testCollider.update(this, game.camera);
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).update(this, game.camera);
         }
@@ -173,6 +177,8 @@ public class GameScreen extends ScreenAdapter {
         // Temporary shortcut to End Screen
         if(Gdx.input.isKeyPressed(Input.Keys.DEL)){
             gameEnd(false);
+        }else if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+            Gdx.app.exit();
         }
     }
 

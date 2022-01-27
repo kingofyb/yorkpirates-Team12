@@ -27,28 +27,6 @@ public class Player extends GameObject {
     private static final float speed = 70f; // Player movement speed.
 
     /**
-     *  Generates a player object within the game with animated frame(s) and a hitbox.
-     * @param frames    The animation frames, or a single sprite.
-     * @param fps       The number of frames to be displayed per second.
-     * @param team      The team the player is on.
-     */
-    public Player(Array<Texture> frames, float fps, String team){
-        this(frames, fps,0,0,team);
-    }
-
-    /**
-     *  Generates a player object within the game with animated frame(s) and a hitbox.
-     * @param frames    The animation frames, or a single sprite.
-     * @param fps       The number of frames to be displayed per second.
-     * @param x         The x coordinate within the map to initialise the object at.
-     * @param y         The y coordinate within the map to initialise the object at.
-     * @param team      The team the player is on.
-     */
-    public Player(Array<Texture> frames, float fps, float x, float y, String team){
-        this(frames,fps,x,y,frames.get(0).getWidth(),frames.get(0).getHeight(),team);
-    }
-
-    /**
      * Generates a generic object within the game with animated frame(s) and a hitbox.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
@@ -73,9 +51,8 @@ public class Player extends GameObject {
      * @param screen    The main game screen.
      * @param camera    The player camera.
      */
-    @Override
     public void update(GameScreen screen, OrthographicCamera camera){
-        oldPos = new Vector2(x,y);
+        Vector2 oldPos = new Vector2(x,y);
         // Movement Calculations
         int horizontal = ((Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) ? 1 : 0)
                 - ((Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) ? 1 : 0);
@@ -83,18 +60,44 @@ public class Player extends GameObject {
                 - ((Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) ? 1 : 0);
         if (horizontal != 0 || vertical != 0){
             move(speed*horizontal, speed*vertical);
-            updateHitboxPos();
-            if (TimeUtils.timeSinceMillis(lastMovementScore) > pointFrequency){
-                lastMovementScore = TimeUtils.millis();
-                screen.points.Add(1);
+            if (safeMove(screen.game.edges)) {
+                if (TimeUtils.timeSinceMillis(lastMovementScore) > pointFrequency) {
+                    lastMovementScore = TimeUtils.millis();
+                    screen.points.Add(1);
+                }
+                previousDirectionX = horizontal;
+                previousDirectionY = vertical;
+                moving = true;
+            } else {    // Collision
+                Vector2 newPos = new Vector2(x, y);
+                x = oldPos.x;
+                if (!safeMove(screen.game.edges)) {
+                    x = newPos.x;
+                    y = oldPos.y;
+                    if (!safeMove(screen.game.edges)) {
+                        x = oldPos.x;
+                    }
+                }
+                moving = false;
             }
-            previousDirectionX = horizontal;
-            previousDirectionY = vertical;
-            moving = true;
         } else moving = false;
 
         // Camera Calculations
         ProcessCamera(screen, camera);
+    }
+
+    /**
+     *  Calculate if the current player position is safe to be in.
+     * @param edges A 2d array containing safe/unsafe positions to be in.
+     * @return      If the current position is safe.
+     */
+    private Boolean safeMove(Array<Array<Boolean>> edges){
+        return (
+                edges.get((int)((y+height/2)/16)).get((int)((x+width/2)/16)) &&
+                        edges.get((int)((y+height/2)/16)).get((int)((x-width/2)/16)) &&
+                        edges.get((int)((y-height/2)/16)).get((int)((x+width/2)/16)) &&
+                        edges.get((int)((y-height/2)/16)).get((int)((x-width/2)/16))
+        );
     }
 
     /**
@@ -153,28 +156,5 @@ public class Player extends GameObject {
         batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
         if(!(playerHealth == null)) playerHealth.draw(batch, 0);
 
-    }
-
-    /**
-     * Called by another object if the player hits them.
-     * @param screen    The main game screen.
-     * @param camera    The player camera.
-     * @param source    The object the player hit.
-     */
-    public void hit(GameScreen screen, OrthographicCamera camera, GameObject source){
-        Vector2 newPos = new Vector2(x, y);
-        x = oldPos.x;
-        updateHitboxPos();
-        if (source.overlaps(hitbox)) {
-            x = newPos.x;
-            y = oldPos.y;
-            updateHitboxPos();
-            if (source.overlaps(hitbox)) {
-                x = oldPos.x;
-                updateHitboxPos();
-            }
-        }
-        moving = false;
-        ProcessCamera(screen, camera);
     }
 }
