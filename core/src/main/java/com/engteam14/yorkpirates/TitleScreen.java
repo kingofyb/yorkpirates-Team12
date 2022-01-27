@@ -4,14 +4,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class TitleScreen extends ScreenAdapter {
     private final YorkPirates game;
 
     private static final float LOGO_SCALE = 0.33f;
 
-    private final Texture title;
+    private Stage stage;
+    private StretchViewport viewport;
 
     /**
      *  Initialises the title screen, as well as relevant textures and data it may contain.
@@ -19,7 +29,32 @@ public class TitleScreen extends ScreenAdapter {
      */
     public TitleScreen(YorkPirates game){
         this.game = game;
-        title = new Texture("libgdx.png");
+
+        stage = new Stage();
+
+        Table table = new Table();
+        table.setFillParent(true);
+
+        TextureAtlas atlas;
+        atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
+        TextureAtlas.AtlasRegion region = atlas.findRegion("imagename");
+        Sprite sprite = atlas.createSprite("otherimagename");
+        NinePatch patch = atlas.createPatch("patchimagename");
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
+
+        skin.addRegions(atlas);
+
+
+        Label nameLabel = new Label("Name:", skin);
+        TextField nameText = new TextField("", skin);
+
+        table.add(nameLabel);
+        table.add(nameText).width(100);
+        Gdx.input.setInputProcessor(stage);
+
+        table.row();
+        stage.addActor(table);
+
     }
 
     /**
@@ -31,11 +66,12 @@ public class TitleScreen extends ScreenAdapter {
         update();
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
-        ScreenUtils.clear(0.6f, 0.6f, 1.0f, 1.0f);
-        game.batch.begin();
-        float newheight = title.getHeight()*(game.camera.viewportWidth*LOGO_SCALE / title.getWidth());
-        game.batch.draw(title, game.camera.viewportWidth*((1-LOGO_SCALE)/2), game.camera.viewportHeight/2-newheight/2, game.camera.viewportWidth*LOGO_SCALE, newheight);
-        game.batch.end();
+        stage.draw();
+      //  ScreenUtils.clear(0.6f, 0.6f, 1.0f, 1.0f);
+      //  game.batch.begin();
+     //   float newheight = title.getHeight()*(game.camera.viewportWidth*LOGO_SCALE / title.getWidth());
+     //   game.batch.draw(title, game.camera.viewportWidth*((1-LOGO_SCALE)/2), game.camera.viewportHeight/2-newheight/2, game.camera.viewportWidth*LOGO_SCALE, newheight);
+      //  game.batch.end();
     }
 
     /**
@@ -50,8 +86,4 @@ public class TitleScreen extends ScreenAdapter {
     /**
      *  Disposes of disposables when game finishes execution.
      */
-    @Override
-    public void dispose(){
-        title.dispose();
-    }
 }

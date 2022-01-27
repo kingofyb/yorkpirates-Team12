@@ -7,21 +7,33 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameScreen extends ScreenAdapter {
     private final Texture quitB;
+    private final Texture muteB;
     public YorkPirates game;
     public Player player;
     public ScoreManager points;
+    public static FitViewport viewp;
+
     public ScoreManager loot;
     private final GameObject testCollider;
 
@@ -51,13 +63,16 @@ public class GameScreen extends ScreenAdapter {
     public GameScreen(YorkPirates game){
         this.game = game;
         followPos = game.camera.position;
+        System.out.println("Gamescreen1");
 
         // Initialise HUD
         HUDBatch = new SpriteBatch();
         HUDCam = new OrthographicCamera();
         HUDCam.setToOrtho(false, game.camera.viewportWidth, game.camera.viewportHeight);
+        viewp = new FitViewport( Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), HUDCam); // change this to your needed viewport
 
 
+        System.out.println("gamescreen2");
 
         //initialise sound
         instrumental = Gdx.audio.newMusic(Gdx.files.internal("assets/Pirate1_Theme1.ogg"));
@@ -79,9 +94,9 @@ public class GameScreen extends ScreenAdapter {
         Array<Texture> sprites = new Array<>();
      //   Array<Texture> buttons = new Array<>();
 
-        //Initialise HUD Quit button.
+        //Initialise HUD buttons.
         quitB = new Texture("exitButton.png");
-
+        muteB = new Texture("muteButton.png");
         // Initialise player
         sprites.add(new Texture("ship (4).png"), new Texture("ship (4).png"));
         player = new Player(sprites, 2, game.camera.viewportWidth/2, game.camera.viewportHeight/2, 32, 16, playerTeam);
@@ -105,6 +120,11 @@ public class GameScreen extends ScreenAdapter {
         // Temporary collide-able GameObject for testing purposes
         sprites.add(new Texture("collider.png"));
         testCollider = new GameObject(sprites, 0, player.x+20f, player.y+30f, 40f, 20f,playerTeam);
+
+        HUD.HUDinitialise();
+
+
+
     }
 
     /**
@@ -140,6 +160,8 @@ public class GameScreen extends ScreenAdapter {
         game.font.draw(HUDBatch, points.GetString(), 0+HUDCam.viewportHeight*0.03f , HUDCam.viewportHeight*0.98f);
         game.font.draw(HUDBatch, loot.GetString(), HUDCam.viewportWidth*0.98f, HUDCam.viewportHeight*0.98f, 1f, Align.right, true);
         HUDBatch.draw(quitB, 0, 0);
+        HUDBatch.draw(muteB, HUDCam.viewportWidth-16f, 0);
+        HUD.renderStage();
         HUDBatch.end();
         HUDCam.update();
         // End drawing HUD
@@ -162,6 +184,14 @@ public class GameScreen extends ScreenAdapter {
             Vector3 mousePos = game.camera.unproject(mouseVect);
             if (mousePos.x <= 20f && mousePos.y <=  20f ) {
                 dispose();
+            }else if (mousePos.x>=HUDCam.viewportWidth-20f && mousePos.y<=20f){
+
+                if (instrumental.getVolume() == 0) {
+                    instrumental.setVolume(1f);
+                }else{
+                    instrumental.setVolume(0);
+
+                }
             }else{
                 Array<Texture> sprites = new Array<>();
                 sprites.add(new Texture("tempProjectile.png"));
