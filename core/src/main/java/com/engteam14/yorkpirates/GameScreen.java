@@ -90,11 +90,11 @@ public class GameScreen extends ScreenAdapter {
         // Initialise colleges
         sprites.add(new Texture("tempCollege.png"));
         colleges = new Array<>();
-        colleges.add(new College(sprites, 0, player.x+100f, player.y,20f, 40f, "testZero",enemyTeam));
-        colleges.add(new College(sprites, 0, player.x+50f, player.y-50f,20f, 40f, "testOne",enemyTeam));
-        colleges.add(new College(sprites, 0, player.x+100f, player.y+50f,20f, 40f, "testTwo",enemyTeam));
-        colleges.add(new College(sprites, 0, player.x+50f, player.y+50f,20f, 40f, "testThree",enemyTeam));
-        colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "Home",playerTeam));
+        colleges.add(new College(sprites, 0, player.x+100f, player.y,20f, 40f, "testZero",enemyTeam,player));
+        colleges.add(new College(sprites, 0, player.x+50f, player.y-50f,20f, 40f, "testOne",enemyTeam,player));
+        colleges.add(new College(sprites, 0, player.x+100f, player.y+250f,20f, 40f, "testTwo",enemyTeam,player));
+        colleges.add(new College(sprites, 0, player.x+50f, player.y+50f,20f, 40f, "testThree",enemyTeam,player));
+        colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "Home",playerTeam,player));
         sprites.clear();
 
         // Temporary collide-able GameObject for testing purposes
@@ -170,7 +170,7 @@ public class GameScreen extends ScreenAdapter {
             game.camera.position.slerp(followPos, 0.1f);
         }
 
-        // Temporary shortcut to endscreen
+        // Temporary shortcut to End Screen
         if(Gdx.input.isKeyPressed(Input.Keys.DEL)){
             gameEnd(false);
         }

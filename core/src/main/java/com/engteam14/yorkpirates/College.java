@@ -18,6 +18,7 @@ public class College extends GameObject {
 
     public boolean nearPlayer = false;
     private HealthBar collegeBar;
+    private final Indicator direction;
 
     private final String collegeName;
     private static final int pointsGained = 50;
@@ -36,7 +37,7 @@ public class College extends GameObject {
      * @param name      The name of the college.
      * @param team      The team the college is on.
      */
-    public College(Array<Texture> frames, float fps, float x, float y, float width, float height, String name, String team){
+    public College(Array<Texture> frames, float fps, float x, float y, float width, float height, String name, String team, Player player){
         super(frames, fps, x, y, width, height, team);
         collegeName = name;
         setMaxHealth(500);
@@ -49,6 +50,11 @@ public class College extends GameObject {
             sprites.add(new Texture("enemyHealthBar.png"));
         }
         collegeBar = new HealthBar(this,sprites);
+        sprites.clear();
+
+
+        sprites.add(new Texture("questArrow.png"));
+        direction = new Indicator(this,player,sprites);
     }
 
     /**
@@ -58,6 +64,7 @@ public class College extends GameObject {
      */
     @Override
     public void update(GameScreen screen, OrthographicCamera camera){
+        direction.move();
         float playerX = screen.player.x;
         float playerY = screen.player.y;
         float detectionRadius = 90f;
@@ -136,5 +143,6 @@ public class College extends GameObject {
     public void draw(SpriteBatch batch, float elapsedTime){
         batch.draw(anim.getKeyFrame(elapsedTime, true), x - width/2, y - height/2, width, height);
         collegeBar.draw(batch, 0);
+        direction.draw(batch,0);
     }
 }

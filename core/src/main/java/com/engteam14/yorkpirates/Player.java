@@ -49,7 +49,7 @@ public class Player extends GameObject {
     }
 
     /**
-     *  Generates a generic object within the game with animated frame(s) and a hitbox.
+     * Generates a generic object within the game with animated frame(s) and a hitbox.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
      * @param x         The x coordinate within the map to initialise the object at.
@@ -69,7 +69,7 @@ public class Player extends GameObject {
     }
 
     /**
-     *  Called once per frame. Used to perform calculations such as player/camera movement.
+     * Called once per frame. Used to perform calculations such as player/camera movement.
      * @param screen    The main game screen.
      * @param camera    The player camera.
      */
@@ -127,7 +127,7 @@ public class Player extends GameObject {
     }
 
     /**
-     *  Called after update(), calculates whether the camera should follow the player and passes it to the game screen.
+     * Called after update(), calculates whether the camera should follow the player and passes it to the game screen.
      * @param screen    The main game screen.
      * @param camera    The player camera.
      */
@@ -137,7 +137,7 @@ public class Player extends GameObject {
     }
 
     /**
-     *  Called when drawing the player.
+     * Called when drawing the player.
      * @param batch         The batch to draw the player within.
      * @param elapsedTime   The current time the game has been running for.
      */
@@ -156,17 +156,17 @@ public class Player extends GameObject {
     }
 
     /**
-     *  Called by another object if the player hits them.
+     * Called by another object if the player hits them.
      * @param screen    The main game screen.
      * @param camera    The player camera.
      * @param source    The object the player hit.
      */
     public void hit(GameScreen screen, OrthographicCamera camera, GameObject source){
-        Vector2 newpos = new Vector2(x, y);
+        Vector2 newPos = new Vector2(x, y);
         x = oldPos.x;
         updateHitboxPos();
         if (source.overlaps(hitbox)) {
-            x = newpos.x;
+            x = newPos.x;
             y = oldPos.y;
             updateHitboxPos();
             if (source.overlaps(hitbox)) {

@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.Array;
 public class HealthBar extends GameObject {
 
     private final float startWidth;
-
     /**
      * Generates a college object within the game with animated frame(s) and a hitbox.
      * @param entity    The college which this bar is attached to.
