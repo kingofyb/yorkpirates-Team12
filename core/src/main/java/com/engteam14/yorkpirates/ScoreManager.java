@@ -27,7 +27,6 @@ public class ScoreManager {
      */
     public void Add(int amount, HUD hud1){
         score += amount;
-        hud1.HUDinitialise();
 
     }
 

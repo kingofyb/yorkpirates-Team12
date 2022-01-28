@@ -27,7 +27,7 @@ public class GameScreen extends ScreenAdapter {
     public HUD hud1;
     public Player player;
     public static ScoreManager points;
-    public static FitViewport viewp;
+    public FitViewport viewp;
 
     public static ScoreManager loot;
     private final GameObject testCollider;
@@ -38,7 +38,7 @@ public class GameScreen extends ScreenAdapter {
     private final SpriteBatch HUDBatch;
     private final OrthographicCamera HUDCam;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
-    public static Music instrumental;
+    public Music instrumental;
 
     private static float elapsedTime = 0;
     private Vector3 followPos;
@@ -106,7 +106,7 @@ public class GameScreen extends ScreenAdapter {
         sprites.add(new Texture("collider.png"));
         testCollider = new GameObject(sprites, 0, player.x+20f, player.y+30f, 40f, 20f,playerTeam);
         hud1 = new HUD();
-        hud1.HUDinitialise();
+        hud1.HUDinitialise(this);
 
 
 
@@ -145,7 +145,11 @@ public class GameScreen extends ScreenAdapter {
         HUDBatch.setProjectionMatrix(HUDCam.combined);
         // Start drawing HUD
         // /
+        hud1.renderStage(this );
         HUDCam.update();
+
+
+
     }
 
     /**
@@ -195,7 +199,6 @@ public class GameScreen extends ScreenAdapter {
         instrumental.dispose();
     }
 
-    public static void gameEnd(boolean win){
-        game.setScreen(new EndScreen(game, elapsedTime, points, loot, win));
+    public static void gameEnd(boolean win){game.setScreen(new EndScreen(game, elapsedTime, points, loot, win));
     }
 }
