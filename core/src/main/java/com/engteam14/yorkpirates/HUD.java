@@ -14,42 +14,41 @@ import com.badlogic.gdx.utils.Align;
 
 public class HUD {
 
-    public static Stage stage1;
-    public static Label score;
-    private static Table table;
-    private static Skin skin;
-    private static Label loot;
+    public Stage stage1;
+    public Label score;
+
+    private final Label loot;
 
     public HUD(GameScreen screen){
         //initialise the stage
         System.out.println("rendering");
-        stage1 = new Stage(screen.viewp);
+        stage1 = new Stage(screen.viewport);
         Gdx.input.setInputProcessor(stage1);
 
-//create main screen table
-        table = new Table();
+        //create main screen table
+        Table table = new Table();
         table.setFillParent(true);
         table.setPosition(0, 0);
-       // table.setDebug(true);
+        //table.setDebug(true);
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
         TextureAtlas.AtlasRegion region = atlas.findRegion("uiskin");
         Sprite sprite = atlas.createSprite("otherimagename");
         NinePatch patch = atlas.createPatch("patchimagename");
-        skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
         skin.addRegions(atlas);
         table.row();
         score = new Label(screen.points.GetString(), skin);
         score.setFontScale(5);
         table.add(score);
-        table.add().prefWidth(screen.viewp.getScreenWidth()-80f);
+        table.add().prefWidth(screen.viewport.getScreenWidth()-80f);
         loot = new Label(screen.loot.GetString(), skin);
         loot.setFontScale(5);
         table.add(loot).padRight(5).left();
 
         table.row();
-        table.add().prefHeight(screen.viewp.getScreenHeight());
+        table.add().prefHeight(screen.viewport.getScreenHeight());
         table.row();
 
         ImageButton button1 = new ImageButton(skin, "default");
@@ -71,7 +70,6 @@ public class HUD {
                 } else {
                     screen.instrumental.setVolume(0);
                 }
-
             }
         });
 
@@ -79,14 +77,12 @@ public class HUD {
         System.out.println("draw");
 
         Gdx.input.setInputProcessor(stage1);
-
-
     }
+
     public void renderStage(GameScreen screen){
         score.setText(screen.points.GetString());
         loot.setText(screen.loot.GetString());
 
         stage1.draw();
     }
-
 }

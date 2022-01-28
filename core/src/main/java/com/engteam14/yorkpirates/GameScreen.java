@@ -23,16 +23,16 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameScreen extends ScreenAdapter {
-    public static YorkPirates game;
+    public YorkPirates game;
     public HUD hud1;
     public Player player;
 
-    public FitViewport viewp;
-    public static ScoreManager points;
+    public FitViewport viewport;
+    public ScoreManager points;
     public ScoreManager loot;
 
     public static Array<Texture> collegeSprites;
-    public static int collegesCaptured;
+    public int collegesCaptured;
     public Array<College> colleges;
     public Array<Projectile> projectiles;
 
@@ -41,7 +41,7 @@ public class GameScreen extends ScreenAdapter {
     private final OrthogonalTiledMapRenderer tiledMapRenderer;
     public Music instrumental;
 
-    private static float elapsedTime = 0;
+    private float elapsedTime = 0;
     private Vector3 followPos;
     public boolean followPlayer = false;
 
@@ -56,14 +56,14 @@ public class GameScreen extends ScreenAdapter {
      * @param game  Passes in the base game class for reference.
      */
     public GameScreen(YorkPirates game){
-        GameScreen.game = game;
+        this.game = game;
         followPos = game.camera.position;
 
         // Initialise HUD
         HUDBatch = new SpriteBatch();
         HUDCam = new OrthographicCamera();
         HUDCam.setToOrtho(false, game.camera.viewportWidth, game.camera.viewportHeight);
-        viewp = new FitViewport( Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), HUDCam); // change this to your needed viewport
+        viewport = new FitViewport( Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), HUDCam); // change this to your needed viewport
 
         //initialise sound
         instrumental = Gdx.audio.newMusic(Gdx.files.internal("Pirate1_Theme1.ogg"));
@@ -143,9 +143,6 @@ public class GameScreen extends ScreenAdapter {
         // /
         gameHUD.renderStage(this );
         HUDCam.update();
-
-
-
     }
 
     /**

@@ -143,7 +143,7 @@ public class College extends GameObject {
                 collegeBar.changeImage(healthBarSprite,0);
                 currentHealth = maxHealth;
                 collegeBar.resize(currentHealth);
-                GameScreen.collegesCaptured += 1;
+                screen.collegesCaptured += 1;
                 direction.changeImage(indicatorSprite,0);
                 team = GameScreen.playerTeam;
             }else{
