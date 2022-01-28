@@ -1,5 +1,7 @@
 package com.engteam14.yorkpirates;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+
 public class ScoreManager {
 
     private int score;
@@ -23,16 +25,18 @@ public class ScoreManager {
      *  Adds an integer value to the score.
      * @param amount    the value to be added.
      */
-    public void Add(int amount){
+    public void Add(int amount, HUD hud1){
         score += amount;
+        hud1.HUDinitialise();
+
     }
 
     /**
      *  Subtracts an integer value from the score.
      * @param amount    the value to be subtracted.
      */
-    public void Subtract(int amount){
-        Add(-amount);
+    public void Subtract(int amount ,HUD hud1){
+        Add(-amount, hud1);
     }
 
     /**

@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Align;
 
 public class HUD {
 
-    private static Stage stage1;
+    public static Stage stage1;
     public static Label score;
     public static void HUDinitialise(){
         //initialise the stage
@@ -82,7 +82,7 @@ public class HUD {
         table.add(bottombar).fillX();
         stage1.addActor(table);
         stage1.draw();
-
+        System.out.println("draw");
 
 
     }

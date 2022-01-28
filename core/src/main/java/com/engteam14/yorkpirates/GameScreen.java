@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameScreen extends ScreenAdapter {
     public static YorkPirates game;
+    public HUD hud1;
     public Player player;
     public static ScoreManager points;
     public static FitViewport viewp;
@@ -61,7 +62,6 @@ public class GameScreen extends ScreenAdapter {
         HUDCam = new OrthographicCamera();
         HUDCam.setToOrtho(false, game.camera.viewportWidth, game.camera.viewportHeight);
         viewp = new FitViewport( Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), HUDCam); // change this to your needed viewport
-
 
 
         //initialise sound
@@ -105,8 +105,9 @@ public class GameScreen extends ScreenAdapter {
         // Temporary collide-able GameObject for testing purposes
         sprites.add(new Texture("collider.png"));
         testCollider = new GameObject(sprites, 0, player.x+20f, player.y+30f, 40f, 20f,playerTeam);
+        hud1 = new HUD();
+        hud1.HUDinitialise();
 
-        HUD.HUDinitialise();
 
 
 
@@ -138,13 +139,12 @@ public class GameScreen extends ScreenAdapter {
         game.font.getData().setScale(0.5f);
         int tx = (int)(player.x/16f);
         int ty = (int)(player.y/16f);
-        game.font.draw(game.batch, new Vector2(tx,ty).toString(), player.x+player.width/2, player.y+player.height/2);
+        //game.font.draw(game.batch, new Vector2(tx,ty).toString(), player.x+player.width/2, player.y+player.height/2);
         game.font.getData().setScale(1f);
         game.batch.end();
         HUDBatch.setProjectionMatrix(HUDCam.combined);
         // Start drawing HUD
         // /
-        HUD.HUDinitialise();
         HUDCam.update();
     }
 
