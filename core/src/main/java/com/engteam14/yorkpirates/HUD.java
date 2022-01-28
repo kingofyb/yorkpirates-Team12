@@ -33,7 +33,7 @@ public class HUD {
         table = new Table();
         table.setFillParent(true);
         table.setPosition(0, 0);
-        table.setDebug(true);
+    //    table.setDebug(true);
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
