@@ -21,6 +21,7 @@ public class College extends GameObject {
     private Indicator direction;
 
     private final String collegeName;
+    private int imageIndex;
     private static final int pointsGained = 50;
     private static final int lootGained = 15;
     private static final int shootFrequency = 1000; // How often the college can shoot.
@@ -28,8 +29,6 @@ public class College extends GameObject {
 
     /**
      * Generates a college object within the game with animated frame(s) and a hitbox.
-     * @param frames    The animation frames, or a single sprite.
-     * @param fps       The number of frames to be displayed per second.
      * @param x         The x coordinate within the map to initialise the object at.
      * @param y         The y coordinate within the map to initialise the object at.
      * @param width     The size of the object in the x-axis.
@@ -37,9 +36,27 @@ public class College extends GameObject {
      * @param name      The name of the college.
      * @param team      The team the college is on.
      */
-    public College(Array<Texture> frames, float fps, float x, float y, float width, float height, String name, String team, Player player){
-        super(frames, fps, x, y, width, height, team);
+    public College(float x, float y, float width, float height, String name, String team, Player player){
+        super(GameScreen.collegeSprites, 0, x, y, width, height, team);
         collegeName = name;
+
+        Array<Texture> sprites = new Array<>();
+        switch(collegeName) {
+            case "Derwent":
+                imageIndex = 2;
+                break;
+            case "Langwith":
+                imageIndex = 4;
+                break;
+            case "Home":
+                imageIndex = 6;
+                break;
+            default:
+                imageIndex = 0;
+        }
+        sprites.add(GameScreen.collegeSprites.get(imageIndex));
+        changeImage(sprites,0);
+
         setMaxHealth(500);
         lastShotFired = 0;
 
@@ -59,9 +76,8 @@ public class College extends GameObject {
     /**
      * Called once per frame. Used to perform calculations such as collision.
      * @param screen    The main game screen.
-     * @param camera    The player camera.
      */
-    public void update(GameScreen screen, OrthographicCamera camera){
+    public void update(GameScreen screen){
         direction.move();
         float playerX = screen.player.x;
         float playerY = screen.player.y;
@@ -120,12 +136,16 @@ public class College extends GameObject {
                 healthBarSprite.add(new Texture("allyHealthBar.png"));
                 indicatorSprite.add(new Texture("homeArrow.png"));
 
+                Array<Texture> sprites = new Array<>();
+                imageIndex += 1;
+                sprites.add(GameScreen.collegeSprites.get(imageIndex));
+                changeImage(sprites,0);
+
                 collegeBar.changeImage(healthBarSprite,0);
                 currentHealth = maxHealth;
                 collegeBar.resize(currentHealth);
-
+                GameScreen.collegesCaptured += 1;
                 direction.changeImage(indicatorSprite,0);
-
                 team = GameScreen.playerTeam;
             }else{
                 collegeBar = null;

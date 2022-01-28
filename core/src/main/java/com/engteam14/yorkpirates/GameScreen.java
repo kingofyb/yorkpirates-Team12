@@ -27,9 +27,11 @@ public class GameScreen extends ScreenAdapter {
     public Player player;
 
     public static FitViewport viewp;
-    public static ScoreManager points;
-    public static ScoreManager loot;
+    public ScoreManager points;
+    public ScoreManager loot;
 
+    public static Array<Texture> collegeSprites;
+    public static int collegesCaptured;
     public Array<College> colleges;
     public Array<Projectile> projectiles;
 
@@ -72,9 +74,6 @@ public class GameScreen extends ScreenAdapter {
         points = new ScoreManager();
         loot = new ScoreManager();
 
-        // Initialise projectiles array to be used storing live projectiles
-        projectiles = new Array<>();
-
         // Initialise sprites array to be used generating GameObjects
         Array<Texture> sprites = new Array<>();
 
@@ -88,14 +87,23 @@ public class GameScreen extends ScreenAdapter {
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         // Initialise colleges
-        sprites.add(new Texture("tempCollege.png"));
+        collegesCaptured = 0;
+        collegeSprites = new Array<>();
+        collegeSprites.add( new Texture("alcuin.png"),
+                            new Texture("alcuin_2.png"));
+        collegeSprites.add( new Texture("derwent.png"),
+                            new Texture("derwent_2.png"));
+        collegeSprites.add( new Texture("langwith.png"),
+                            new Texture("langwith_2.png"));
+        collegeSprites.add( new Texture("goodricke.png"));
         colleges = new Array<>();
-        colleges.add(new College(sprites, 0, player.x+100f, player.y,20f, 40f, "testZero",enemyTeam,player));
-        colleges.add(new College(sprites, 0, player.x+50f, player.y-50f,20f, 40f, "testOne",enemyTeam,player));
-        colleges.add(new College(sprites, 0, player.x+100f, player.y+250f,20f, 40f, "testTwo",enemyTeam,player));
-        colleges.add(new College(sprites, 0, player.x+50f, player.y+50f,20f, 40f, "testThree",enemyTeam,player));
-        colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "Home",playerTeam,player));
-        sprites.clear();
+        colleges.add(new College(player.x+100f, player.y,20f, 40f, "Alcuin",enemyTeam,player));
+        colleges.add(new College(player.x+50f, player.y-50f,20f, 40f, "Derwent",enemyTeam,player));
+        colleges.add(new College(player.x+100f, player.y+250f,20f, 40f, "Langwith",enemyTeam,player));
+        colleges.add(new College(player.x-100f, player.y,20f, 40f, "Home",playerTeam,player));
+
+        // Initialise projectiles array to be used storing live projectiles
+        projectiles = new Array<>();
 
         gameHUD = new HUD(this);
     }
@@ -149,7 +157,7 @@ public class GameScreen extends ScreenAdapter {
         // Call updates for every individual object
         player.update(this, game.camera);
         for(int i = 0; i < colleges.size; i++) {
-            colleges.get(i).update(this, game.camera);
+            colleges.get(i).update(this);
         }
 
         // Check for projectile creation, then call projectile update
