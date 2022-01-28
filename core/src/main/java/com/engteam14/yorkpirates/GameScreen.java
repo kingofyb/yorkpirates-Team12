@@ -172,7 +172,7 @@ public class GameScreen extends ScreenAdapter {
 
         // Temporary shortcut to End Screen
         if(Gdx.input.isKeyPressed(Input.Keys.DEL)){
-            gameEnd(false);
+            pauseGame();
         }else if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
             Gdx.app.exit();
         }
@@ -186,6 +186,10 @@ public class GameScreen extends ScreenAdapter {
         HUDBatch.dispose();
         tiledMap.dispose();
         instrumental.dispose();
+    }
+
+    public void pauseGame(){
+        game.setScreen(new PauseScreen(game,this));
     }
 
     public static void gameEnd(boolean win){

@@ -20,11 +20,11 @@ public class TitleScreen extends ScreenAdapter {
 
     private static final float LOGO_SCALE = 0.33f;
 
-    private Stage stage;
+    private final Stage stage;
     private StretchViewport viewport;
 
     /**
-     *  Initialises the title screen, as well as relevant textures and data it may contain.
+     * Initialises the title screen, as well as relevant textures and data it may contain.
      * @param game  Passes in the base game class for reference.
      */
     public TitleScreen(YorkPirates game){
@@ -58,7 +58,7 @@ public class TitleScreen extends ScreenAdapter {
     }
 
     /**
-     *  Is called once every frame. Runs update() and then renders the title screen.
+     * Is called once every frame. Runs update() and then renders the title screen.
      * @param delta The time passed since the previously rendered frame.
      */
     @Override
@@ -67,11 +67,6 @@ public class TitleScreen extends ScreenAdapter {
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
         stage.draw();
-      //  ScreenUtils.clear(0.6f, 0.6f, 1.0f, 1.0f);
-      //  game.batch.begin();
-     //   float newheight = title.getHeight()*(game.camera.viewportWidth*LOGO_SCALE / title.getWidth());
-     //   game.batch.draw(title, game.camera.viewportWidth*((1-LOGO_SCALE)/2), game.camera.viewportHeight/2-newheight/2, game.camera.viewportWidth*LOGO_SCALE, newheight);
-      //  game.batch.end();
     }
 
     /**
@@ -82,8 +77,4 @@ public class TitleScreen extends ScreenAdapter {
             game.setScreen(new GameScreen(game));
         }
     }
-
-    /**
-     *  Disposes of disposables when game finishes execution.
-     */
 }
