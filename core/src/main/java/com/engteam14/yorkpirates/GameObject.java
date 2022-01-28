@@ -52,15 +52,19 @@ public class GameObject {
      * @param height    The size of the object in the y-axis.
      * @param team      The team the object is on.
      */
-    public GameObject(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
-        sprite = frames.get(0);
-        anim = new Animation<>(fps==0?0:(1f/fps), frames);
+    GameObject(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
+        changeImage(frames,fps);
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         setHitbox();
         this.team = team;
+    }
+
+    void changeImage(Array<Texture> frames, float fps){
+        sprite = frames.get(0);
+        anim = new Animation<>(fps==0?0:(1f/fps), frames);
     }
 
     void setMaxHealth(int mh){
@@ -74,7 +78,7 @@ public class GameObject {
      * @param damage            The damage dealt by the projectile.
      * @param projectileTeam    The team of the projectile.
      */
-    public void takeDamage(GameScreen screen, float damage, String projectileTeam){
+    void takeDamage(GameScreen screen, float damage, String projectileTeam){
         currentHealth -= damage;
     }
 
@@ -91,7 +95,7 @@ public class GameObject {
     /**
      * Sets the object's hitbox, based upon it's x, y, width and height values.
      */
-    private void setHitbox(){
+    void setHitbox(){
         hitbox = new Rectangle();
         updateHitboxPos();
         hitbox.width = width;
@@ -111,7 +115,7 @@ public class GameObject {
      * @param rect  The other object to be checked against.
      * @return      True if overlapping, false otherwise.
      */
-    public boolean overlaps(Rectangle rect){
+    boolean overlaps(Rectangle rect){
         updateHitboxPos();
         return hitbox.overlaps(rect);
     }
@@ -121,7 +125,7 @@ public class GameObject {
      * @param batch         The batch to draw the object within.
      * @param elapsedTime   The current time the game has been running for.
      */
-    public void draw(SpriteBatch batch, float elapsedTime){
+    void draw(SpriteBatch batch, float elapsedTime){
         batch.draw(anim.getKeyFrame(elapsedTime, true), x - width/2, y - height/2, width, height);
     }
 }

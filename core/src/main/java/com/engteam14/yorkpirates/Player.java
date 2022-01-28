@@ -107,7 +107,7 @@ public class Player extends GameObject {
      * @param y     The amount to move the object within the y-axis.
      */
     @Override
-    void move(float x, float y){
+    public void move(float x, float y){
         this.x += x * Gdx.graphics.getDeltaTime();
         this.y += y * Gdx.graphics.getDeltaTime();
         playerHealth.move(this.x, this.y + height/2 + 2f);

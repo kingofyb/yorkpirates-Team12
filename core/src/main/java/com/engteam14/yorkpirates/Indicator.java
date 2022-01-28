@@ -16,6 +16,7 @@ public class Indicator extends GameObject{
     private final College college;
 
     private Vector2 gradient;
+    public boolean visible;
 
     public Indicator(College college, Player player, Array<Texture> frames) {
         super(frames, 0, player.x, player.y, 10f, 5f, college.team);
@@ -23,6 +24,7 @@ public class Indicator extends GameObject{
         this.player = player;
         this.college = college;
         gradient = updateGradient();
+        visible = true;
         move();
     }
 
@@ -33,10 +35,12 @@ public class Indicator extends GameObject{
      */
     @Override
     public void draw(SpriteBatch batch, float elapsedTime){
-        Texture frame = sprite;
-        float rotation = (float) Math.toDegrees(Math.atan2(gradient.y,gradient.x));
+        if(visible){
+            Texture frame = sprite;
+            float rotation = (float) Math.toDegrees(Math.atan2(gradient.y,gradient.x));
 
-        batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
+            batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
+        }
     }
 
     /**

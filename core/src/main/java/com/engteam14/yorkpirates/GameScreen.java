@@ -25,18 +25,17 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 public class GameScreen extends ScreenAdapter {
     public static YorkPirates game;
     public Player player;
-    public static ScoreManager points;
-    public static FitViewport viewp;
 
+    public static FitViewport viewp;
+    public static ScoreManager points;
     public static ScoreManager loot;
-    private final GameObject testCollider;
 
     public Array<College> colleges;
     public Array<Projectile> projectiles;
 
     private final SpriteBatch HUDBatch;
     private final OrthographicCamera HUDCam;
-    private OrthogonalTiledMapRenderer tiledMapRenderer;
+    private final OrthogonalTiledMapRenderer tiledMapRenderer;
     public static Music instrumental;
 
     private static float elapsedTime = 0;
@@ -53,7 +52,7 @@ public class GameScreen extends ScreenAdapter {
      * @param game  Passes in the base game class for reference.
      */
     public GameScreen(YorkPirates game){
-        this.game = game;
+        GameScreen.game = game;
         followPos = game.camera.position;
 
         // Initialise HUD
@@ -61,8 +60,6 @@ public class GameScreen extends ScreenAdapter {
         HUDCam = new OrthographicCamera();
         HUDCam.setToOrtho(false, game.camera.viewportWidth, game.camera.viewportHeight);
         viewp = new FitViewport( Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), HUDCam); // change this to your needed viewport
-
-
 
         //initialise sound
         instrumental = Gdx.audio.newMusic(Gdx.files.internal("Pirate1_Theme1.ogg"));
@@ -79,8 +76,6 @@ public class GameScreen extends ScreenAdapter {
 
         // Initialise sprites array to be used generating GameObjects
         Array<Texture> sprites = new Array<>();
-     //   Array<Texture> buttons = new Array<>();
-
 
         // Initialise player
         sprites.add(new Texture("ship (4).png"), new Texture("ship (4).png"));
@@ -88,7 +83,6 @@ public class GameScreen extends ScreenAdapter {
         sprites.clear();
 
         // Initialise map texture
-        //map = new Texture("testback.png");
         tiledMap = new TmxMapLoader().load("Pirate12.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
@@ -102,14 +96,7 @@ public class GameScreen extends ScreenAdapter {
         colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "Home",playerTeam,player));
         sprites.clear();
 
-        // Temporary collide-able GameObject for testing purposes
-        sprites.add(new Texture("collider.png"));
-        testCollider = new GameObject(sprites, 0, player.x+20f, player.y+30f, 40f, 20f,playerTeam);
-
         HUD.HUDinitialise();
-
-
-
     }
 
     /**
@@ -158,7 +145,7 @@ public class GameScreen extends ScreenAdapter {
      * Is called once every frame. Used for game calculations that take place before rendering.
      */
     private void update(){
-        // Call update for every individual object
+        // Call updates for every individual object
         player.update(this, game.camera);
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).update(this, game.camera);
