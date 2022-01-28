@@ -21,6 +21,7 @@ public class HUD {
     private static Table table;
     private static Skin skin;
     private static Label loot;
+    private static Table tasks;
 
     public static void HUDinitialise(GameScreen screen){
         //initialise the stage
@@ -32,7 +33,7 @@ public class HUD {
         table = new Table();
         table.setFillParent(true);
         table.setPosition(0, 0);
-       // table.setDebug(true);
+        table.setDebug(true);
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
@@ -45,20 +46,32 @@ public class HUD {
         score = new Label(screen.points.GetString(), skin);
         score.setFontScale(5);
         table.add(score);
-        table.add().prefWidth(screen.viewp.getScreenWidth()-80f);
+        table.add();
+
+        // create tasks table
+
+        table.add().prefWidth(screen.viewp.getScreenWidth()*0.15f);
         loot = new Label(screen.loot.GetString(), skin);
         loot.setFontScale(5);
         table.add(loot).padRight(5).left();
 
         table.row();
+        tasks =new Table();
+        table.add();
+
         table.add().prefHeight(screen.viewp.getScreenHeight());
+        table.add(tasks).colspan(2);
+        tasks.add(new Label("This is the tasks", skin));
         table.row();
 
-        ImageButton button1 = new ImageButton(skin, "default");
+        ImageButton button1 = new ImageButton(skin, "settings");
         ImageButton buttonMute = new ImageButton(skin, "music");
+        buttonMute.getImageCell().expand().fill();
+        button1.getImageCell().expand().fill();
         buttonMute.setChecked(true);
         table.add(button1).size(64,64).left();
         table.add(new Label("table", skin)).expandX();
+        table.add();
         table.add(buttonMute).size(64,64).right();
         table.setTouchable(Touchable.enabled);
         button1.addListener(new ClickListener() {
