@@ -1,4 +1,5 @@
 # York Pirates!
+![York Pirates!](https://engteam14.github.io/media/Logo.gif)
 
 A University of York Computer Science Engineering 1 group project.
 
