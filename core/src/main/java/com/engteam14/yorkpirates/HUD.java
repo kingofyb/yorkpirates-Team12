@@ -26,44 +26,44 @@ public class HUD {
     public static void HUDinitialise(GameScreen screen){
         //initialise the stage
         System.out.println("rendering");
-        stage1 = new Stage(screen.viewp);
+        stage1 = new Stage(screen.viewport);
         Gdx.input.setInputProcessor(stage1);
 
-//create main screen table
+        //create main screen table
         table = new Table();
         table.setFillParent(true);
         table.setPosition(0, 0);
     //    table.setDebug(true);
 
+        //create skin atlas
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
         TextureAtlas.AtlasRegion region = atlas.findRegion("uiskin");
-        Sprite sprite = atlas.createSprite("otherimagename");
-        NinePatch patch = atlas.createPatch("patchimagename");
         skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
         skin.addRegions(atlas);
+
+        //first (top) row
         table.row();
         score = new Label(screen.points.GetString(), skin);
         score.setFontScale(5);
         table.add(score);
         table.add();
-
-        // create tasks table
-
-        table.add().prefWidth(screen.viewp.getScreenWidth()*0.15f);
+        table.add().prefWidth(screen.viewport.getScreenWidth()*0.15f);
         loot = new Label(screen.loot.GetString(), skin);
         loot.setFontScale(5);
         table.add(loot).padRight(5).left();
 
+        //second row (mid section)
         table.row();
         tasks =new Table();
         table.add();
-
-        table.add().prefHeight(screen.viewp.getScreenHeight());
+        //table in second row for tasks
+        table.add().prefHeight(screen.viewport.getScreenHeight());
         table.add(tasks).colspan(2);
         tasks.add(new Label("This is the tasks", skin));
-        table.row();
 
+        //bottom row
+        table.row();
         ImageButton button1 = new ImageButton(skin, "settings");
         ImageButton buttonMute = new ImageButton(skin, "music");
         buttonMute.getImageCell().expand().fill();
@@ -76,7 +76,7 @@ public class HUD {
         table.setTouchable(Touchable.enabled);
         button1.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                GameScreen.gameEnd(true );
+                screen.gameEnd(true );
             }
         });
         buttonMute.addListener(new ClickListener() {

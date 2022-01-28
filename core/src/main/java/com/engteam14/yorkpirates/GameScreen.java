@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class GameScreen extends ScreenAdapter {
     public YorkPirates game;
@@ -106,7 +107,8 @@ public class GameScreen extends ScreenAdapter {
         // Initialise projectiles array to be used storing live projectiles
         projectiles = new Array<>();
 
-        gameHUD = new HUD(this);
+        gameHUD =  new HUD();
+        gameHUD.HUDinitialise(this);
     }
 
     /**
