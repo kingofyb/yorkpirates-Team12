@@ -15,25 +15,29 @@ import com.badlogic.gdx.utils.Align;
 public class HUD {
 
     private static Stage stage1;
-
+    public static Label score;
     public static void HUDinitialise(){
         //initialise the stage
 
         stage1 = new Stage(GameScreen.viewp);
         Gdx.input.setInputProcessor(stage1);
-
+//create main screen table
         Table table = new Table();
-        table.setPosition(0, 0);
-        table.setSize(GameScreen.viewp.getCamera().viewportWidth , GameScreen.viewp.getCamera().viewportWidth-50);
+        table.setFillParent(true);
         table.setPosition(0, 0);
         table.setDebug(true);
-
-        Table table2 = new Table();
-        table2.setSize(GameScreen.viewp.getCamera().viewportWidth , 64);
-        table2.setDebug(true);
-       // table2.setPosition(-GameScreen.viewp.getCamera().viewportWidth*0.48f, 0);
-
-        Table table3 = new Table();
+// create bottom bar table
+        Table bottombar = new Table();
+        bottombar.setDebug(true);
+        bottombar.align(Align.left | Align.bottom);
+//create top bar table
+        Table topbar = new Table();
+        topbar.align(Align.left | Align.top);
+        topbar.setDebug(true);
+//create mid sec
+        Table midsec = new Table();
+        midsec.setDebug(true);
+        midsec.setHeight(table.getHeight()-topbar.getHeight()- bottombar.getHeight());
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
@@ -41,19 +45,17 @@ public class HUD {
         Sprite sprite = atlas.createSprite("otherimagename");
         NinePatch patch = atlas.createPatch("patchimagename");
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
-
         skin.addRegions(atlas);
+
 
 
 
         Button button1 = new Button(skin);
         Button buttonMute = new TextButton("Mute",skin);
-        table2.add(button1).size(64,64).left();
-        table2.add().size(GameScreen.viewp.getCamera().viewportWidth-128,64);
-        table2.add(buttonMute).size(64,64).right();
+        bottombar.add(button1).size(64,64).left();
+        bottombar.add(new Label("bottombar", skin)).size(GameScreen.viewp.getCamera().viewportWidth-128,64);
+        bottombar.add(buttonMute).size(64,64).right();
 
-        table2.align(Align.left | Align.bottom);
-        table2.add().size(GameScreen.viewp.getCamera().viewportWidth-128,64);
         button1.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
                                     GameScreen.gameEnd(true );
@@ -69,9 +71,19 @@ public class HUD {
 
             }
         });
+        Label score = new Label(GameScreen.points.GetString(), skin);
+        score.setFontScale(5);
+        topbar.add(score).prefWidth(GameScreen.viewp.getCamera().viewportWidth).left();
         table.row();
+        table.add(topbar);
+        table.row();
+        table.add(midsec).expand();
+        table.row();
+        table.add(bottombar).fillX();
         stage1.addActor(table);
-        stage1.addActor(table2);
+        stage1.draw();
+
+
 
     }
     public static void renderStage(){

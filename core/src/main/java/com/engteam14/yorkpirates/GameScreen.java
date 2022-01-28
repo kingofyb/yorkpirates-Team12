@@ -141,17 +141,11 @@ public class GameScreen extends ScreenAdapter {
         game.font.draw(game.batch, new Vector2(tx,ty).toString(), player.x+player.width/2, player.y+player.height/2);
         game.font.getData().setScale(1f);
         game.batch.end();
-        // End drawing batch
-        HUDCam.update();
         HUDBatch.setProjectionMatrix(HUDCam.combined);
         // Start drawing HUD
-        HUDBatch.begin();
-        game.font.draw(HUDBatch, points.GetString(), 0+HUDCam.viewportHeight*0.03f , HUDCam.viewportHeight*0.98f);
-        game.font.draw(HUDBatch, loot.GetString(), HUDCam.viewportWidth*0.98f, HUDCam.viewportHeight*0.98f, 1f, Align.right, true);
-        HUD.renderStage();
-        HUDBatch.end();
+        // /
+        HUD.HUDinitialise();
         HUDCam.update();
-        // End drawing HUD
     }
 
     /**
