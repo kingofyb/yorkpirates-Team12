@@ -12,55 +12,71 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
+
+
 public class HUD {
 
-    public Stage stage1;
-    public Label score;
+    public static Stage stage1;
+    public static Label score;
+    private static Table table;
+    private static Skin skin;
+    private static Label loot;
+    private static Table tasks;
 
-    private final Label loot;
-
-    public HUD(GameScreen screen){
+    public static void HUDinitialise(GameScreen screen){
         //initialise the stage
         System.out.println("rendering");
-        stage1 = new Stage(screen.viewport);
+        stage1 = new Stage(screen.viewp);
         Gdx.input.setInputProcessor(stage1);
 
-        //create main screen table
-        Table table = new Table();
+//create main screen table
+        table = new Table();
         table.setFillParent(true);
         table.setPosition(0, 0);
-        //table.setDebug(true);
+    //    table.setDebug(true);
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
         TextureAtlas.AtlasRegion region = atlas.findRegion("uiskin");
         Sprite sprite = atlas.createSprite("otherimagename");
         NinePatch patch = atlas.createPatch("patchimagename");
-        Skin skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
+        skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
         skin.addRegions(atlas);
         table.row();
         score = new Label(screen.points.GetString(), skin);
         score.setFontScale(5);
         table.add(score);
-        table.add().prefWidth(screen.viewport.getScreenWidth()-80f);
+        table.add();
+
+        // create tasks table
+
+        table.add().prefWidth(screen.viewp.getScreenWidth()*0.15f);
         loot = new Label(screen.loot.GetString(), skin);
         loot.setFontScale(5);
         table.add(loot).padRight(5).left();
 
         table.row();
-        table.add().prefHeight(screen.viewport.getScreenHeight());
+        tasks =new Table();
+        table.add();
+
+        table.add().prefHeight(screen.viewp.getScreenHeight());
+        table.add(tasks).colspan(2);
+        tasks.add(new Label("This is the tasks", skin));
         table.row();
 
-        ImageButton button1 = new ImageButton(skin, "default");
+        ImageButton button1 = new ImageButton(skin, "settings");
         ImageButton buttonMute = new ImageButton(skin, "music");
+        buttonMute.getImageCell().expand().fill();
+        button1.getImageCell().expand().fill();
         buttonMute.setChecked(true);
         table.add(button1).size(64,64).left();
-        table.add(new Label("table", skin)).expandX();
+        table.add().expandX();
+        table.add();
         table.add(buttonMute).size(64,64).right();
         table.setTouchable(Touchable.enabled);
         button1.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                screen.gameEnd(true );
+                GameScreen.gameEnd(true );
             }
         });
         buttonMute.addListener(new ClickListener() {
@@ -70,6 +86,7 @@ public class HUD {
                 } else {
                     screen.instrumental.setVolume(0);
                 }
+
             }
         });
 
@@ -77,12 +94,14 @@ public class HUD {
         System.out.println("draw");
 
         Gdx.input.setInputProcessor(stage1);
-    }
 
-    public void renderStage(GameScreen screen){
+
+    }
+    public static void renderStage(GameScreen screen){
         score.setText(screen.points.GetString());
         loot.setText(screen.loot.GetString());
 
         stage1.draw();
     }
+
 }
