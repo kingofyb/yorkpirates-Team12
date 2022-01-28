@@ -67,7 +67,7 @@ public class GameScreen extends ScreenAdapter {
         //initialise sound
         instrumental = Gdx.audio.newMusic(Gdx.files.internal("Pirate1_Theme1.ogg"));
         instrumental.setLooping(true);
-        instrumental.setVolume(0.8f);
+        instrumental.setVolume(0);
         instrumental.play();
 
         // Initialise points and loot managers

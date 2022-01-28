@@ -32,24 +32,11 @@ public class HUD {
         table = new Table();
         table.setFillParent(true);
         table.setPosition(0, 0);
-        table.setDebug(true);
-
-/*// create bottom bar table
-        Table bottombar = new Table();
-        bottombar.setDebug(true);
-        bottombar.align(Align.left | Align.bottom);
-//create top bar table
-        Table topbar = new Table();
-        topbar.align(Align.left | Align.top);
-        topbar.setDebug(true);
-//create mid sec
-        Table midsec = new Table();
-        midsec.setDebug(true);
-        midsec.setHeight(table.getHeight()-topbar.getHeight()- bottombar.getHeight());*/
+       // table.setDebug(true);
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
-        TextureAtlas.AtlasRegion region = atlas.findRegion("imagename");
+        TextureAtlas.AtlasRegion region = atlas.findRegion("uiskin");
         Sprite sprite = atlas.createSprite("otherimagename");
         NinePatch patch = atlas.createPatch("patchimagename");
         skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
@@ -67,8 +54,9 @@ public class HUD {
         table.add().prefHeight(screen.viewp.getScreenHeight());
         table.row();
 
-        Button button1 = new Button(skin);
-        Button buttonMute = new TextButton("Mute",skin);
+        ImageButton button1 = new ImageButton(skin, "default");
+        ImageButton buttonMute = new ImageButton(skin, "music");
+        buttonMute.setChecked(true);
         table.add(button1).size(64,64).left();
         table.add(new Label("table", skin)).expandX();
         table.add(buttonMute).size(64,64).right();
