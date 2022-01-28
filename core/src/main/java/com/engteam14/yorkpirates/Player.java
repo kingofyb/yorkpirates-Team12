@@ -65,7 +65,7 @@ public class Player extends GameObject {
             if (safeMove(screen.game.edges)) {
                 if (TimeUtils.timeSinceMillis(lastMovementScore) > pointFrequency) {
                     lastMovementScore = TimeUtils.millis();
-                    screen.points.Add(1);
+                    screen.points.Add(1, screen.hud1);
                 }
                 moving = true;
             } else {    // Collision

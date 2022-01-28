@@ -1,68 +1,91 @@
 package com.engteam14.yorkpirates;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 public class HUD {
 
-    private final Stage stage1;
+    public static Stage stage1;
+    public static Label score;
+    private static Table table;
+    private static Skin skin;
+    private static Label loot;
 
     public HUD(GameScreen screen){
         //initialise the stage
-
-        stage1 = new Stage(GameScreen.viewp);
+        System.out.println("rendering");
+        stage1 = new Stage(screen.viewp);
         Gdx.input.setInputProcessor(stage1);
 
-        Table table = new Table();
+//create main screen table
+        table = new Table();
+        table.setFillParent(true);
         table.setPosition(0, 0);
-        table.setSize(GameScreen.viewp.getCamera().viewportWidth , GameScreen.viewp.getCamera().viewportWidth-50);
-        table.setPosition(0, 0);
-        table.setDebug(true);
-
-        Table table2 = new Table();
-        table2.setSize(GameScreen.viewp.getCamera().viewportWidth , 64);
-        table2.setDebug(true);
+       // table.setDebug(true);
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
-        Skin skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
-
+        TextureAtlas.AtlasRegion region = atlas.findRegion("uiskin");
+        Sprite sprite = atlas.createSprite("otherimagename");
+        NinePatch patch = atlas.createPatch("patchimagename");
+        skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
         skin.addRegions(atlas);
+        table.row();
+        score = new Label(screen.points.GetString(), skin);
+        score.setFontScale(5);
+        table.add(score);
+        table.add().prefWidth(screen.viewp.getScreenWidth()-80f);
+        loot = new Label(screen.loot.GetString(), skin);
+        loot.setFontScale(5);
+        table.add(loot).padRight(5).left();
 
-        Button button1 = new Button(skin);
-        Button buttonMute = new TextButton("Mute",skin);
-        table2.add(button1).size(64,64).left();
-        table2.add().size(GameScreen.viewp.getCamera().viewportWidth-128,64);
-        table2.add(buttonMute).size(64,64).right();
+        table.row();
+        table.add().prefHeight(screen.viewp.getScreenHeight());
+        table.row();
 
-        table2.align(Align.left | Align.bottom);
-        table2.add().size(GameScreen.viewp.getCamera().viewportWidth-128,64);
+        ImageButton button1 = new ImageButton(skin, "default");
+        ImageButton buttonMute = new ImageButton(skin, "music");
+        buttonMute.setChecked(true);
+        table.add(button1).size(64,64).left();
+        table.add(new Label("table", skin)).expandX();
+        table.add(buttonMute).size(64,64).right();
+        table.setTouchable(Touchable.enabled);
         button1.addListener(new ClickListener() {
-                                public void clicked(InputEvent event, float x, float y) {
-                                    screen.gameEnd(true );
-                                }
-                            });
+            public void clicked(InputEvent event, float x, float y) {
+                screen.gameEnd(true );
+            }
+        });
         buttonMute.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 if (screen.instrumental.getVolume() == 0) {
                     screen.instrumental.setVolume(1);
                 } else {
                     screen.instrumental.setVolume(0);
-                    }
+                }
 
             }
         });
-        table.row();
+
         stage1.addActor(table);
-        stage1.addActor(table2);
+        System.out.println("draw");
+
+        Gdx.input.setInputProcessor(stage1);
+
 
     }
-    public void renderStage(){
+    public void renderStage(GameScreen screen){
+        score.setText(screen.points.GetString());
+        loot.setText(screen.loot.GetString());
+
         stage1.draw();
     }
 

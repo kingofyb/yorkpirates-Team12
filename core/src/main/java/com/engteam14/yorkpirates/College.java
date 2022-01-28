@@ -128,14 +128,13 @@ public class College extends GameObject {
             collegeBar.resize(currentHealth);
         }else{
             if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if the college is an enemy of the player
-                screen.points.Add(pointsGained);
-                screen.loot.Add(lootGained);
+                screen.points.Add(pointsGained, screen.hud1);
+                screen.loot.Add(lootGained, screen.hud1);
 
                 Array<Texture> healthBarSprite = new Array<>();
                 Array<Texture> indicatorSprite = new Array<>();
                 healthBarSprite.add(new Texture("allyHealthBar.png"));
                 indicatorSprite.add(new Texture("homeArrow.png"));
-
                 Array<Texture> sprites = new Array<>();
                 imageIndex += 1;
                 sprites.add(GameScreen.collegeSprites.get(imageIndex));

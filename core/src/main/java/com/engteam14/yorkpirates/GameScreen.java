@@ -24,10 +24,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameScreen extends ScreenAdapter {
     public static YorkPirates game;
+    public HUD hud1;
     public Player player;
 
-    public static FitViewport viewp;
-    public ScoreManager points;
+    public FitViewport viewp;
+    public static ScoreManager points;
     public ScoreManager loot;
 
     public static Array<Texture> collegeSprites;
@@ -67,7 +68,7 @@ public class GameScreen extends ScreenAdapter {
         //initialise sound
         instrumental = Gdx.audio.newMusic(Gdx.files.internal("Pirate1_Theme1.ogg"));
         instrumental.setLooping(true);
-        instrumental.setVolume(0.8f);
+        instrumental.setVolume(0);
         instrumental.play();
 
         // Initialise points and loot managers
@@ -134,20 +135,17 @@ public class GameScreen extends ScreenAdapter {
         game.font.getData().setScale(0.5f);
         int tx = (int)(player.x/16f);
         int ty = (int)(player.y/16f);
-        game.font.draw(game.batch, new Vector2(tx,ty).toString(), player.x+player.width/2, player.y+player.height/2);
+        //game.font.draw(game.batch, new Vector2(tx,ty).toString(), player.x+player.width/2, player.y+player.height/2);
         game.font.getData().setScale(1f);
-        game.batch.end(); // End drawing batch
-
-        HUDCam.update();
+        game.batch.end();
         HUDBatch.setProjectionMatrix(HUDCam.combined);
-
-        HUDBatch.begin(); // Start drawing HUD
-        game.font.draw(HUDBatch, points.GetString(), 0+HUDCam.viewportHeight*0.03f , HUDCam.viewportHeight*0.98f);
-        game.font.draw(HUDBatch, loot.GetString(), HUDCam.viewportWidth*0.98f, HUDCam.viewportHeight*0.98f, 1f, Align.right, true);
-        gameHUD.renderStage();
-        HUDBatch.end();
+        // Start drawing HUD
+        // /
+        gameHUD.renderStage(this );
         HUDCam.update();
-        // End drawing HUD
+
+
+
     }
 
     /**
