@@ -30,8 +30,6 @@ public class PauseScreen extends ScreenAdapter {
     public PauseScreen(YorkPirates game, GameScreen screen){
         this.game = game;
         this.screen = screen;
-
-        //game.camera.position.lerp(new Vector3(game.camera.viewportWidth/2, game.camera.viewportHeight/2, 0f), 1f);
     }
 
     /**
@@ -50,7 +48,7 @@ public class PauseScreen extends ScreenAdapter {
      * Is called once every frame. Used for calculations that take place before rendering.
      */
     private void update(){
-        if(Gdx.input.isKeyPressed(Input.Keys.ENTER) || Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
             game.setScreen(screen);
         }
     }

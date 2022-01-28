@@ -56,8 +56,11 @@ public class EndScreen extends ScreenAdapter {
      * Is called once every frame. Used for calculations that take place before rendering.
      */
     private void update(){
-        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
             game.setScreen(new TitleScreen(game));
+        }
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            Gdx.app.exit();
         }
     }
 }

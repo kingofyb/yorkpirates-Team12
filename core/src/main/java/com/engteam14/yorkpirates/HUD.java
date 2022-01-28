@@ -1,22 +1,18 @@
 package com.engteam14.yorkpirates;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
-
 public class HUD {
 
-    private static Stage stage1;
+    private final Stage stage1;
 
-    public static void HUDinitialise(){
+    public HUD(GameScreen screen){
         //initialise the stage
 
         stage1 = new Stage(GameScreen.viewp);
@@ -31,20 +27,12 @@ public class HUD {
         Table table2 = new Table();
         table2.setSize(GameScreen.viewp.getCamera().viewportWidth , 64);
         table2.setDebug(true);
-       // table2.setPosition(-GameScreen.viewp.getCamera().viewportWidth*0.48f, 0);
-
-        Table table3 = new Table();
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
-        TextureAtlas.AtlasRegion region = atlas.findRegion("imagename");
-        Sprite sprite = atlas.createSprite("otherimagename");
-        NinePatch patch = atlas.createPatch("patchimagename");
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
 
         skin.addRegions(atlas);
-
-
 
         Button button1 = new Button(skin);
         Button buttonMute = new TextButton("Mute",skin);
@@ -56,15 +44,15 @@ public class HUD {
         table2.add().size(GameScreen.viewp.getCamera().viewportWidth-128,64);
         button1.addListener(new ClickListener() {
                                 public void clicked(InputEvent event, float x, float y) {
-                                    GameScreen.gameEnd(true );
+                                    screen.gameEnd(true );
                                 }
                             });
         buttonMute.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                if (GameScreen.instrumental.getVolume() == 0) {
-                    GameScreen.instrumental.setVolume(1);
+                if (screen.instrumental.getVolume() == 0) {
+                    screen.instrumental.setVolume(1);
                 } else {
-                    GameScreen.instrumental.setVolume(0);
+                    screen.instrumental.setVolume(0);
                     }
 
             }
@@ -74,7 +62,7 @@ public class HUD {
         stage1.addActor(table2);
 
     }
-    public static void renderStage(){
+    public void renderStage(){
         stage1.draw();
     }
 

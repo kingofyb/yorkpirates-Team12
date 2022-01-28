@@ -36,7 +36,7 @@ public class GameScreen extends ScreenAdapter {
     private final SpriteBatch HUDBatch;
     private final OrthographicCamera HUDCam;
     private final OrthogonalTiledMapRenderer tiledMapRenderer;
-    public static Music instrumental;
+    public Music instrumental;
 
     private static float elapsedTime = 0;
     private Vector3 followPos;
@@ -46,6 +46,7 @@ public class GameScreen extends ScreenAdapter {
     public static final String enemyTeam = "ENEMY";
     public TiledMap tiledMap;
 
+    private final HUD gameHUD;
 
     /**
      * Initialises the main game screen, as well as relevant entities and data.
@@ -96,7 +97,7 @@ public class GameScreen extends ScreenAdapter {
         colleges.add(new College(sprites, 0, player.x-100f, player.y,20f, 40f, "Home",playerTeam,player));
         sprites.clear();
 
-        HUD.HUDinitialise();
+        gameHUD = new HUD(this);
     }
 
     /**
@@ -135,7 +136,7 @@ public class GameScreen extends ScreenAdapter {
         HUDBatch.begin(); // Start drawing HUD
         game.font.draw(HUDBatch, points.GetString(), 0+HUDCam.viewportHeight*0.03f , HUDCam.viewportHeight*0.98f);
         game.font.draw(HUDBatch, loot.GetString(), HUDCam.viewportWidth*0.98f, HUDCam.viewportHeight*0.98f, 1f, Align.right, true);
-        HUD.renderStage();
+        gameHUD.renderStage();
         HUDBatch.end();
         HUDCam.update();
         // End drawing HUD
@@ -171,12 +172,12 @@ public class GameScreen extends ScreenAdapter {
         }
 
         // Pause Game
-        if(Gdx.input.isKeyPressed(Input.Keys.DEL)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.DEL)){
             pauseGame();
         }
 
         // Temporary shortcut to End Screen
-        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             Gdx.app.exit();
         }
     }
@@ -195,7 +196,7 @@ public class GameScreen extends ScreenAdapter {
         game.setScreen(new PauseScreen(game,this));
     }
 
-    public static void gameEnd(boolean win){
+    public void gameEnd(boolean win){
         game.setScreen(new EndScreen(game, elapsedTime, points, loot, win));
     }
 }
