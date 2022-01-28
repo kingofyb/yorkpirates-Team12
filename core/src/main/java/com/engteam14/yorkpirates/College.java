@@ -121,6 +121,9 @@ public class College extends GameObject {
                 indicatorSprite.add(new Texture("homeArrow.png"));
 
                 collegeBar.changeImage(healthBarSprite,0);
+                currentHealth = maxHealth;
+                collegeBar.resize(currentHealth);
+
                 direction.changeImage(indicatorSprite,0);
 
                 team = GameScreen.playerTeam;
