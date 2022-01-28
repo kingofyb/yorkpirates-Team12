@@ -60,13 +60,13 @@ public class Player extends GameObject {
                 - ((Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) ? 1 : 0);
         if (horizontal != 0 || vertical != 0){
             move(speed*horizontal, speed*vertical);
+            previousDirectionX = horizontal;
+            previousDirectionY = vertical;
             if (safeMove(screen.game.edges)) {
                 if (TimeUtils.timeSinceMillis(lastMovementScore) > pointFrequency) {
                     lastMovementScore = TimeUtils.millis();
                     screen.points.Add(1);
                 }
-                previousDirectionX = horizontal;
-                previousDirectionY = vertical;
                 moving = true;
             } else {    // Collision
                 Vector2 newPos = new Vector2(x, y);
