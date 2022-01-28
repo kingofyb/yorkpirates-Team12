@@ -70,7 +70,7 @@ public class HUD {
         button1.getImageCell().expand().fill();
         buttonMute.setChecked(true);
         table.add(button1).size(64,64).left();
-        table.add(new Label("table", skin)).expandX();
+        table.add().expandX();
         table.add();
         table.add(buttonMute).size(64,64).right();
         table.setTouchable(Touchable.enabled);
