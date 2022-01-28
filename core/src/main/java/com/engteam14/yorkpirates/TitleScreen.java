@@ -17,11 +17,10 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class TitleScreen extends ScreenAdapter {
     private final YorkPirates game;
-
-    private static final float LOGO_SCALE = 0.33f;
-
     private final Stage stage;
+
     private StretchViewport viewport;
+    private static final float logoScale = 0.33f;
 
     /**
      * Initialises the title screen, as well as relevant textures and data it may contain.
@@ -44,7 +43,6 @@ public class TitleScreen extends ScreenAdapter {
 
         skin.addRegions(atlas);
 
-
         Label nameLabel = new Label("Name:", skin);
         TextField nameText = new TextField("", skin);
 
@@ -54,7 +52,6 @@ public class TitleScreen extends ScreenAdapter {
 
         table.row();
         stage.addActor(table);
-
     }
 
     /**
@@ -70,10 +67,10 @@ public class TitleScreen extends ScreenAdapter {
     }
 
     /**
-     *  Is called once every frame. Used for calculations that take place before rendering.
+     * Is called once every frame. Used for calculations that take place before rendering.
      */
     private void update(){
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+        if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
             game.setScreen(new GameScreen(game));
         }
     }

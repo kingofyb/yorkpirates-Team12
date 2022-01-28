@@ -11,12 +11,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class PauseScreen extends ScreenAdapter {
@@ -27,6 +30,8 @@ public class PauseScreen extends ScreenAdapter {
     public PauseScreen(YorkPirates game, GameScreen screen){
         this.game = game;
         this.screen = screen;
+
+        //game.camera.position.lerp(new Vector3(game.camera.viewportWidth/2, game.camera.viewportHeight/2, 0f), 1f);
     }
 
     /**
@@ -38,13 +43,14 @@ public class PauseScreen extends ScreenAdapter {
         update();
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
+        ScreenUtils.clear(0.6f, 0.6f, 1.0f, 1.0f);
     }
 
     /**
-     *  Is called once every frame. Used for calculations that take place before rendering.
+     * Is called once every frame. Used for calculations that take place before rendering.
      */
     private void update(){
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+        if(Gdx.input.isKeyPressed(Input.Keys.ENTER) || Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             game.setScreen(screen);
         }
     }

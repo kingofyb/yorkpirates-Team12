@@ -11,13 +11,13 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class EndScreen extends ScreenAdapter {
     private final YorkPirates game;
 
-    private String time;
-    private String points;
-    private String loot;
-    private boolean win;
+    private final String time;
+    private final String points;
+    private final String loot;
+    private final boolean win;
 
     /**
-     *  Initialises the title screen, as well as relevant textures and data it may contain.
+     * Initialises the title screen, as well as relevant textures and data it may contain.
      * @param game  Passes in the base game class for reference.
      */
     public EndScreen(YorkPirates game, float seconds, ScoreManager points, ScoreManager loot, boolean win){
@@ -30,7 +30,7 @@ public class EndScreen extends ScreenAdapter {
     }
 
     /**
-     *  Is called once every frame. Runs update() and then renders the title screen.
+     * Is called once every frame. Runs update() and then renders the title screen.
      * @param delta The time passed since the previously rendered frame.
      */
     @Override
@@ -53,7 +53,7 @@ public class EndScreen extends ScreenAdapter {
     }
 
     /**
-     *  Is called once every frame. Used for calculations that take place before rendering.
+     * Is called once every frame. Used for calculations that take place before rendering.
      */
     private void update(){
         if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
@@ -62,7 +62,7 @@ public class EndScreen extends ScreenAdapter {
     }
 
     /**
-     *  Disposes of disposables when game finishes execution.
+     * Disposes of disposables when game finishes execution.
      */
     @Override
     public void dispose(){
