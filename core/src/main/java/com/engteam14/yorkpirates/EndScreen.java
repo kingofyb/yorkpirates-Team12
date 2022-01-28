@@ -60,12 +60,4 @@ public class EndScreen extends ScreenAdapter {
             game.setScreen(new TitleScreen(game));
         }
     }
-
-    /**
-     * Disposes of disposables when game finishes execution.
-     */
-    @Override
-    public void dispose(){
-
-    }
 }
