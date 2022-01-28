@@ -2,6 +2,7 @@ package com.engteam14.yorkpirates;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -47,5 +48,9 @@ public class YorkPirates extends Game {
 	public void dispose () {
 		batch.dispose();
 		font.dispose();
+	}
+
+	public void closeGame(ScreenAdapter currentScreen){
+		setScreen(new ConfirmationScreen(this,currentScreen));
 	}
 }

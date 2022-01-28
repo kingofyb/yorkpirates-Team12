@@ -63,6 +63,7 @@ public class TitleScreen extends ScreenAdapter {
         update();
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
+        ScreenUtils.clear(0f, 0f, 0f, 1.0f);
         stage.draw();
     }
 
@@ -72,6 +73,8 @@ public class TitleScreen extends ScreenAdapter {
     private void update(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
             game.setScreen(new GameScreen(game));
+        }else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            game.closeGame(this);
         }
     }
 }

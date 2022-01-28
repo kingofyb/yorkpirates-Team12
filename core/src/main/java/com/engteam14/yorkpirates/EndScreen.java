@@ -60,7 +60,7 @@ public class EndScreen extends ScreenAdapter {
             game.setScreen(new TitleScreen(game));
         }
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            Gdx.app.exit();
+            game.closeGame(this);
         }
     }
 }

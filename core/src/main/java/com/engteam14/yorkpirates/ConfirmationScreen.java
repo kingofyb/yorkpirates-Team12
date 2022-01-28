@@ -2,15 +2,16 @@ package com.engteam14.yorkpirates;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class PauseScreen extends ScreenAdapter {
+public class ConfirmationScreen extends ScreenAdapter {
 
     private final YorkPirates game;
-    private final GameScreen screen;
+    private final ScreenAdapter screen;
 
-    public PauseScreen(YorkPirates game, GameScreen screen){
+    public ConfirmationScreen(YorkPirates game, ScreenAdapter screen){
         this.game = game;
         this.screen = screen;
     }
@@ -24,17 +25,17 @@ public class PauseScreen extends ScreenAdapter {
         update();
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
-        ScreenUtils.clear(0.6f, 0.6f, 1.0f, 1.0f);
+        ScreenUtils.clear(1f, 0f, 0f, 1.0f);
     }
 
     /**
      * Is called once every frame. Used for calculations that take place before rendering.
      */
     private void update(){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            Gdx.app.exit();
+        }else if(Gdx.input.isKeyJustPressed(Input.Keys.DEL) || Gdx.input.isKeyJustPressed(Input.Keys.FORWARD_DEL)){
             game.setScreen(screen);
-        }else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            game.closeGame(this);
         }
     }
 }

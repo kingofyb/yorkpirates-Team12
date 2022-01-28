@@ -172,13 +172,13 @@ public class GameScreen extends ScreenAdapter {
         }
 
         // Pause Game
-        if(Gdx.input.isKeyJustPressed(Input.Keys.DEL)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.DEL) || Gdx.input.isKeyJustPressed(Input.Keys.FORWARD_DEL)){
             pauseGame();
         }
 
         // Temporary shortcut to End Screen
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            Gdx.app.exit();
+            game.closeGame(this);
         }
     }
 
