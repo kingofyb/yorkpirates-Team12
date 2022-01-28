@@ -20,6 +20,7 @@ public class HUD {
     public static Label score;
     private static Table table;
     private static Skin skin;
+    private static Label loot;
 
     public static void HUDinitialise(GameScreen screen){
         //initialise the stage
@@ -57,10 +58,13 @@ public class HUD {
         score = new Label(screen.points.GetString(), skin);
         score.setFontScale(5);
         table.add(score);
-        table.add().prefWidth(screen.viewp.getScreenWidth()-64f);
+        table.add().prefWidth(screen.viewp.getScreenWidth()-80f);
+        loot = new Label(screen.loot.GetString(), skin);
+        loot.setFontScale(5);
+        table.add(loot).padRight(5).left();
 
         table.row();
-        table.add().prefHeight(screen.viewp.getScreenHeight()-128);
+        table.add().prefHeight(screen.viewp.getScreenHeight());
         table.row();
 
         Button button1 = new Button(skin);
@@ -85,23 +89,6 @@ public class HUD {
             }
         });
 
-/*        button1.addListener(new ClickListener() {
-                                public void clicked(InputEvent event, float x, float y) {
-                                    screen.gameEnd(true );
-                                }
-                            });
-        buttonMute.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (screen.instrumental.getVolume() == 0f) {
-                    screen.instrumental.setVolume(1f);
-                } else {
-                    screen.instrumental.setVolume(0f);
-                    }
-
-            }
-        });*/
-
-
         stage1.addActor(table);
         System.out.println("draw");
 
@@ -111,6 +98,8 @@ public class HUD {
     }
     public static void renderStage(GameScreen screen){
         score.setText(screen.points.GetString());
+        loot.setText(screen.loot.GetString());
+
         stage1.draw();
     }
 
