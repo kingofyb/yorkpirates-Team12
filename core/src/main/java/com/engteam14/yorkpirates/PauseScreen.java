@@ -41,7 +41,6 @@ public class PauseScreen extends ScreenAdapter {
         skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
         skin.addRegions(atlas);
 
-        Label pausedMessage = new Label("Paused", skin, "title");
 
         TextButton resumeB = new TextButton("Resume", skin );
         resumeB.addListener(new ClickListener() {
@@ -144,12 +143,7 @@ public class PauseScreen extends ScreenAdapter {
         table.add().expand();
         table.add().expand();
         table.add().expand();
-/*        table.row().padTop(20f).padBottom(20f);
-        table.add().expand();
-        table.add().expand();
-        table.add().expand();
-        table.add().expand();
-        table.add().expand();*/
+
         pauseStage.addActor(table);
         pauseStage.draw();
         Gdx.input.setInputProcessor(pauseStage);

@@ -51,7 +51,7 @@ public class HUD {
   //      tasks.debug();
         Label message = new Label("These are the tasks to do:", skin, "title");
         CheckBox task1 = new CheckBox("Destroy all colleges", skin);
-        CheckBox task2  = new CheckBox("Survive 5 seconds", skin);
+        CheckBox task2  = new CheckBox("   Survive 5 seconds", skin);
         task1.setDisabled(true);
         task1.setDisabled(true);
 
@@ -59,7 +59,7 @@ public class HUD {
         tasks.row();
         tasks.add(task1).left().pad(5);
         tasks.row();
-        tasks.add(task2).left().pad(5);
+        tasks.add(task2).left().pad(10);
 
 
         //first (top) row
