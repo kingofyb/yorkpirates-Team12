@@ -88,7 +88,7 @@ public class GameScreen extends ScreenAdapter {
         sprites.clear();
 
         // Initialise map texture
-        tiledMap = new TmxMapLoader().load("Pirate12.tmx");
+        tiledMap = new TmxMapLoader().load("pirate12.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         // Initialise colleges
