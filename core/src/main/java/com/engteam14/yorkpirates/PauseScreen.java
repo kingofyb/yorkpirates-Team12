@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.math.Vector2;
+
 
 public class PauseScreen extends ScreenAdapter {
 
@@ -31,7 +33,6 @@ public class PauseScreen extends ScreenAdapter {
         table.setFillParent(true);
         table.setSize(screen.viewport.getScreenWidth(), screen.viewport.getScreenHeight());
         table.setPosition(0, 0);
-        table.setDebug(true);
         table.setTouchable(Touchable.enabled);
 
         TextureAtlas atlas;
@@ -163,6 +164,7 @@ public class PauseScreen extends ScreenAdapter {
     public void render(float delta){
         update();
         ScreenUtils.clear(0.6f, 0.6f, 1.0f, 1.0f);
+        Gdx.input.setInputProcessor(pauseStage);
 
         pauseStage.draw();
 

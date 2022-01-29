@@ -17,6 +17,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -59,6 +61,7 @@ public class GameScreen extends ScreenAdapter {
     public GameScreen(YorkPirates game){
         this.game = game;
         followPos = game.camera.position;
+
 
         // Initialise HUD
         HUDBatch = new SpriteBatch();
@@ -158,9 +161,12 @@ public class GameScreen extends ScreenAdapter {
         }
 
         // Check for projectile creation, then call projectile update
+
+
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             Vector3 mouseVector = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
             Vector3 mousePos = game.camera.unproject(mouseVector);
+            System.out.println(new Vector3(Gdx.input.getX(), Gdx.input.getY(),0));
 
             Array<Texture> sprites = new Array<>();
             sprites.add(new Texture("tempProjectile.png"));
