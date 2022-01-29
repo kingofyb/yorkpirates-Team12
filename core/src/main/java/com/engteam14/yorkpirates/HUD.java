@@ -76,7 +76,7 @@ public class HUD {
         table.setTouchable(Touchable.enabled);
         button1.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                screen.gameEnd(true );
+                screen.pauseGame();
             }
         });
         buttonMute.addListener(new ClickListener() {
@@ -93,13 +93,13 @@ public class HUD {
         stage1.addActor(table);
         System.out.println("draw");
 
-        Gdx.input.setInputProcessor(stage1);
 
 
     }
     public static void renderStage(GameScreen screen){
         score.setText(screen.points.GetString());
         loot.setText(screen.loot.GetString());
+        Gdx.input.setInputProcessor(stage1);
 
         stage1.draw();
     }
