@@ -74,7 +74,7 @@ public class EndScreen extends ScreenAdapter {
         table1.row();
         table1.add().expand().uniform();
         title.setScaling(Scaling.fit);
-        table1.add(title).expand().colspan(4).fill().pad(260);
+        table1.add(title).expand().colspan(4).fill();
         table1.add().expand();
 
         //table row 2

@@ -44,8 +44,7 @@ public class PauseScreen extends ScreenAdapter {
         TextButton resumeB = new TextButton("Resume", skin );
         resumeB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(screen);
-
+                continueGame();
             }
         });
         TextButton quitB = new TextButton("Quit", skin );
@@ -163,9 +162,13 @@ public class PauseScreen extends ScreenAdapter {
      */
     private void update(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            screen.isPaused = false;
-            screen.lastPause = screen.elapsedTime;
-            game.setScreen(screen);
+            continueGame();
         }
+    }
+
+    private void continueGame() {
+        screen.isPaused = false;
+        screen.lastPause = screen.elapsedTime;
+        game.setScreen(screen);
     }
 }
