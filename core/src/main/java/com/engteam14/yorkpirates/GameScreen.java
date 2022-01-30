@@ -48,6 +48,7 @@ public class GameScreen extends ScreenAdapter {
     private Vector3 followPos;
     public boolean followPlayer = false;
 
+    private final String playerName;
     public static final String playerTeam = "PLAYER";
     public static final String enemyTeam = "ENEMY";
     public TiledMap tiledMap;
@@ -58,8 +59,9 @@ public class GameScreen extends ScreenAdapter {
      * Initialises the main game screen, as well as relevant entities and data.
      * @param game  Passes in the base game class for reference.
      */
-    public GameScreen(YorkPirates game){
+    public GameScreen(YorkPirates game, String playerName){
         this.game = game;
+        this.playerName = playerName;
         followPos = game.camera.position;
 
 
@@ -145,8 +147,11 @@ public class GameScreen extends ScreenAdapter {
         game.batch.end();
         HUDBatch.setProjectionMatrix(HUDCam.combined);
         // Start drawing HUD
-        // /
-        gameHUD.renderStage(this );
+        HUDBatch.begin();
+        Vector3 pos = game.camera.project(new Vector3(player.x, player.y, 0f));
+        game.font.draw(HUDBatch, playerName, pos.x, pos.y+170f, 1f, Align.center, true);
+        HUDBatch.end();
+        gameHUD.renderStage(this);
         HUDCam.update();
     }
 

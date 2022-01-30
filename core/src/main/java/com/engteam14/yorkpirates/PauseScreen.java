@@ -41,7 +41,7 @@ public class PauseScreen extends ScreenAdapter {
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
         TextureAtlas.AtlasRegion region = atlas.findRegion("YorkPiratesSkin");
-        skin = new Skin(Gdx.files.internal("Skin/skin-name.json"));
+        skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"));
         skin.addRegions(atlas);
 
 
