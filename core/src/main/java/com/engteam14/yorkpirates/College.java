@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.engteam14.yorkpirates.HealthBar;
@@ -20,12 +21,14 @@ public class College extends GameObject {
     private HealthBar collegeBar;
     private Indicator direction;
 
-    private final String collegeName;
     private int imageIndex;
-    private static final int pointsGained = 50;
-    private static final int lootGained = 15;
-    private static final int shootFrequency = 1000; // How often the college can shoot.
     private long lastShotFired;
+    private final String collegeName;
+    private final Array<Texture> collegeImages;
+
+    private static final int lootGained = 15;
+    private static final int pointsGained = 50;
+    private static final int shootFrequency = 1000; // How often the college can shoot.
 
     /**
      * Generates a college object within the game with animated frame(s) and a hitbox.
@@ -36,12 +39,15 @@ public class College extends GameObject {
      */
     public College(Array<Texture> sprites, float x, float y, float scale, String name, String team, Player player){
         super(sprites, 0, x, y, sprites.get(0).getWidth()*scale, sprites.get(0).getHeight()*scale, team);
-        collegeName = name;
 
-        changeImage(sprites,0);
+        collegeImages = new Array<>();
+        for(int i = 0; i < sprites.size; i++) {
+            collegeImages.add(sprites.get(i));
+        }
 
         setMaxHealth(500);
         lastShotFired = 0;
+        collegeName = name;
 
         Array<Texture> healthBarSprite = new Array<>();
         Array<Texture> indicatorSprite = new Array<>();
@@ -88,9 +94,13 @@ public class College extends GameObject {
                     if(victory){
                         screen.gameEnd(true);
                     }else{
-                        //Display Message "Still need to defeat ALL colleges to complete the game"
+                        //screen.game.batch.setProjectionMatrix(screen.game.camera.combined);
+                        //screen.game.batch.begin();
+                        //screen.game.font.setColor(1f, 1f, 1f, 1f);
+                        //screen.game.font.getData().setScale(1.2f);
+                        //screen.game.font.draw(screen.game.batch,"Can not end game while enemy colleges are still remaining.", screen.game.camera.viewportWidth/2, screen.game.camera.viewportHeight*0.8f+screen.game.font.getLineHeight()/2, 1, Align.center, true);
+                        //screen.game.batch.end();
                     }
-
                 }
             }
         }else{
@@ -118,9 +128,9 @@ public class College extends GameObject {
                 Array<Texture> indicatorSprite = new Array<>();
                 healthBarSprite.add(new Texture("allyHealthBar.png"));
                 indicatorSprite.add(new Texture("homeArrow.png"));
+
                 Array<Texture> sprites = new Array<>();
-                imageIndex += 1;
-                sprites.add(GameScreen.collegeSprites.get(imageIndex));
+                sprites.add(collegeImages.get(1));
                 changeImage(sprites,0);
 
                 collegeBar.changeImage(healthBarSprite,0);

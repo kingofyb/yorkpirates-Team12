@@ -58,7 +58,6 @@ public class GameScreen extends ScreenAdapter {
         this.playerName = playerName;
         followPos = game.camera.position;
 
-
         // Initialise HUD
         HUDBatch = new SpriteBatch();
         HUDCam = new OrthographicCamera();
