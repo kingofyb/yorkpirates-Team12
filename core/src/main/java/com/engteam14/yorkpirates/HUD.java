@@ -38,11 +38,11 @@ public class HUD {
         table = new Table();
         table.setFillParent(true);
         table.setPosition(0, 0);
-     //   table.setDebug(true);
+        table.setDebug(true);
 
 
 
-        //create skin atlas
+        //create skin atlas1
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
         TextureAtlas.AtlasRegion region = atlas.findRegion("Skin/YorkPiratesSkin");
@@ -63,6 +63,7 @@ public class HUD {
         task1.setDisabled(true);
         task1.setDisabled(true);
 
+
         tasks.add(message).pad(5);
         tasks.row();
         tasks.add(task1).left().pad(5);
@@ -82,10 +83,7 @@ public class HUD {
 
         //bottom row
         ImageButton button1 = new ImageButton(skin, "Menu");
-      //  ImageButton buttonMute = new ImageButton(skin, "music");
-       // buttonMute.getImageCell().expand().fill();
-      //  button1.getImageCell().expand().fill();
-      //  buttonMute.setChecked(true);
+
 
         table.setTouchable(Touchable.enabled);
         //row 1
@@ -125,16 +123,7 @@ public class HUD {
                 screen.pauseGame();
             }
         });
-      //  buttonMute.addListener(new ClickListener() {
-            //public void clicked(InputEvent event, float x, float y) {
-            //    if (screen.instrumental.getVolume() == 0) {
-            //        screen.instrumental.setVolume(1);
-            //    } else {
-              //      screen.instrumental.setVolume(0);
-               // }
 
-            //}
-       //});
 
         stage1.addActor(table);
         System.out.println("draw");

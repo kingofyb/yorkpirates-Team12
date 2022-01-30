@@ -20,7 +20,7 @@ public class TitleScreen extends ScreenAdapter {
     private final YorkPirates game;
     private final Stage stage;
     private final TextField nameText;
-    private final Animation<Texture> anim;
+  //  private final Animation<Texture> anim;
 
     private StretchViewport viewport;
     private static final float logoScale = 0.33f;
@@ -35,9 +35,9 @@ public class TitleScreen extends ScreenAdapter {
 
         stage = new Stage();
 
-        Array<Texture> frames = null;
-        float fps;
-        anim = new Animation<>(0.5f, frames);
+  //      Array<Texture> frames = null;
+   //     float fps;
+    //    anim = new Animation<>(0.5f, frames);
         Texture titleT = new Texture("logo/Logo_00000.png");
         Image title = new Image(titleT);
         title.scaleBy(1/4);
@@ -53,6 +53,7 @@ public class TitleScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
         skin.addRegions(atlas);
 
+        table.add().expandX();
         table.add().expandX();
         table.add(title).fill().prefHeight(game.camera.viewportHeight+40).prefWidth(game.camera.viewportWidth).colspan(5).expand();
 
