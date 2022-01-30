@@ -63,7 +63,7 @@ public class TitleScreen extends ScreenAdapter {
 
         Table table = new Table();
         table.setFillParent(true);
-     //   table.debug();
+        table.debug();
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
@@ -80,15 +80,16 @@ public class TitleScreen extends ScreenAdapter {
         table.row();
         table.add().expand();
         table.add().expand();
-        nameText = new TextField("Name (optional)", skin);
+        nameText = new TextField("Name (optional)", skin, "edges");
         nameText.setAlignment(Align.center);
+        nameText.setOnlyFontChars(true);
         nameText.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 nameText.setText("");
             }});
         table.add().expand();
 
-        table.add(nameText).fillX().padLeft(65).padRight(65);
+        table.add(nameText).fillX().pad(80).padBottom(-30);
         table.add().expand();
 
         table.add().expandY();
@@ -99,7 +100,7 @@ public class TitleScreen extends ScreenAdapter {
         table.add();
 
         table.add();
-        ImageButton startButton = new ImageButton(skin, "Play");
+        ImageTextButton startButton = new ImageTextButton("Play", skin);
         table.add(startButton);
         table.add();
         table.add();
@@ -111,7 +112,7 @@ public class TitleScreen extends ScreenAdapter {
         table.add().expand();
 
         table.add().expand();
-        TextButton quitButton = new TextButton("Quit", skin);
+        ImageTextButton quitButton = new ImageTextButton("Exit Game", skin, "Quit");
         table.add(quitButton);
         table.add().expand();
         table.add().expand();

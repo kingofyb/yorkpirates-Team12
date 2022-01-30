@@ -58,9 +58,9 @@ public class EndScreen extends ScreenAdapter {
         table1.setPosition(0, 0);
     //    table1.setDebug(true);
         Gdx.input.setInputProcessor(EndStage);
-        ImageButton quitB = new ImageButton(skin, "Restart");
+        ImageButton quitB = new ImageButton(skin, "Quit");
 
-        ImageButton restartB = new ImageButton(skin);
+        ImageButton restartB = new ImageButton(skin, "Restart");
 
         quitB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
