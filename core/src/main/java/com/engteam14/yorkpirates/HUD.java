@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 
 public class HUD {
 
@@ -75,15 +76,16 @@ public class HUD {
         Texture star = new Texture(Gdx.files.internal("points.png"));
         Image coinI = new Image(coin);
         Image starI = new Image(star);
+        coinI.setScaling(Scaling.fit);
+        starI.setScaling(Scaling.fit);
         loot = new Label(screen.loot.GetString(), skin);
         score = new Label(screen.points.GetString(), skin);
 
         tasks.add(starI);
-        score.setFontScale(1.5f);
+        score.setFontScale(1.2f);
         tasks.add(score).pad(5);
         tasks.add(coinI);
-        loot.setFontScale(1.5f);
-
+        loot.setFontScale(1.2f);
         tasks.add(loot);
         tasks.row();
         tasks.add(message).pad(1).colspan(4);
