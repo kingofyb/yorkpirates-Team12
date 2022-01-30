@@ -57,7 +57,7 @@ public class YorkPirates extends Game {
 		font.dispose();
 	}
 
-	public void closeGame(ScreenAdapter currentScreen){
-		setScreen(new ConfirmationScreen(this,currentScreen));
+	public void closeGame(){
+		Gdx.app.exit();
 	}
 }

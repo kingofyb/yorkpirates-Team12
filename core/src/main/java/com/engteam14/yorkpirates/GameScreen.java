@@ -4,26 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class GameScreen extends ScreenAdapter {
     public YorkPirates game;
@@ -47,6 +38,9 @@ public class GameScreen extends ScreenAdapter {
     public float elapsedTime = 0;
     private Vector3 followPos;
     public boolean followPlayer = false;
+
+    public boolean isPaused = false;
+    public float lastPause = 0;
 
     public final String playerName;
     public static final String playerTeam = "PLAYER";
@@ -124,8 +118,10 @@ public class GameScreen extends ScreenAdapter {
      */
     @Override
     public void render(float delta){
-        elapsedTime += delta;
-        update();
+        if(!isPaused) {
+            elapsedTime += delta;
+            update();
+        }
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
         ScreenUtils.clear(0.1f, 0.6f, 0.6f, 1.0f);
@@ -149,12 +145,14 @@ public class GameScreen extends ScreenAdapter {
         game.batch.end();
         HUDBatch.setProjectionMatrix(HUDCam.combined);
         // Start drawing HUD
-        HUDBatch.begin();
-        Vector3 pos = game.camera.project(new Vector3(player.x, player.y, 0f));
-        game.font.draw(HUDBatch, playerName, pos.x, pos.y+170f, 1f, Align.center, true);
-        HUDBatch.end();
-        gameHUD.renderStage(this);
-        HUDCam.update();
+        if(!isPaused) {
+            HUDBatch.begin();
+            Vector3 pos = game.camera.project(new Vector3(player.x, player.y, 0f));
+            game.font.draw(HUDBatch, playerName, pos.x, pos.y + 170f, 1f, Align.center, true);
+            HUDBatch.end();
+            gameHUD.renderStage(this);
+            HUDCam.update();
+        }
     }
 
     /**
@@ -187,14 +185,9 @@ public class GameScreen extends ScreenAdapter {
             game.camera.position.slerp(followPos, 0.1f);
         }
 
-        // Pause Game
-        if(Gdx.input.isKeyJustPressed(Input.Keys.DEL) || Gdx.input.isKeyJustPressed(Input.Keys.FORWARD_DEL)){
-            pauseGame();
-        }
-
         // Temporary shortcut to End Screen
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            game.closeGame(this);
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && elapsedTime - lastPause > 1f){
+            pauseGame();
         }
     }
 
@@ -209,6 +202,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public void pauseGame(){
+        isPaused = true;
         game.setScreen(new PauseScreen(game,this));
     }
 

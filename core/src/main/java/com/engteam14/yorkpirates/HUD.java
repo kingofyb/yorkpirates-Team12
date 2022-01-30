@@ -99,7 +99,7 @@ public class HUD {
         table.setTouchable(Touchable.enabled);
         //row 1
         table.row();
-        table.add(button1).size(100,100).left().top();
+        table.add(button1).size(150).left().top().pad(25);
         table.add().expandX();
         table.add().minWidth(64);
         table.add().minWidth(64);

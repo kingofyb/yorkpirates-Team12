@@ -13,13 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import org.w3c.dom.Text;
 
 public class TitleScreen extends ScreenAdapter {
     private final YorkPirates game;
@@ -63,7 +60,7 @@ public class TitleScreen extends ScreenAdapter {
 
         Table table = new Table();
         table.setFillParent(true);
-        table.debug();
+        //table.debug();
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
@@ -178,6 +175,6 @@ public class TitleScreen extends ScreenAdapter {
 
 
     private void quitGame() {
-        game.closeGame(this);
+        game.closeGame();
     }
 }

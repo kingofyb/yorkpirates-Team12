@@ -4,13 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class EndScreen extends ScreenAdapter {
@@ -53,7 +55,6 @@ public class EndScreen extends ScreenAdapter {
     //    table1.setDebug(true);
         Gdx.input.setInputProcessor(EndStage);
         ImageButton quitB = new ImageButton(skin, "Quit");
-
         ImageButton restartB = new ImageButton(skin, "Restart");
 
         quitB.addListener(new ClickListener() {
@@ -72,14 +73,15 @@ public class EndScreen extends ScreenAdapter {
 
         table1.row();
         table1.add().expand().uniform();
-        table1.add(title).expand().colspan(4).fill().pad(60);
+        title.setScaling(Scaling.fit);
+        table1.add(title).expand().colspan(4).fill().pad(260);
         table1.add().expand();
 
         //table row 2
         table1.row();
         table1.add().expand();
         table1.add().expand();
-        table1.add(new Label(points, skin)).colspan(2).expand();
+        table1.add(new Label(time, skin)).colspan(2).expand();
         table1.add().expand();
         table1.add().expand();
 
@@ -87,24 +89,29 @@ public class EndScreen extends ScreenAdapter {
         table1.row();
         table1.add().expand();
         table1.add().expand();
-        table1.add(new Label(loot, skin)).expand().colspan(2);
+        table1.add(new Label(points, skin)).expand().colspan(2);
         table1.add().expand();
         table1.add().expand();
 
         //table row 4
         table1.row();
+        table1.add().expand();
+        table1.add().expand();
+        table1.add(new Label(loot, skin)).expand().colspan(2);
+        table1.add().expand();
+        table1.add().expand();
+
+        //table row 5
+        table1.row();
         table1.add().expand().uniform();
         table1.add().expand();
-        table1.add(restartB).expand();
-        table1.add(quitB).expand();
+        table1.add(restartB).expand().size(200f);
+        table1.add(quitB).expand().size(200f);
         table1.add().expand();
         table1.add().expand();
-
+        table1.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("background.png")))));
 
         EndStage.addActor(table1);
-
-
-
     }
 
     /**1
@@ -138,10 +145,8 @@ public class EndScreen extends ScreenAdapter {
      * Is called once every frame. Used for calculations that take place before rendering.
      */
     private void update(){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             game.setScreen(new TitleScreen(game));        }
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            game.closeGame(this);
-        }
+
     }
 }

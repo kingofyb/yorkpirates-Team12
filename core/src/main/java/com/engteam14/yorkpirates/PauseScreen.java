@@ -3,18 +3,15 @@ package com.engteam14.yorkpirates;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.math.Vector2;
 
 
 public class PauseScreen extends ScreenAdapter {
@@ -87,6 +84,7 @@ public class PauseScreen extends ScreenAdapter {
 
         Texture titleT = new Texture(Gdx.files.internal("paused.png"));
         Image title = new Image(titleT);
+        title.setScaling(Scaling.fit);
 
 
         table.columnDefaults(0).width(screen.viewport.getScreenWidth()/5f);
@@ -109,7 +107,7 @@ public class PauseScreen extends ScreenAdapter {
 
         table.row().pad(10);
         table.add().expand();
-        table.add(title).colspan(4).fill().expand();
+        table.add(title).colspan(4).fill().expand().pad(50f);
 
         table.add().expand();
 
@@ -139,6 +137,7 @@ public class PauseScreen extends ScreenAdapter {
         table.add(quitB).expand().fillX().colspan(2).padLeft(40).padRight(40);
         table.add().expand();
         table.add().expand();
+        table.setBackground(skin.getDrawable("Selection"));
 
         pauseStage.addActor(table);
         pauseStage.draw();
@@ -154,22 +153,19 @@ public class PauseScreen extends ScreenAdapter {
     public void render(float delta){
         update();
         ScreenUtils.clear(0.6f, 0.6f, 1.0f, 1.0f);
+        screen.render(delta);
         Gdx.input.setInputProcessor(pauseStage);
-
         pauseStage.draw();
-
-
-
     }
 
     /**
      * Is called once every frame. Used for calculations that take place before rendering.
      */
     private void update(){
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
+            screen.isPaused = false;
+            screen.lastPause = screen.elapsedTime;
             game.setScreen(screen);
-        }else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            game.closeGame(this);
         }
     }
 }
