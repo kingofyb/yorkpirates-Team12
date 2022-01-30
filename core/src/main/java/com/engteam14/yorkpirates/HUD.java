@@ -63,16 +63,20 @@ public class HUD {
         task1.setDisabled(true);
         task1.setDisabled(true);
 
+        Texture coin = new Texture(Gdx.files.internal("loot.png"));
+        Texture star = new Texture(Gdx.files.internal("points.png"));
+        Image coinI = new Image(coin);
+        Image starI = new Image(star);
         loot = new Label(screen.loot.GetString(), skin);
         score = new Label(screen.points.GetString(), skin);
 
-        tasks.add();
+        tasks.add(starI);
         score.setFontScale(1.5f);
-        tasks.add(score).fillY();
-        tasks.add();
+        tasks.add(score).pad(5);
+        tasks.add(coinI);
         loot.setFontScale(1.5f);
 
-        tasks.add(loot).fillY();
+        tasks.add(loot);
         tasks.row();
         tasks.add(message).pad(1).colspan(4);
         tasks.row();

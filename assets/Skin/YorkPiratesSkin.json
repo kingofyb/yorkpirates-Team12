@@ -70,6 +70,12 @@
 		"imageUp": "play",
 		"imageDown": "play_down",
 		"imageOver": "play_over"
+	},
+	"Quit": {
+		"parent": "default",
+		"imageUp": "quit",
+		"imageDown": "quit_down",
+		"imageOver": "quit_over"
 	}
 },
 "ImageTextButtonStyle": {
@@ -93,6 +99,12 @@
 		"imageOver": "play_over",
 		"pressedOffsetY": -3,
 		"unpressedOffsetY": 3
+	},
+	"Quit": {
+		"parent": "default",
+		"imageUp": "quit",
+		"imageDown": "quit_down",
+		"imageOver": "quit_over"
 	}
 },
 "LabelStyle": {
@@ -113,6 +125,13 @@
 		"font": "Raleway-Bold",
 		"fontColor": "White",
 		"background": "textfield",
+		"cursor": "textfield_cursor",
+		"selection": "Selection"
+	},
+	"edges": {
+		"font": "Raleway-Bold-Small",
+		"fontColor": "White",
+		"background": "textfield_alt",
 		"cursor": "textfield_cursor",
 		"selection": "Selection"
 	}
