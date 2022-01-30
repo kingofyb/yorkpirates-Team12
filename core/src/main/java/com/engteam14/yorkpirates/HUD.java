@@ -16,19 +16,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
-
-
 public class HUD {
 
-    public static Stage stage1;
-    public static Label score;
-    private static Table table;
-    private static Skin skin;
-    private static Label loot;
-    private static Table tasks;
-    private static Label message;
+    public Stage stage1;
+    public Label score;
+    private Table table;
+    private Skin skin;
+    private Label loot;
+    private Table tasks;
+    private Label message;
 
-    public static void HUDinitialise(GameScreen screen){
+    public HUD(GameScreen screen){
         //initialise the stage
         System.out.println("rendering");
         stage1 = new Stage(screen.viewport);
@@ -105,7 +103,7 @@ public class HUD {
         table.add().expand();
 
         table.add(tasks).colspan(4);
-;
+
         table.row();
         //third row
         table.add();
@@ -131,7 +129,7 @@ public class HUD {
 
 
     }
-    public static void renderStage(GameScreen screen){
+    public void renderStage(GameScreen screen){
         score.setText(screen.points.GetString());
         loot.setText(screen.loot.GetString());
         Gdx.input.setInputProcessor(stage1);
