@@ -112,8 +112,7 @@ public class GameScreen extends ScreenAdapter {
         // Initialise projectiles array to be used storing live projectiles
         projectiles = new Array<>();
 
-        gameHUD =  new HUD();
-        gameHUD.HUDinitialise(this);
+        gameHUD =  new HUD(this);
     }
 
     /**
