@@ -1,15 +1,19 @@
 package com.engteam14.yorkpirates;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 
@@ -40,18 +44,22 @@ public class HUD {
 
         //create skin atlas
         TextureAtlas atlas;
-        atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
-        TextureAtlas.AtlasRegion region = atlas.findRegion("uiskin");
-        skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
+        atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
+        TextureAtlas.AtlasRegion region = atlas.findRegion("Skin/YorkPiratesSkin");
+        skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
         skin.addRegions(atlas);
 
 
         //create tasks table
         tasks =new Table();
-  //      tasks.debug();
-        Label message = new Label("These are the tasks to do:", skin, "title");
+
+        tasks.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("transparent.png"))));
+    //    tasks.debug();
+        Label message = new Label("These are the tasks to do:", skin);
+        message.setFontScale(0.5f, 0.5f);
         CheckBox task1 = new CheckBox("Destroy all colleges", skin);
-        CheckBox task2  = new CheckBox("   Survive 5 seconds", skin);
+        task1.scaleBy(1/2);
+        CheckBox task2  = new CheckBox("Survive 5 seconds", skin);
         task1.setDisabled(true);
         task1.setDisabled(true);
 
@@ -65,20 +73,19 @@ public class HUD {
         //first (top) row
         table.row();
         score = new Label(screen.points.GetString(), skin);
-        score.setFontScale(5);
+
 
         loot = new Label(screen.loot.GetString(), skin);
-        loot.setFontScale(5);
 
         //second row (mid section)
 
 
         //bottom row
-        ImageButton button1 = new ImageButton(skin, "settings");
-        ImageButton buttonMute = new ImageButton(skin, "music");
-        buttonMute.getImageCell().expand().fill();
-        button1.getImageCell().expand().fill();
-        buttonMute.setChecked(true);
+        ImageButton button1 = new ImageButton(skin, "Menu");
+      //  ImageButton buttonMute = new ImageButton(skin, "music");
+       // buttonMute.getImageCell().expand().fill();
+      //  button1.getImageCell().expand().fill();
+      //  buttonMute.setChecked(true);
 
         table.setTouchable(Touchable.enabled);
         //row 1
@@ -99,7 +106,7 @@ public class HUD {
 
         table.add().expand();
 
-        table.add(tasks).colspan(4).fill();
+        table.add(tasks).colspan(4);
 ;
         table.row();
         //third row
@@ -110,7 +117,7 @@ public class HUD {
         table.add();
         table.add();
         table.add();
-        table.add(buttonMute).size(64,64).right();
+        table.add().size(64,64).right();
 
 
         button1.addListener(new ClickListener() {
@@ -118,16 +125,16 @@ public class HUD {
                 screen.pauseGame();
             }
         });
-        buttonMute.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                if (screen.instrumental.getVolume() == 0) {
-                    screen.instrumental.setVolume(1);
-                } else {
-                    screen.instrumental.setVolume(0);
-                }
+      //  buttonMute.addListener(new ClickListener() {
+            //public void clicked(InputEvent event, float x, float y) {
+            //    if (screen.instrumental.getVolume() == 0) {
+            //        screen.instrumental.setVolume(1);
+            //    } else {
+              //      screen.instrumental.setVolume(0);
+               // }
 
-            }
-        });
+            //}
+       //});
 
         stage1.addActor(table);
         System.out.println("draw");

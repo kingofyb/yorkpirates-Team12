@@ -3,13 +3,16 @@ package com.engteam14.yorkpirates;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.math.Vector2;
 
@@ -36,9 +39,9 @@ public class PauseScreen extends ScreenAdapter {
         table.setTouchable(Touchable.enabled);
 
         TextureAtlas atlas;
-        atlas = new TextureAtlas(Gdx.files.internal("uiskin.atlas"));
-        TextureAtlas.AtlasRegion region = atlas.findRegion("uiskin");
-        skin = new Skin(Gdx.files.internal("uiskin.json"), new TextureAtlas(Gdx.files.internal("uiskin.atlas")));
+        atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
+        TextureAtlas.AtlasRegion region = atlas.findRegion("YorkPiratesSkin");
+        skin = new Skin(Gdx.files.internal("Skin/skin-name.json"));
         skin.addRegions(atlas);
 
 
