@@ -14,6 +14,7 @@ import java.util.Objects;
 public class Player extends GameObject {
 
     public Vector2 camDiff;
+    public float distance;
     private Vector2 oldPos;
     private HealthBar playerHealth;
 
@@ -82,6 +83,7 @@ public class Player extends GameObject {
             }
         } else moving = false;
         updateHitboxPos();
+        distance += Math.pow((Math.pow((x - oldPos.x),2f) + Math.pow((y - oldPos.y),2f)),0.5f)/10f;
 
         // Camera Calculations
         ProcessCamera(screen, camera);

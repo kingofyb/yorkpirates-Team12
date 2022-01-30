@@ -48,7 +48,7 @@ public class GameScreen extends ScreenAdapter {
     private Vector3 followPos;
     public boolean followPlayer = false;
 
-    private final String playerName;
+    public final String playerName;
     public static final String playerTeam = "PLAYER";
     public static final String enemyTeam = "ENEMY";
     public TiledMap tiledMap;
