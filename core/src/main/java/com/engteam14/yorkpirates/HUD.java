@@ -18,13 +18,10 @@ import com.badlogic.gdx.utils.Align;
 
 public class HUD {
 
-    public Stage stage1;
     public Label score;
-    private Table table;
-    private Skin skin;
-    private Label loot;
-    private Table tasks;
+    public Stage stage1;
     private Label message;
+    private final Label loot;
 
     public HUD(GameScreen screen){
         //initialise the stage
@@ -32,36 +29,29 @@ public class HUD {
         stage1 = new Stage(screen.viewport);
         Gdx.input.setInputProcessor(stage1);
 
-
-
-
         //create main screen table
-        table = new Table();
+        Table table = new Table();
         table.setFillParent(true);
         table.setPosition(0, 0);
-   //     table.setDebug(true);
-
-
+        //table.setDebug(true);
 
         //create skin atlas1
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
-        skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
+        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
         skin.addRegions(atlas);
 
-
-
         //create tasks table
-        tasks =new Table();
+        Table tasks = new Table();
 
         tasks.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("transparent.png"))));
-    //    tasks.debug();
+        //tasks.debug();
         Label message = new Label("These are the tasks to do:", skin);
         message.setFontScale(0.5f, 0.5f);
         CheckBox task1 = new CheckBox("Destroy all colleges", skin);
         CheckBox task2  = new CheckBox("Survive 5 seconds", skin);
         task1.setDisabled(true);
-        task1.setDisabled(true);
+        task2.setDisabled(true);
 
         Texture coin = new Texture(Gdx.files.internal("loot.png"));
         Texture star = new Texture(Gdx.files.internal("points.png"));
@@ -88,13 +78,10 @@ public class HUD {
         //first (top) row
         table.row();
 
-
         //second row (midsection)
-
 
         //bottom row
         ImageButton button1 = new ImageButton(skin, "Menu");
-
 
         table.setTouchable(Touchable.enabled);
         //row 1
@@ -108,7 +95,6 @@ public class HUD {
 
         //row2
         table.row();
-
 
         //table in second row for tasks
         table.add();
