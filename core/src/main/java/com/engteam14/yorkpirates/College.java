@@ -31,13 +31,11 @@ public class College extends GameObject {
      * Generates a college object within the game with animated frame(s) and a hitbox.
      * @param x         The x coordinate within the map to initialise the object at.
      * @param y         The y coordinate within the map to initialise the object at.
-     * @param width     The size of the object in the x-axis.
-     * @param height    The size of the object in the y-axis.
      * @param name      The name of the college.
      * @param team      The team the college is on.
      */
-    public College(float x, float y, float width, float height, String name, String team, Player player){
-        super(GameScreen.collegeSprites, 0, x, y, width, height, team);
+    public College(float x, float y, String name, String team, Player player){
+        super(GameScreen.collegeSprites, 0, x, y, team);
         collegeName = name;
 
         Array<Texture> sprites = new Array<>();
@@ -56,6 +54,8 @@ public class College extends GameObject {
         }
         sprites.add(GameScreen.collegeSprites.get(imageIndex));
         changeImage(sprites,0);
+        width = sprites.get(0).getWidth() / 5f;
+        height = sprites.get(0).getHeight() / 5f;
 
         setMaxHealth(500);
         lastShotFired = 0;

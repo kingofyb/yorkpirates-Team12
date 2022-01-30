@@ -104,10 +104,10 @@ public class GameScreen extends ScreenAdapter {
                             new Texture("langwith_2.png"));
         collegeSprites.add( new Texture("goodricke.png"));
         colleges = new Array<>();
-        colleges.add(new College(player.x+100f, player.y,20f, 40f, "Alcuin",enemyTeam,player));
-        colleges.add(new College(player.x+50f, player.y-50f,20f, 40f, "Derwent",enemyTeam,player));
-        colleges.add(new College(player.x+100f, player.y+250f,20f, 40f, "Langwith",enemyTeam,player));
-        colleges.add(new College(player.x-100f, player.y,20f, 40f, "Home",playerTeam,player));
+        colleges.add(new College(player.x+100f, player.y,"Alcuin",enemyTeam,player));
+        colleges.add(new College(player.x+50f, player.y-50f,"Derwent",enemyTeam,player));
+        colleges.add(new College(player.x+100f, player.y+250f,"Langwith",enemyTeam,player));
+        colleges.add(new College(player.x-100f, player.y,"Home",playerTeam,player));
 
         // Initialise projectiles array to be used storing live projectiles
         projectiles = new Array<>();
