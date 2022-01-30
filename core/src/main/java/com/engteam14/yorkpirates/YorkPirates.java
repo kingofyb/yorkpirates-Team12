@@ -6,7 +6,9 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 
 public class YorkPirates extends Game {
@@ -17,6 +19,7 @@ public class YorkPirates extends Game {
 	SpriteBatch batch;
 	BitmapFont font;
 	Array<Array<Boolean>> edges;
+	Skin skin;
 
 	/**
 	 *	Initialises base game class.
@@ -26,7 +29,12 @@ public class YorkPirates extends Game {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 16*screenToPixelRatio, 9*screenToPixelRatio);
 		batch = new SpriteBatch();
-		font = new BitmapFont();
+
+		TextureAtlas atlas;
+		atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
+		Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
+		skin.addRegions(atlas);
+		font = skin.getFont("Raleway-Bold");
 
 		edges = new Array<>();
 		String data = Gdx.files.internal("edges.csv").readString();
