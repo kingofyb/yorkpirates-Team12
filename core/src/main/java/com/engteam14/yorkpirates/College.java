@@ -34,28 +34,11 @@ public class College extends GameObject {
      * @param name      The name of the college.
      * @param team      The team the college is on.
      */
-    public College(float x, float y, String name, String team, Player player){
-        super(GameScreen.collegeSprites, 0, x, y, team);
+    public College(Array<Texture> sprites, float x, float y, float scale, String name, String team, Player player){
+        super(sprites, 0, x, y, sprites.get(0).getWidth()*scale, sprites.get(0).getHeight()*scale, team);
         collegeName = name;
 
-        Array<Texture> sprites = new Array<>();
-        switch(collegeName) {
-            case "Derwent":
-                imageIndex = 2;
-                break;
-            case "Langwith":
-                imageIndex = 4;
-                break;
-            case "Home":
-                imageIndex = 6;
-                break;
-            default:
-                imageIndex = 0;
-        }
-        sprites.add(GameScreen.collegeSprites.get(imageIndex));
         changeImage(sprites,0);
-        width = sprites.get(0).getWidth() / 5f;
-        height = sprites.get(0).getHeight() / 5f;
 
         setMaxHealth(500);
         lastShotFired = 0;
