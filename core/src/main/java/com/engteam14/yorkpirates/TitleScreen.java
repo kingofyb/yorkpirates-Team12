@@ -45,15 +45,7 @@ public class TitleScreen extends ScreenAdapter {
         tiledMap = new TmxMapLoader().load("pirate12.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
-        Texture logosheet = new Texture(Gdx.files.internal("logo.png"));
-        TextureRegion[][] split = TextureRegion.split(logosheet, logosheet.getWidth() / 8, logosheet.getHeight() / 10);
-        Array<TextureRegion> frames = new Array<>();
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 8; j++) {
-                frames.add(split[i][j]);
-            }
-        }
-        anim = new Animation<TextureRegion>(0.05f, frames);
+        anim = game.logo;
         TextureRegion titleT = anim.getKeyFrame(0f);
         Image title = new Image(titleT);
         title.scaleBy(1/4);

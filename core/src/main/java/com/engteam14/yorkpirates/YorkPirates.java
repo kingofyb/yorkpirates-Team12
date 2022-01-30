@@ -4,9 +4,8 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
@@ -19,7 +18,7 @@ public class YorkPirates extends Game {
 	SpriteBatch batch;
 	BitmapFont font;
 	Array<Array<Boolean>> edges;
-	Skin skin;
+	Animation<TextureRegion> logo;
 
 	/**
 	 *	Initialises base game class.
@@ -34,6 +33,16 @@ public class YorkPirates extends Game {
 		Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
 		skin.addRegions(atlas);
 		font = skin.getFont("Raleway-Bold");
+
+		Texture logosheet = new Texture(Gdx.files.internal("logo.png"));
+		TextureRegion[][] split = TextureRegion.split(logosheet, logosheet.getWidth() / 8, logosheet.getHeight() / 10);
+		Array<TextureRegion> frames = new Array<>();
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 8; j++) {
+				frames.add(split[i][j]);
+			}
+		}
+		logo = new Animation<TextureRegion>(0.05f, frames);
 
 		edges = new Array<>();
 		String data = Gdx.files.internal("edges.csv").readString();

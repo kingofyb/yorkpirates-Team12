@@ -1,5 +1,7 @@
 package com.engteam14.yorkpirates.lwjgl3;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 import com.engteam14.yorkpirates.YorkPirates;
@@ -23,11 +25,9 @@ public class Lwjgl3Launcher {
 		//// If you remove the above line and set Vsync to false, you can get unlimited FPS, which can be
 		//// useful for testing performance, but can also be very stressful to some hardware.
 		//// You may also need to configure GPU drivers to fully disable Vsync; this can cause screen tearing.
-		configuration.setMaximized(true);
-		configuration.setResizable(true);
-		configuration.setAutoIconify(true);
+		configuration.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 
-		configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
+		configuration.setWindowIcon("icon_128.png", "icon_64.png", "icon_32.png", "icon_16.png");
 
 		return configuration;
 	}
