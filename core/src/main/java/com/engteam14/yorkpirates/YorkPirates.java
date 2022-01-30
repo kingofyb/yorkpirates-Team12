@@ -29,7 +29,6 @@ public class YorkPirates extends Game {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 16*screenToPixelRatio, 9*screenToPixelRatio);
 		batch = new SpriteBatch();
-
 		TextureAtlas atlas;
 		atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
 		Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));

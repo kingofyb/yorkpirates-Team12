@@ -213,6 +213,11 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public void gameEnd(boolean win){
-        game.setScreen(new EndScreen(game, elapsedTime, points, loot, win));
+        game.setScreen(new EndScreen(game, this, elapsedTime, points, loot, win));
     }
+
+    public void restart(){
+        game.setScreen(new TitleScreen(game));
+    }
+
 }

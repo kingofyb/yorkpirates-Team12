@@ -40,12 +40,11 @@ public class PauseScreen extends ScreenAdapter {
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
-
-        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
+        skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
         skin.addRegions(atlas);
 
-     //   table.debug();
-        ImageTextButton resumeB = new ImageTextButton("Resume", skin, "Resume" );
+
+        TextButton resumeB = new TextButton("Resume", skin );
         resumeB.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(screen);
@@ -66,7 +65,7 @@ public class PauseScreen extends ScreenAdapter {
 
             }
         });
-        ImageTextButton music = new ImageTextButton("", skin );
+        TextButton music = new TextButton("", skin );
         if (screen.instrumental.getVolume() == 0) {
             music.setText("Turn Music ON");
         } else {
@@ -91,45 +90,55 @@ public class PauseScreen extends ScreenAdapter {
 
 
         table.columnDefaults(0).width(screen.viewport.getScreenWidth()/5f);
+     //   table.columnDefaults(1).width(screen.viewport.getScreenWidth()/300f);
+
+ //       table.columnDefaults(4).width(screen.viewport.getScreenWidth()/300f);
+
         table.columnDefaults(5).width(screen.viewport.getScreenWidth()/5f);
+      //  table.debug();
+/*
 
+        table.row().padTop(40f).padBottom(40f);
+        table.add().expand();
+        table.add().expand();
+        table.add().expand();
+        table.add().expand();
+        table.add().expand();
+        table.add().expand();
+*/
 
-
-        table.row().padTop(20f);
-        table.add().expandY();
-        table.add(title).colspan(4).expandY().fill();
-
-        table.add().expandY();
-
-
-        table.row().padBottom(10f).padTop(10f);
+        table.row().pad(10);
         table.add().expand();
-        table.add().expand();
-        table.add(resumeB).expand().colspan(2);
-        table.add().expand();
-        table.add().expand();
-
-        table.row().padTop(10f).padBottom(10f);
-        table.add().expand();
-        table.add().expand();
-        table.add(restartB).expand().fillX().colspan(2).uniform();
-        table.add().expand();
-        table.add().expand();
-        table.row().padTop(10f).padBottom(10f);
+        table.add(title).colspan(4).fill().expand();
 
         table.add().expand();
+
+
+        table.row();
         table.add().expand();
-        table.add(music).expand().fillX().colspan(2).uniform();
+        table.add().expand();
+        table.add(resumeB).expand().fillX().expand().colspan(2).padLeft(40).padRight(40);
         table.add().expand();
         table.add().expand();
 
-        table.row().padTop(10f).padBottom(10f);
+        table.row();
         table.add().expand();
         table.add().expand();
-        table.add(quitB).expand().fillX().colspan(2).uniform();
+        table.add(restartB).expand().fillX().colspan(2).padLeft(40).padRight(40);
         table.add().expand();
         table.add().expand();
-        table.row().padTop(10f).padBottom(10f);
+        table.row();
+        table.add().expand();
+        table.add().expand();
+        table.add(music).expand().fillX().colspan(2).padLeft(40).padRight(40);
+        table.add().expand();
+        table.add().expand();
+        table.row();
+        table.add().expand();
+        table.add().expand();
+        table.add(quitB).expand().fillX().colspan(2).padLeft(40).padRight(40);
+        table.add().expand();
+        table.add().expand();
 
         pauseStage.addActor(table);
         pauseStage.draw();

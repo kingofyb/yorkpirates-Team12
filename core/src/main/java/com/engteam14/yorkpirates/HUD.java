@@ -34,20 +34,23 @@ public class HUD {
         stage1 = new Stage(screen.viewport);
         Gdx.input.setInputProcessor(stage1);
 
+
+
+
         //create main screen table
         table = new Table();
         table.setFillParent(true);
         table.setPosition(0, 0);
-        table.setDebug(true);
+   //     table.setDebug(true);
 
 
 
         //create skin atlas1
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
-        TextureAtlas.AtlasRegion region = atlas.findRegion("Skin/YorkPiratesSkin");
         skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
         skin.addRegions(atlas);
+
 
 
         //create tasks table
@@ -58,27 +61,33 @@ public class HUD {
         Label message = new Label("These are the tasks to do:", skin);
         message.setFontScale(0.5f, 0.5f);
         CheckBox task1 = new CheckBox("Destroy all colleges", skin);
-        task1.scaleBy(1/2);
         CheckBox task2  = new CheckBox("Survive 5 seconds", skin);
         task1.setDisabled(true);
         task1.setDisabled(true);
 
+        loot = new Label(screen.loot.GetString(), skin);
+        score = new Label(screen.points.GetString(), skin);
 
-        tasks.add(message).pad(5);
+        tasks.add();
+        score.setFontScale(1.5f);
+        tasks.add(score).fillY();
+        tasks.add();
+        loot.setFontScale(1.5f);
+
+        tasks.add(loot).fillY();
         tasks.row();
-        tasks.add(task1).left().pad(5);
+        tasks.add(message).pad(1).colspan(4);
         tasks.row();
-        tasks.add(task2).left().pad(10);
+        tasks.add(task1).left().pad(5).colspan(4);
+        tasks.row();
+        tasks.add(task2).left().pad(5).colspan(4);
 
 
         //first (top) row
         table.row();
-        score = new Label(screen.points.GetString(), skin);
 
 
-        loot = new Label(screen.loot.GetString(), skin);
-
-        //second row (mid section)
+        //second row (midsection)
 
 
         //bottom row
@@ -88,12 +97,12 @@ public class HUD {
         table.setTouchable(Touchable.enabled);
         //row 1
         table.row();
-        table.add(button1).size(64,64).left().top();
+        table.add(button1).size(100,100).left().top();
         table.add().expandX();
         table.add().minWidth(64);
-        table.add(score);
         table.add().minWidth(64);
-        table.add(loot);
+        table.add().minWidth(64);
+        table.add();
 
         //row2
         table.row();

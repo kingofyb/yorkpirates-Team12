@@ -4,7 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -15,30 +20,113 @@ public class EndScreen extends ScreenAdapter {
     private final String points;
     private final String loot;
     private final boolean win;
+    private static Table table1;
+    Stage EndStage;
 
     /**
      * Initialises the title screen, as well as relevant textures and data it may contain.
      * @param game  Passes in the base game class for reference.
      */
-    public EndScreen(YorkPirates game, float seconds, ScoreManager points, ScoreManager loot, boolean win){
+    public EndScreen(YorkPirates game, GameScreen screen, float seconds, ScoreManager points, ScoreManager loot, boolean win){
+
         this.game = game;
         this.time = ((int)(seconds / 60) == 0 ? "" : ((int)(seconds / 60) + " Minutes, ")) + (int)(seconds % 60) + " Seconds Elapsed";
         this.points = points.Get() == 0 ? "No Points Gained" : points.GetString() + " Points Gained";
         this.loot = loot.Get() == 0 ? "No Loot Won" : loot.GetString() + " Loot Won";
         this.win = win;
         game.camera.position.lerp(new Vector3(game.camera.viewportWidth/2, game.camera.viewportHeight/2, 0f), 1f);
+        String imageN;
+        if (win) {
+            imageN="game_win.png";
+        }else{
+            imageN="game_over.png";
+        }
+
+
+        Texture titleT = new Texture(Gdx.files.internal(imageN));
+        Image title = new Image(titleT);
+
+        TextureAtlas atlas;
+        atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
+        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
+        skin.addRegions(atlas);
+
+
+        EndStage = new Stage(screen.viewport);
+        table1 = new  Table();
+        table1.setFillParent(true);
+        table1.setPosition(0, 0);
+    //    table1.setDebug(true);
+        Gdx.input.setInputProcessor(EndStage);
+        ImageButton quitB = new ImageButton(skin, "Restart");
+
+        ImageButton restartB = new ImageButton(skin);
+
+        quitB.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+
+            }
+        });
+
+        restartB.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                screen.restart();
+
+            }
+        });
+
+        table1.row();
+        table1.add().expand().uniform();
+        table1.add(title).expand().colspan(4).fill().pad(60);
+        table1.add().expand();
+
+        //table row 2
+        table1.row();
+        table1.add().expand();
+        table1.add().expand();
+        table1.add(new Label(this.points, skin)).colspan(2).expand();;
+        table1.add().expand();
+        table1.add().expand();
+
+        //table row 3
+        table1.row();
+        table1.add().expand();
+        table1.add().expand();
+        table1.add(new Label(this.loot, skin)).expand().colspan(2);
+        table1.add().expand();
+        table1.add().expand();
+
+        //table row 4
+        table1.row();
+        table1.add().expand().uniform();
+        table1.add().expand();
+        table1.add(restartB).expand();
+        table1.add(quitB).expand();
+        table1.add().expand();
+        table1.add().expand();
+
+
+        EndStage.addActor(table1);
+
+
+
     }
 
-    /**
+    /**1
      * Is called once every frame. Runs update() and then renders the title screen.
      * @param delta The time passed since the previously rendered frame.
      */
     @Override
     public void render(float delta){
         update();
-        game.camera.update();
+        ScreenUtils.clear(0.1f, 0.6f, 0.6f, 1.0f);
+
+        EndStage.draw();
+
+
+    /*        game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
-        ScreenUtils.clear(0.6f, 0.6f, 1.0f, 1.0f);
         game.batch.begin();
         if (win)    game.font.setColor(0.7f, 1.0f, 0.6f, 1f);
         else        game.font.setColor(1.0f, 0.8f, 0.6f, 1f);
@@ -49,7 +137,7 @@ public class EndScreen extends ScreenAdapter {
         game.font.draw(game.batch, time, game.camera.viewportWidth/2, game.camera.viewportHeight*0.6f+game.font.getLineHeight()/2, 0.9f, Align.center, true);
         game.font.draw(game.batch, points, game.camera.viewportWidth/2, game.camera.viewportHeight*0.5f+game.font.getLineHeight()/2, 0.9f, Align.center, true);
         game.font.draw(game.batch, loot, game.camera.viewportWidth/2, game.camera.viewportHeight*0.4f+game.font.getLineHeight()/2, 0.9f, Align.center, true);
-        game.batch.end();
+        game.batch.end();*/
     }
 
     /**
@@ -57,8 +145,7 @@ public class EndScreen extends ScreenAdapter {
      */
     private void update(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            game.setScreen(new TitleScreen(game));
-        }
+            game.setScreen(new TitleScreen(game));        }
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
             game.closeGame(this);
         }

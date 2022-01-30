@@ -63,7 +63,7 @@ public class TitleScreen extends ScreenAdapter {
 
         Table table = new Table();
         table.setFillParent(true);
-       // table.debug();
+     //   table.debug();
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
@@ -71,7 +71,6 @@ public class TitleScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
         skin.addRegions(atlas);
 
-        table.add().expandX();
         table.add().expandX();
         titleCell = table.add(title);
         titleCell.fill().prefHeight(game.camera.viewportHeight+40).prefWidth(game.camera.viewportWidth).colspan(5).expand();
@@ -89,7 +88,7 @@ public class TitleScreen extends ScreenAdapter {
             }});
         table.add().expand();
 
-        table.add(nameText).fillX().pad(65);
+        table.add(nameText).fillX().padLeft(65).padRight(65);
         table.add().expand();
 
         table.add().expandY();
