@@ -19,16 +19,15 @@ import com.badlogic.gdx.utils.Scaling;
 
 public class HUD {
 
-    private CheckBox collegesTask;
-    private CheckBox movementTask;
-    private CheckBox pointsTask;
-    public Stage stage1;
     public Label score;
-    private Table table;
-    private Skin skin;
-    private Label loot;
-    private Table tasks;
+    public Stage stage1;
+
     private Label message;
+    private final Label loot;
+
+    private final CheckBox collegesTask;
+    private final CheckBox movementTask;
+    private final CheckBox pointsTask;
 
     private final int DISTANCE_GOAL = 600;
     private final int POINT_GOAL = 150;
@@ -39,27 +38,20 @@ public class HUD {
         stage1 = new Stage(screen.viewport);
         Gdx.input.setInputProcessor(stage1);
 
-
-
-
         //create main screen table
-        table = new Table();
+        Table table = new Table();
         table.setFillParent(true);
         table.setPosition(0, 0);
    //     table.setDebug(true);
 
-
-
         //create skin atlas1
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
-        skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
+        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
         skin.addRegions(atlas);
 
-
-
         //create tasks table
-        tasks =new Table();
+        Table tasks = new Table();
 
         tasks.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("transparent.png"))));
     //    tasks.debug();
@@ -96,17 +88,13 @@ public class HUD {
         tasks.row();
         tasks.add(pointsTask).left().pad(5).colspan(4);
 
-
         //first (top) row
         table.row();
 
-
         //second row (midsection)
-
 
         //bottom row
         ImageButton button1 = new ImageButton(skin, "Menu");
-
 
         table.setTouchable(Touchable.enabled);
         //row 1
@@ -120,7 +108,6 @@ public class HUD {
 
         //row2
         table.row();
-
 
         //table in second row for tasks
         table.add();
@@ -140,20 +127,16 @@ public class HUD {
         table.add();
         table.add().size(64,64).right();
 
-
         button1.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 screen.pauseGame();
             }
         });
 
-
         stage1.addActor(table);
         System.out.println("draw");
-
-
-
     }
+
     public void renderStage(GameScreen screen){
         score.setText(screen.points.GetString());
         loot.setText(screen.loot.GetString());
@@ -170,5 +153,4 @@ public class HUD {
         Gdx.input.setInputProcessor(stage1);
         stage1.draw();
     }
-
 }
