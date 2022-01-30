@@ -44,7 +44,7 @@ public class GameScreen extends ScreenAdapter {
     private final OrthogonalTiledMapRenderer tiledMapRenderer;
     public Music instrumental;
 
-    private float elapsedTime = 0;
+    public float elapsedTime = 0;
     private Vector3 followPos;
     public boolean followPlayer = false;
 
@@ -212,7 +212,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public void gameEnd(boolean win){
-        game.setScreen(new EndScreen(game, this, elapsedTime, points, loot, win));
+        game.setScreen(new EndScreen(game, this, win));
     }
 
     public void restart(){

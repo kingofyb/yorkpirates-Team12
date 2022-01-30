@@ -15,25 +15,21 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class EndScreen extends ScreenAdapter {
     private final YorkPirates game;
-
-    private final String time;
-    private final String points;
-    private final String loot;
-    private final boolean win;
-    private static Table table1;
-    Stage EndStage;
+    private final Stage EndStage;
 
     /**
      * Initialises the title screen, as well as relevant textures and data it may contain.
-     * @param game  Passes in the base game class for reference.
+     * @param game      Passes in the base game class for reference.
+     * @param screen    Passes in the game screen for reference.
+     * @param win       Passes in the win status.
      */
-    public EndScreen(YorkPirates game, GameScreen screen, float seconds, ScoreManager points, ScoreManager loot, boolean win){
+    public EndScreen(YorkPirates game, GameScreen screen, boolean win){
 
         this.game = game;
-        this.time = ((int)(seconds / 60) == 0 ? "" : ((int)(seconds / 60) + " Minutes, ")) + (int)(seconds % 60) + " Seconds Elapsed";
-        this.points = points.Get() == 0 ? "No Points Gained" : points.GetString() + " Points Gained";
-        this.loot = loot.Get() == 0 ? "No Loot Won" : loot.GetString() + " Loot Won";
-        this.win = win;
+        int seconds = (int) screen.elapsedTime;
+        String time = ((seconds / 60) == 0 ? "" : ((seconds / 60) + " Minutes, ")) + (seconds % 60) + " Seconds Elapsed";
+        String points = screen.points.Get() == 0 ? "No Points Gained" : screen.points.GetString() + " Points Gained";
+        String loot = screen.loot.Get() == 0 ? "No Loot Won" : screen.loot.GetString() + " Loot Won";
         game.camera.position.lerp(new Vector3(game.camera.viewportWidth/2, game.camera.viewportHeight/2, 0f), 1f);
         String imageN;
         if (win) {
@@ -41,7 +37,6 @@ public class EndScreen extends ScreenAdapter {
         }else{
             imageN="game_over.png";
         }
-
 
         Texture titleT = new Texture(Gdx.files.internal(imageN));
         Image title = new Image(titleT);
@@ -51,9 +46,8 @@ public class EndScreen extends ScreenAdapter {
         Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
         skin.addRegions(atlas);
 
-
         EndStage = new Stage(screen.viewport);
-        table1 = new  Table();
+        Table table1 = new Table();
         table1.setFillParent(true);
         table1.setPosition(0, 0);
     //    table1.setDebug(true);
@@ -85,7 +79,7 @@ public class EndScreen extends ScreenAdapter {
         table1.row();
         table1.add().expand();
         table1.add().expand();
-        table1.add(new Label(this.points, skin)).colspan(2).expand();;
+        table1.add(new Label(points, skin)).colspan(2).expand();
         table1.add().expand();
         table1.add().expand();
 
@@ -93,7 +87,7 @@ public class EndScreen extends ScreenAdapter {
         table1.row();
         table1.add().expand();
         table1.add().expand();
-        table1.add(new Label(this.loot, skin)).expand().colspan(2);
+        table1.add(new Label(loot, skin)).expand().colspan(2);
         table1.add().expand();
         table1.add().expand();
 
