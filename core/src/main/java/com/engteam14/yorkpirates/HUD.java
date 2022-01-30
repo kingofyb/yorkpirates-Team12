@@ -18,10 +18,19 @@ import com.badlogic.gdx.utils.Align;
 
 public class HUD {
 
-    public Label score;
+    private CheckBox collegesTask;
+    private CheckBox movementTask;
+    private CheckBox pointsTask;
     public Stage stage1;
+    public Label score;
+    private Table table;
+    private Skin skin;
+    private Label loot;
+    private Table tasks;
     private Label message;
-    private final Label loot;
+
+    private final int DISTANCE_GOAL = 600;
+    private final int POINT_GOAL = 150;
 
     public HUD(GameScreen screen){
         //initialise the stage
@@ -29,29 +38,38 @@ public class HUD {
         stage1 = new Stage(screen.viewport);
         Gdx.input.setInputProcessor(stage1);
 
+
+
+
         //create main screen table
-        Table table = new Table();
+        table = new Table();
         table.setFillParent(true);
         table.setPosition(0, 0);
-        //table.setDebug(true);
+   //     table.setDebug(true);
+
+
 
         //create skin atlas1
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
-        Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
+        skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
         skin.addRegions(atlas);
 
+
+
         //create tasks table
-        Table tasks = new Table();
+        tasks =new Table();
 
         tasks.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("transparent.png"))));
-        //tasks.debug();
-        Label message = new Label("These are the tasks to do:", skin);
+    //    tasks.debug();
+        Label message = new Label(screen.playerName+"'s Tasks:", skin);
         message.setFontScale(0.5f, 0.5f);
-        CheckBox task1 = new CheckBox("Destroy all colleges", skin);
-        CheckBox task2  = new CheckBox("Survive 5 seconds", skin);
-        task1.setDisabled(true);
-        task2.setDisabled(true);
+        collegesTask = new CheckBox("Destroy all colleges 0/"+(screen.colleges.size-1), skin);
+        movementTask = new CheckBox("Move "+DISTANCE_GOAL+"m 0/"+DISTANCE_GOAL, skin);
+        pointsTask = new CheckBox("Get"+POINT_GOAL+"points 0/"+POINT_GOAL, skin);
+        collegesTask.setChecked(true);
+        movementTask.setChecked(true);
+        pointsTask.setChecked(true);
 
         Texture coin = new Texture(Gdx.files.internal("loot.png"));
         Texture star = new Texture(Gdx.files.internal("points.png"));
@@ -70,18 +88,23 @@ public class HUD {
         tasks.row();
         tasks.add(message).pad(1).colspan(4);
         tasks.row();
-        tasks.add(task1).left().pad(5).colspan(4);
+        tasks.add(collegesTask).left().pad(5).colspan(4);
         tasks.row();
-        tasks.add(task2).left().pad(5).colspan(4);
+        tasks.add(movementTask).left().pad(5).colspan(4);
+        tasks.row();
+        tasks.add(pointsTask).left().pad(5).colspan(4);
 
 
         //first (top) row
         table.row();
 
+
         //second row (midsection)
+
 
         //bottom row
         ImageButton button1 = new ImageButton(skin, "Menu");
+
 
         table.setTouchable(Touchable.enabled);
         //row 1
@@ -95,6 +118,7 @@ public class HUD {
 
         //row2
         table.row();
+
 
         //table in second row for tasks
         table.add();
@@ -131,6 +155,16 @@ public class HUD {
     public void renderStage(GameScreen screen){
         score.setText(screen.points.GetString());
         loot.setText(screen.loot.GetString());
+
+        collegesTask.setChecked(screen.collegesCaptured < screen.colleges.size-1);
+        collegesTask.setText("Destroy all colleges:  "+Math.min(screen.collegesCaptured, screen.colleges.size-1)+"/"+(screen.colleges.size-1)+"  ");
+
+        movementTask.setChecked(screen.player.distance < DISTANCE_GOAL);
+        movementTask.setText("Move "+DISTANCE_GOAL+"m:  "+Math.min((int)(screen.player.distance), DISTANCE_GOAL)+"/"+DISTANCE_GOAL+"  ");
+
+        pointsTask.setChecked(screen.points.Get() < POINT_GOAL);
+        pointsTask.setText("Get "+POINT_GOAL+" points:  "+Math.min(screen.points.Get(), POINT_GOAL)+"/"+POINT_GOAL+"  ");
+
         Gdx.input.setInputProcessor(stage1);
         stage1.draw();
     }
