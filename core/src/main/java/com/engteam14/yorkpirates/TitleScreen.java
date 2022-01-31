@@ -25,22 +25,20 @@ public class TitleScreen extends ScreenAdapter {
 
     private float elapsedTime = 0f;
 
-    private final TiledMapRenderer tiledMapRenderer;
-
     /**
      * Initialises the title screen, as well as relevant textures and data it may contain.
      * @param game  Passes in the base game class for reference.
      */
     public TitleScreen(YorkPirates game){
         this.game = game;
-        nextGame = new GameScreen(game, playerName);
+        nextGame = new GameScreen(game, null);
         nextGame.isPaused = true;
         nextGame.playerName = "Player";
 
         stage = new Stage();
 
         TiledMap tiledMap = new TmxMapLoader().load("pirate12.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        TiledMapRenderer tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         anim = game.logo;
         TextureRegion titleT = anim.getKeyFrame(0f);
