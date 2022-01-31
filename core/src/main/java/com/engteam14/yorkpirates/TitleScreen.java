@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class TitleScreen extends ScreenAdapter {
     private final YorkPirates game;
+    private final GameScreen nextGame;
     private final Stage stage;
     private final TextField nameText;
     private final Cell<Image> titleCell;
@@ -39,6 +40,9 @@ public class TitleScreen extends ScreenAdapter {
      */
     public TitleScreen(YorkPirates game){
         this.game = game;
+        nextGame = new GameScreen(game, playerName);
+        nextGame.isPaused = true;
+        nextGame.playerName = "Player";
 
         stage = new Stage();
 
@@ -52,7 +56,7 @@ public class TitleScreen extends ScreenAdapter {
 
         Table table = new Table();
         table.setFillParent(true);
-        table.debug();
+        //table.debug();
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
@@ -137,8 +141,9 @@ public class TitleScreen extends ScreenAdapter {
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
         ScreenUtils.clear(0f, 0f, 0f, 1.0f);
-        tiledMapRenderer.setView(game.camera); // Draw map first so behind everything
-        tiledMapRenderer.render();
+        //tiledMapRenderer.setView(game.camera); // Draw map first so behind everything
+        //tiledMapRenderer.render();
+        nextGame.render(delta);
         TextureRegion frame = anim.getKeyFrame(elapsedTime, true);
         titleCell.setActor(new Image(frame));
         stage.draw();
@@ -162,7 +167,8 @@ public class TitleScreen extends ScreenAdapter {
         } else{
             playerName = nameText.getText();
         }
-        game.setScreen(new GameScreen(game, playerName));
+        nextGame.isPaused = false;
+        game.setScreen(nextGame);
     }
 
 

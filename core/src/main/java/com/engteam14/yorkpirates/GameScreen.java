@@ -42,7 +42,7 @@ public class GameScreen extends ScreenAdapter {
     public boolean isPaused = false;
     public float lastPause = 0;
 
-    public final String playerName;
+    public String playerName;
     public static final String playerTeam = "PLAYER";
     public static final String enemyTeam = "ENEMY";
     public TiledMap tiledMap;
