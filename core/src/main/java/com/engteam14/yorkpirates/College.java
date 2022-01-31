@@ -17,6 +17,7 @@ public class College extends GameObject {
     private HealthBar collegeBar;
     private Indicator direction;
 
+    private float greyTime;
     private long lastShotFired;
     private final String collegeName;
     private final Array<Texture> collegeImages;
@@ -40,6 +41,7 @@ public class College extends GameObject {
             collegeImages.add(sprites.get(i));
         }
 
+        greyTime = 0;
         setMaxHealth(500);
         lastShotFired = 0;
         collegeName = name;
@@ -94,6 +96,15 @@ public class College extends GameObject {
         }else{
             direction.visible = true;
         }
+
+        if(isGrey){
+            if(greyTime > 5){
+                isGrey = false;
+                greyTime = 0;
+            }else{
+                greyTime += 1;
+            }
+        }
     }
 
     /**
@@ -105,6 +116,8 @@ public class College extends GameObject {
     @Override
     public void takeDamage(GameScreen screen, float damage, String projectileTeam){
         currentHealth -= damage;
+        isGrey = true;
+
         if(currentHealth > 0){
             collegeBar.resize(currentHealth);
         }else{
@@ -150,7 +163,11 @@ public class College extends GameObject {
      */
     @Override
     public void draw(SpriteBatch batch, float elapsedTime){
+        if(isGrey){
+            batch.setShader(shader); // Set our grey-out shader to the batch
+        }
         batch.draw(anim.getKeyFrame(elapsedTime, true), x - width/2, y - height/2, width, height);
+        batch.setShader(null);
         collegeBar.draw(batch, 0);
         direction.draw(batch,0);
     }

@@ -1,27 +1,35 @@
 package com.engteam14.yorkpirates;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
 public class GameObject {
-    Texture sprite;
-    Animation<Texture> anim;
-    Rectangle hitbox;
+
     float x;
     float y;
+
+    String team;
+
     float width;
     float height;
-    String team;
+
     int maxHealth;
     float currentHealth;
 
+    boolean isGrey;
+
+    Texture sprite;
+    Rectangle hitbox;
+    ShaderProgram shader;
+    Animation<Texture> anim;
+
     /**
-     * Generates a generic object within the game with animated frame(s) and a hitbox.
+     * Generates a generic object within the game with animated frame(s) and a hit-box.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
      * @param x         The x coordinate within the map to initialise the object at.
@@ -32,12 +40,18 @@ public class GameObject {
      */
     GameObject(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
         changeImage(frames,fps);
+
         this.x = x;
         this.y = y;
+        setHitbox();
+
+        isGrey = false;
+        this.team = team;
+
         this.width = width;
         this.height = height;
-        setHitbox();
-        this.team = team;
+
+        shader = new ShaderProgram(Gdx.files.internal("grey.vsh"), Gdx.files.internal("grey.fsh"));
     }
 
     /**
@@ -67,6 +81,7 @@ public class GameObject {
      */
     void takeDamage(GameScreen screen, float damage, String projectileTeam){
         currentHealth -= damage;
+        isGrey = true;
     }
 
     /**
@@ -80,7 +95,7 @@ public class GameObject {
     }
 
     /**
-     * Sets the object's hitbox, based upon it's x, y, width and height values.
+     * Sets the object's hit-box, based upon it's x, y, width and height values.
      */
     void setHitbox(){
         hitbox = new Rectangle();
