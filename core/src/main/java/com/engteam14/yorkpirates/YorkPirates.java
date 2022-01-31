@@ -25,6 +25,7 @@ public class YorkPirates extends Game {
 	 */
 	@Override
 	public void create () {
+		Gdx.graphics.setForegroundFPS(30);
 		Gdx.graphics.setVSync(true);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 16*screenToPixelRatio, 9*screenToPixelRatio);
@@ -35,15 +36,7 @@ public class YorkPirates extends Game {
 		skin.addRegions(atlas);
 		font = skin.getFont("Raleway-Bold");
 
-		Texture logosheet = new Texture(Gdx.files.internal("logo.png"));
-		TextureRegion[][] split = TextureRegion.split(logosheet, logosheet.getWidth() / 8, logosheet.getHeight() / 10);
-		Array<TextureRegion> frames = new Array<>();
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 8; j++) {
-				frames.add(split[i][j]);
-			}
-		}
-		logo = new Animation<TextureRegion>(0.05f, frames);
+		logo = getAnimator("logo.png", 10,8);
 
 		edges = new Array<>();
 		String data = Gdx.files.internal("edges.csv").readString();
@@ -56,6 +49,18 @@ public class YorkPirates extends Game {
 			edges.insert(0, newrow);
 		}
 		setScreen(new TitleScreen(this));
+	}
+
+	private Animation<TextureRegion> getAnimator(String path, int x, int y) {
+		Texture logosheet = new Texture(Gdx.files.internal(path));
+		TextureRegion[][] split = TextureRegion.split(logosheet, logosheet.getWidth() / y, logosheet.getHeight() / x);
+		Array<TextureRegion> frames = new Array<>();
+		for (int i = 0; i < x; i++) {
+			for (int j = 0; j < y; j++) {
+				frames.add(split[i][j]);
+			}
+		}
+		return new Animation<TextureRegion>(0.05f, frames);
 	}
 
 	/**
