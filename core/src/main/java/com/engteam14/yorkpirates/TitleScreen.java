@@ -168,6 +168,8 @@ public class TitleScreen extends ScreenAdapter {
             playerName = nameText.getText();
         }
         nextGame.isPaused = false;
+        nextGame.playerName = playerName;
+        nextGame.gameHUD.updateName(nextGame);
         game.setScreen(nextGame);
     }
 

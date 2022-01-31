@@ -55,7 +55,7 @@ public class HUD {
 
         tasks.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("transparent.png"))));
     //    tasks.debug();
-        Label message = new Label(screen.playerName+"'s Tasks:", skin);
+        message = new Label(screen.playerName+"'s Tasks:", skin);
         message.setFontScale(0.5f, 0.5f);
         collegesTask = new CheckBox("Destroy all colleges 0/"+(screen.colleges.size-1), skin);
         movementTask = new CheckBox("Move "+DISTANCE_GOAL+"m 0/"+DISTANCE_GOAL, skin);
@@ -152,5 +152,9 @@ public class HUD {
 
         Gdx.input.setInputProcessor(stage1);
         stage1.draw();
+    }
+
+    public void updateName(GameScreen screen){
+        message.setText(screen.playerName+"'s Tasks:");
     }
 }

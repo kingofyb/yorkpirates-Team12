@@ -47,7 +47,7 @@ public class GameScreen extends ScreenAdapter {
     public static final String enemyTeam = "ENEMY";
     public TiledMap tiledMap;
 
-    private final HUD gameHUD;
+    public final HUD gameHUD;
 
     /**
      * Initialises the main game screen, as well as relevant entities and data.
