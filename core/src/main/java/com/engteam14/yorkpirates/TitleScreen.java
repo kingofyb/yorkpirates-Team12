@@ -52,7 +52,7 @@ public class TitleScreen extends ScreenAdapter {
 
         Table table = new Table();
         table.setFillParent(true);
-        //table.debug();
+        table.debug();
 
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));

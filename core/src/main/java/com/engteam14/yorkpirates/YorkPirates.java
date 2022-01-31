@@ -25,6 +25,7 @@ public class YorkPirates extends Game {
 	 */
 	@Override
 	public void create () {
+		Gdx.graphics.setVSync(true);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 16*screenToPixelRatio, 9*screenToPixelRatio);
 		batch = new SpriteBatch();
