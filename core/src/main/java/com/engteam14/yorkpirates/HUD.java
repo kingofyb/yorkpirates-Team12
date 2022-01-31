@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -28,8 +29,8 @@ public class HUD {
     private final Cell<Image> tutorialImg;
     private final Label tutorialLabel;
 
-    private final int DISTANCE_GOAL = 600;
-    private final int POINT_GOAL = 150;
+    private final int DISTANCE_GOAL = MathUtils.random(55,65)*10;
+    private final int POINT_GOAL = MathUtils.random(13,18)*10;
 
     /**
      * Generates a HUD object within the game that controls elements of the UI.
@@ -179,9 +180,15 @@ public class HUD {
             collegesTask.setText("Capture all colleges:  "+Math.min(screen.collegesCaptured, screen.colleges.size-1)+"/"+(screen.colleges.size-1)+"  ");
         }
 
+        if(screen.player.distance < DISTANCE_GOAL && !movementTask.isChecked()){
+            screen.loot.Add(5);
+        }
         movementTask.setChecked(screen.player.distance < DISTANCE_GOAL);
         movementTask.setText("Move "+DISTANCE_GOAL+"m:  "+Math.min((int)(screen.player.distance), DISTANCE_GOAL)+"/"+DISTANCE_GOAL+"  ");
 
+        if(screen.points.Get() < POINT_GOAL && !pointsTask.isChecked()){
+            screen.loot.Add(5);
+        }
         pointsTask.setChecked(screen.points.Get() < POINT_GOAL);
         pointsTask.setText("Get "+POINT_GOAL+" points:  "+Math.min(screen.points.Get(), POINT_GOAL)+"/"+POINT_GOAL+"  ");
 
