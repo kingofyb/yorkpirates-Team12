@@ -162,6 +162,7 @@ public class HUD {
             Image newimg = new Image(screen.game.keyboard.getKeyFrame(screen.elapsedTime, true));
             newimg.setScaling(Scaling.fit);
             tutorialImg.setActor(newimg);
+            screen.hasShot = false;
         } else if(!screen.hasShot){
             Image newimg = new Image(screen.game.mouse.getKeyFrame(screen.elapsedTime, true));
             newimg.setScaling(Scaling.fit);
