@@ -43,7 +43,6 @@ public class GameObject {
 
         this.x = x;
         this.y = y;
-        setHitbox();
 
         isGrey = false;
         this.team = team;
@@ -51,6 +50,7 @@ public class GameObject {
         this.width = width;
         this.height = height;
 
+        setHitbox();
         shader = new ShaderProgram(Gdx.files.internal("grey.vsh"), Gdx.files.internal("grey.fsh"));
     }
 
