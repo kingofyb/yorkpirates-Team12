@@ -141,8 +141,11 @@ public class HUD {
         score.setText(screen.points.GetString());
         loot.setText(screen.loot.GetString());
 
-        collegesTask.setChecked(screen.collegesCaptured < screen.colleges.size-1);
-        collegesTask.setText("Destroy all colleges:  "+Math.min(screen.collegesCaptured, screen.colleges.size-1)+"/"+(screen.colleges.size-1)+"  ");
+        if(screen.collegesCaptured >= screen.colleges.size-1){
+            collegesTask.setText("Return home to win.");
+        } else {
+            collegesTask.setText("Capture all colleges:  "+Math.min(screen.collegesCaptured, screen.colleges.size-1)+"/"+(screen.colleges.size-1)+"  ");
+        }
 
         movementTask.setChecked(screen.player.distance < DISTANCE_GOAL);
         movementTask.setText("Move "+DISTANCE_GOAL+"m:  "+Math.min((int)(screen.player.distance), DISTANCE_GOAL)+"/"+DISTANCE_GOAL+"  ");
