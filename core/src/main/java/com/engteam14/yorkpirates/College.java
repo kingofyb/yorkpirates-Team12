@@ -2,14 +2,10 @@ package com.engteam14.yorkpirates;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.engteam14.yorkpirates.HealthBar;
 
 import java.util.Objects;
 
@@ -21,7 +17,6 @@ public class College extends GameObject {
     private HealthBar collegeBar;
     private Indicator direction;
 
-    private int imageIndex;
     private long lastShotFired;
     private final String collegeName;
     private final Array<Texture> collegeImages;
@@ -31,7 +26,7 @@ public class College extends GameObject {
     private static final int shootFrequency = 1000; // How often the college can shoot.
 
     /**
-     * Generates a college object within the game with animated frame(s) and a hitbox.
+     * Generates a college object within the game with animated frame(s) and a hit-box.
      * @param x         The x coordinate within the map to initialise the object at.
      * @param y         The y coordinate within the map to initialise the object at.
      * @param name      The name of the college.
@@ -93,13 +88,6 @@ public class College extends GameObject {
                     }
                     if(victory){
                         screen.gameEnd(true);
-                    }else{
-                        //screen.game.batch.setProjectionMatrix(screen.game.camera.combined);
-                        //screen.game.batch.begin();
-                        //screen.game.font.setColor(1f, 1f, 1f, 1f);
-                        //screen.game.font.getData().setScale(1.2f);
-                        //screen.game.font.draw(screen.game.batch,"Can not end game while enemy colleges are still remaining.", screen.game.camera.viewportWidth/2, screen.game.camera.viewportHeight*0.8f+screen.game.font.getLineHeight()/2, 1, Align.center, true);
-                        //screen.game.batch.end();
                     }
                 }
             }
@@ -121,8 +109,8 @@ public class College extends GameObject {
             collegeBar.resize(currentHealth);
         }else{
             if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if the college is an enemy of the player
-                screen.points.Add(pointsGained, screen.hud1);
-                screen.loot.Add(lootGained, screen.hud1);
+                screen.points.Add(pointsGained);
+                screen.loot.Add(lootGained);
 
                 Array<Texture> healthBarSprite = new Array<>();
                 Array<Texture> indicatorSprite = new Array<>();

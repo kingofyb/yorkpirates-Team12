@@ -9,13 +9,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
-import java.util.Objects;
-
 public class Player extends GameObject {
 
     public Vector2 camDiff;
     public float distance;
-    private Vector2 oldPos;
     private HealthBar playerHealth;
 
     private int previousDirectionX;
@@ -28,7 +25,7 @@ public class Player extends GameObject {
     private static final float speed = 70f; // Player movement speed.
 
     /**
-     * Generates a generic object within the game with animated frame(s) and a hitbox.
+     * Generates a generic object within the game with animated frame(s) and a hit-box.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
      * @param x         The x coordinate within the map to initialise the object at.
@@ -66,7 +63,7 @@ public class Player extends GameObject {
             if (safeMove(screen.game.edges)) {
                 if (TimeUtils.timeSinceMillis(lastMovementScore) > pointFrequency) {
                     lastMovementScore = TimeUtils.millis();
-                    screen.points.Add(1, screen.hud1);
+                    screen.points.Add(1);
                 }
                 moving = true;
             } else {    // Collision
@@ -155,9 +152,7 @@ public class Player extends GameObject {
         }
         float rotation = (float) Math.toDegrees(Math.atan2(previousDirectionY, previousDirectionX));
 
-        //batch.draw(frame, x - width/2, y - height/2, width, height);
         batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
         if(!(playerHealth == null)) playerHealth.draw(batch, 0);
-
     }
 }
