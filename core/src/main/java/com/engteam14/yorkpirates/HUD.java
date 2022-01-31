@@ -53,7 +53,7 @@ public class HUD {
 
         tasks.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("transparent.png"))));
     //    tasks.debug();
-        Label message = new Label(screen.playerName+"'s Tasks:", skin);
+        message = new Label(screen.playerName+"'s Tasks:", skin);
         message.setFontScale(0.5f, 0.5f);
         collegesTask = new CheckBox("Destroy all colleges 0/"+(screen.colleges.size-1), skin);
         movementTask = new CheckBox("Move "+DISTANCE_GOAL+"m 0/"+DISTANCE_GOAL, skin);
@@ -143,8 +143,11 @@ public class HUD {
         score.setText(screen.points.GetString());
         loot.setText(screen.loot.GetString());
 
-        collegesTask.setChecked(screen.collegesCaptured < screen.colleges.size-1);
-        collegesTask.setText("Destroy all colleges:  "+Math.min(screen.collegesCaptured, screen.colleges.size-1)+"/"+(screen.colleges.size-1)+"  ");
+        if(screen.collegesCaptured >= screen.colleges.size-1){
+            collegesTask.setText("Return home to win.");
+        } else {
+            collegesTask.setText("Capture all colleges:  "+Math.min(screen.collegesCaptured, screen.colleges.size-1)+"/"+(screen.colleges.size-1)+"  ");
+        }
 
         movementTask.setChecked(screen.player.distance < DISTANCE_GOAL);
         movementTask.setText("Move "+DISTANCE_GOAL+"m:  "+Math.min((int)(screen.player.distance), DISTANCE_GOAL)+"/"+DISTANCE_GOAL+"  ");
@@ -154,5 +157,9 @@ public class HUD {
 
         Gdx.input.setInputProcessor(stage1);
         stage1.draw();
+    }
+
+    public void updateName(GameScreen screen){
+        message.setText(screen.playerName+"'s Tasks:");
     }
 }
