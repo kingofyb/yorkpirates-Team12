@@ -2,9 +2,11 @@ package com.engteam14.yorkpirates;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 
@@ -15,6 +17,8 @@ public class YorkPirates extends Game {
 	public OrthographicCamera camera;
 	public Array<Array<Boolean>> edges;
 	public Animation<TextureRegion> logo;
+	public Animation<TextureRegion> mouse;
+	public Animation<TextureRegion> keyboard;
 
 	private static final int screenToPixelRatio = 16; // Determines the pixel ratio of the game.
 
@@ -23,6 +27,7 @@ public class YorkPirates extends Game {
 	 */
 	@Override
 	public void create () {
+		Gdx.graphics.setForegroundFPS(30);
 		Gdx.graphics.setVSync(true);
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 16*screenToPixelRatio, 9*screenToPixelRatio);
@@ -33,15 +38,9 @@ public class YorkPirates extends Game {
 		skin.addRegions(atlas);
 		font = skin.getFont("Raleway-Bold");
 
-		Texture logoSheet = new Texture(Gdx.files.internal("logo.png"));
-		TextureRegion[][] split = TextureRegion.split(logoSheet, logoSheet.getWidth() / 8, logoSheet.getHeight() / 10);
-		Array<TextureRegion> frames = new Array<>();
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 8; j++) {
-				frames.add(split[i][j]);
-			}
-		}
-		logo = new Animation<>(0.05f, frames);
+		logo = getAnimator("logo.png", 10,8);
+		mouse = getAnimator("mouse.png",5, 5);
+		keyboard = getAnimator("keyboard.png",1, 16);
 
 		edges = new Array<>();
 		String data = Gdx.files.internal("edges.csv").readString();
@@ -54,6 +53,18 @@ public class YorkPirates extends Game {
 			edges.insert(0, newRow);
 		}
 		setScreen(new TitleScreen(this));
+	}
+
+	private Animation<TextureRegion> getAnimator(String path, int x, int y) {
+		Texture logosheet = new Texture(Gdx.files.internal(path));
+		TextureRegion[][] split = TextureRegion.split(logosheet, logosheet.getWidth() / y, logosheet.getHeight() / x);
+		Array<TextureRegion> frames = new Array<>();
+		for (int i = 0; i < x; i++) {
+			for (int j = 0; j < y; j++) {
+				frames.add(split[i][j]);
+			}
+		}
+		return new Animation<TextureRegion>(0.05f, frames);
 	}
 
 	/**
