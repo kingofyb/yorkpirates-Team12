@@ -14,6 +14,5 @@ Move around the lake and fight opposing colleges!
 - [Pirate Pack](https://opengameart.org/content/pirate-pack-190)
 - [City Tiles](https://opengameart.org/content/12x12-city-tiles-top-down)
 - [Animated Tutorial](https://opengameart.org/content/animated-game-controls-tutorial)
-- [Underwater Background](https://opengameart.org/content/underwater-bg)
 - [skin-composer](https://github.com/raeleus/skin-composer)
 - [Raleway font](https://fonts.google.com/specimen/Raleway)
