@@ -32,6 +32,9 @@ public class HUD {
     private final int DISTANCE_GOAL = MathUtils.random(55,65)*10;
     private final int POINT_GOAL = MathUtils.random(13,18)*10;
 
+    private final int DISTANCE_REWARD = 20;
+    private final int POINT_REWARD = 15;
+
     /**
      * Generates a HUD object within the game that controls elements of the UI.
      * @param screen    The game screen which this is attached to.
@@ -181,13 +184,13 @@ public class HUD {
         }
 
         if(screen.player.distance < DISTANCE_GOAL && !movementTask.isChecked()){
-            screen.loot.Add(5);
+            screen.loot.Add(DISTANCE_REWARD);
         }
         movementTask.setChecked(screen.player.distance < DISTANCE_GOAL);
         movementTask.setText("Move "+DISTANCE_GOAL+"m:  "+Math.min((int)(screen.player.distance), DISTANCE_GOAL)+"/"+DISTANCE_GOAL+"  ");
 
         if(screen.points.Get() < POINT_GOAL && !pointsTask.isChecked()){
-            screen.loot.Add(5);
+            screen.loot.Add(POINT_REWARD);
         }
         pointsTask.setChecked(screen.points.Get() < POINT_GOAL);
         pointsTask.setText("Get "+POINT_GOAL+" points:  "+Math.min(screen.points.Get(), POINT_GOAL)+"/"+POINT_GOAL+"  ");
