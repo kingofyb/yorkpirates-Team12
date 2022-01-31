@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameScreen extends ScreenAdapter {
     public YorkPirates game;
-    public HUD hud1;
     public Player player;
 
     public FitViewport viewport;
@@ -43,12 +42,12 @@ public class GameScreen extends ScreenAdapter {
     public boolean isPaused = false;
     public float lastPause = 0;
 
-    public final String playerName;
+    public String playerName;
     public static final String playerTeam = "PLAYER";
     public static final String enemyTeam = "ENEMY";
     public TiledMap tiledMap;
 
-    private final HUD gameHUD;
+    public final HUD gameHUD;
 
     /**
      * Initialises the main game screen, as well as relevant entities and data.
@@ -137,10 +136,6 @@ public class GameScreen extends ScreenAdapter {
         }
         player.draw(game.batch, elapsedTime); // Player is last entity, all else drawn before them
 
-        game.font.getData().setScale(0.5f);
-        int tx = (int)(player.x/16f);
-        int ty = (int)(player.y/16f);
-        //game.font.draw(game.batch, new Vector2(tx,ty).toString(), player.x+player.width/2, player.y+player.height/2);
         game.font.getData().setScale(1f);
         game.batch.end();
         HUDBatch.setProjectionMatrix(HUDCam.combined);
@@ -177,7 +172,7 @@ public class GameScreen extends ScreenAdapter {
             hasShot = true;
         }
         for(int i = projectiles.size - 1; i >= 0; i--) {
-            projectiles.get(i).update(this, game.camera);
+            projectiles.get(i).update(this);
         }
 
         // Camera calculations based on player movement
@@ -186,8 +181,8 @@ public class GameScreen extends ScreenAdapter {
             game.camera.position.slerp(followPos, 0.1f);
         }
 
-        // Temporary shortcut to End Screen
-        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && elapsedTime - lastPause > 1f){
+        // Call to pause the game
+        if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && elapsedTime - lastPause > 0.1f){
             pauseGame();
         }
     }
@@ -202,15 +197,25 @@ public class GameScreen extends ScreenAdapter {
         instrumental.dispose();
     }
 
+    /**
+     * Called to switch from the current screen to the pause screen, while retaining the current screen's information.
+     */
     public void pauseGame(){
         isPaused = true;
         game.setScreen(new PauseScreen(game,this));
     }
 
+    /**
+     * Called to switch from the current screen to the end screen.
+     * @param win   The boolean determining the win state of the game.
+     */
     public void gameEnd(boolean win){
         game.setScreen(new EndScreen(game, this, win));
     }
 
+    /**
+     * Called to switch from the current screen to the title screen.
+     */
     public void restart(){
         game.setScreen(new TitleScreen(game));
     }

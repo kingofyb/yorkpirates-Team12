@@ -1,8 +1,6 @@
 package com.engteam14.yorkpirates;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Objects;
@@ -17,11 +15,12 @@ public class Projectile extends GameObject{
     private final float dx;
     private final float dy;
     private final float projectileSpeed; // Projectile movement speed.
-    private static final float maxDistance = 7500f; // Projectile max range.
+
     private static final float projectileDamage = 20f; // Projectile damage.
+    private static final float maxDistance = 7500f; // Projectile max range.
 
     /**
-     * Generates a projectile object within the game with animated frame(s) and a hitbox.
+     * Generates a projectile object within the game with animated frame(s) and a hit-box.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
      * @param origin    The object which the projectile originates from.
@@ -54,7 +53,7 @@ public class Projectile extends GameObject{
      * Called once per frame. Used to perform calculations such as projectile movement and collision detection.
      * @param screen    The main game screen.
      */
-    public void update(GameScreen screen, OrthographicCamera camera){
+    public void update(GameScreen screen){
         // Movement Calculations
         move(projectileSpeed*dx, projectileSpeed*dy);
         distanceTravelled += projectileSpeed;

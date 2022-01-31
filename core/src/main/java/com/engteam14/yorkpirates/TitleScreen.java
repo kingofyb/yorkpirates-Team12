@@ -3,7 +3,6 @@ package com.engteam14.yorkpirates;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -14,24 +13,17 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class TitleScreen extends ScreenAdapter {
     private final YorkPirates game;
+    private final GameScreen nextGame;
     private final Stage stage;
     private final TextField nameText;
     private final Cell<Image> titleCell;
     private final Animation<TextureRegion> anim;
 
-    private StretchViewport viewport;
     private float elapsedTime = 0f;
-    private final float logoScale = 0.33f;
-    private String playerName;
-
-    private TiledMap tiledMap;
-    private TiledMapRenderer tiledMapRenderer;
 
     /**
      * Initialises the title screen, as well as relevant textures and data it may contain.
@@ -39,16 +31,19 @@ public class TitleScreen extends ScreenAdapter {
      */
     public TitleScreen(YorkPirates game){
         this.game = game;
+        nextGame = new GameScreen(game, null);
+        nextGame.isPaused = true;
+        nextGame.playerName = "Player";
 
         stage = new Stage();
 
-        tiledMap = new TmxMapLoader().load("pirate12.tmx");
-        tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+        TiledMap tiledMap = new TmxMapLoader().load("pirate12.tmx");
+        TiledMapRenderer tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         anim = game.logo;
         TextureRegion titleT = anim.getKeyFrame(0f);
         Image title = new Image(titleT);
-        title.scaleBy(1/4);
+        title.scaleBy(0.25f);
 
         Table table = new Table();
         table.setFillParent(true);
@@ -125,7 +120,6 @@ public class TitleScreen extends ScreenAdapter {
         stage.addActor(table);
     }
 
-    //loading.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture("90.png"))); for animation?
     /**
      * Is called once every frame. Runs update() and then renders the title screen.
      * @param delta The time passed since the previously rendered frame.
@@ -137,35 +131,43 @@ public class TitleScreen extends ScreenAdapter {
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
         ScreenUtils.clear(0f, 0f, 0f, 1.0f);
-        tiledMapRenderer.setView(game.camera); // Draw map first so behind everything
-        tiledMapRenderer.render();
+        //tiledMapRenderer.setView(game.camera); // Draw map first so behind everything
+        //tiledMapRenderer.render();
+        nextGame.render(delta);
         TextureRegion frame = anim.getKeyFrame(elapsedTime, true);
         titleCell.setActor(new Image(frame));
         stage.draw();
     }
 
     /**
-     * Is called once every frame. Used for calculations that take place before rendering.
+     * Is called once every frame to check for player input.
      */
     private void update(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
             newGame();
-        }else if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            quitGame();
         }
     }
 
+    /**
+     * Is called to create a new game screen.
+     */
     private void newGame(){
+        String playerName;
         if ( nameText.getText().equals("Name (optional)") || nameText.getText().equals("")) {
             playerName = "Player";
 
         } else{
             playerName = nameText.getText();
         }
-        game.setScreen(new GameScreen(game, playerName));
+        nextGame.isPaused = false;
+        nextGame.playerName = playerName;
+        nextGame.gameHUD.updateName(nextGame);
+        game.setScreen(nextGame);
     }
 
-
+    /**
+     * Calls the close game function in the main game class.
+     */
     private void quitGame() {
         game.closeGame();
     }

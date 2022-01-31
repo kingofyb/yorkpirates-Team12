@@ -12,18 +12,18 @@ import com.badlogic.gdx.utils.Array;
 
 public class YorkPirates extends Game {
 
-	public static final int screenToPixelRatio = 16; // Determines the pixel ratio of the game.
+	public BitmapFont font;
+	public SpriteBatch batch;
+	public OrthographicCamera camera;
+	public Array<Array<Boolean>> edges;
+	public Animation<TextureRegion> logo;
+	public Animation<TextureRegion> mouse;
+	public Animation<TextureRegion> keyboard;
 
-	OrthographicCamera camera;
-	SpriteBatch batch;
-	BitmapFont font;
-	Array<Array<Boolean>> edges;
-	Animation<TextureRegion> logo;
-	Animation<TextureRegion> mouse;
-	Animation<TextureRegion> keyboard;
+	private static final int screenToPixelRatio = 16; // Determines the pixel ratio of the game.
 
 	/**
-	 *	Initialises base game class.
+	 * Initialises base game class.
 	 */
 	@Override
 	public void create () {
@@ -45,12 +45,12 @@ public class YorkPirates extends Game {
 		edges = new Array<>();
 		String data = Gdx.files.internal("edges.csv").readString();
 		for(String row: data.split("\n")){
-			Array<Boolean> newrow = new Array<>();
+			Array<Boolean> newRow = new Array<>();
 			for(String num: row.split(",")){
-				if(num.equals("-1")) newrow.add(true);
-				else newrow.add(false);
+				if(num.equals("-1")) newRow.add(true);
+				else newRow.add(false);
 			}
-			edges.insert(0, newrow);
+			edges.insert(0, newRow);
 		}
 		setScreen(new TitleScreen(this));
 	}
@@ -68,7 +68,7 @@ public class YorkPirates extends Game {
 	}
 
 	/**
-	 * 	Disposes of data when game finishes execution.
+	 * Disposes of data when game finishes execution.
 	 */
 	@Override
 	public void dispose () {
@@ -76,6 +76,9 @@ public class YorkPirates extends Game {
 		font.dispose();
 	}
 
+	/**
+	 * Closes the application
+	 */
 	public void closeGame(){
 		Gdx.app.exit();
 	}

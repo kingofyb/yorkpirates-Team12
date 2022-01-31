@@ -24,28 +24,6 @@ public class GameObject {
      * Generates a generic object within the game with animated frame(s) and a hitbox.
      * @param frames    The animation frames, or a single sprite.
      * @param fps       The number of frames to be displayed per second.
-     * @param team      The team the object is on.
-     */
-    public GameObject(Array<Texture> frames, float fps, String team){
-        this(frames,fps,0,0,team);
-    }
-
-    /**
-     * Generates a generic object within the game with animated frame(s) and a hitbox.
-     * @param frames    The animation frames, or a single sprite.
-     * @param fps       The number of frames to be displayed per second.
-     * @param x         The x coordinate within the map to initialise the object at.
-     * @param y         The y coordinate within the map to initialise the object at.
-     * @param team      The team the object is on.
-     */
-    public GameObject(Array<Texture> frames, float fps, float x, float y, String team){
-        this(frames,fps,x,y,frames.get(0).getWidth(),frames.get(0).getHeight(),team);
-    }
-
-    /**
-     * Generates a generic object within the game with animated frame(s) and a hitbox.
-     * @param frames    The animation frames, or a single sprite.
-     * @param fps       The number of frames to be displayed per second.
      * @param x         The x coordinate within the map to initialise the object at.
      * @param y         The y coordinate within the map to initialise the object at.
      * @param width     The size of the object in the x-axis.
@@ -62,11 +40,20 @@ public class GameObject {
         this.team = team;
     }
 
+    /**
+     * Called when the image needs to be changed or set.
+     * @param frames    The animation frames, or a single sprite.
+     * @param fps       The number of frames to be displayed per second.
+     */
     void changeImage(Array<Texture> frames, float fps){
         sprite = frames.get(0);
         anim = new Animation<>(fps==0?0:(1f/fps), frames);
     }
 
+    /**
+     * Called when the health of the object needs to be set.
+     * @param mh    The health value for the object
+     */
     void setMaxHealth(int mh){
         maxHealth = mh;
         currentHealth = maxHealth;

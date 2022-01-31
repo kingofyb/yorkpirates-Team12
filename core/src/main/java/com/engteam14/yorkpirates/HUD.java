@@ -2,19 +2,14 @@ package com.engteam14.yorkpirates;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Scaling;
 
 public class HUD {
@@ -22,8 +17,8 @@ public class HUD {
     public Label score;
     public Stage stage1;
 
-    private Label message;
     private final Label loot;
+    private final Label message;
 
     private final CheckBox collegesTask;
     private final CheckBox movementTask;
@@ -36,6 +31,10 @@ public class HUD {
     private final int DISTANCE_GOAL = 600;
     private final int POINT_GOAL = 150;
 
+    /**
+     * Generates a HUD object within the game that controls elements of the UI.
+     * @param screen    The game screen which this is attached to.
+     */
     public HUD(GameScreen screen){
         //initialise the stage
         System.out.println("rendering");
@@ -59,7 +58,7 @@ public class HUD {
 
         tasks.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("transparent.png"))));
     //    tasks.debug();
-        Label message = new Label(screen.playerName+"'s Tasks:", skin);
+        message = new Label(screen.playerName + "'s Tasks:", skin);
         message.setFontScale(0.5f, 0.5f);
         collegesTask = new CheckBox("Destroy all colleges 0/"+(screen.colleges.size-1), skin);
         movementTask = new CheckBox("Move "+DISTANCE_GOAL+"m 0/"+DISTANCE_GOAL, skin);
@@ -151,6 +150,10 @@ public class HUD {
         System.out.println("draw");
     }
 
+    /**
+     * Called to render the HUD elements
+     * @param screen    The game screen which this is attached to.
+     */
     public void renderStage(GameScreen screen){
         score.setText(screen.points.GetString());
         loot.setText(screen.loot.GetString());
@@ -169,8 +172,11 @@ public class HUD {
             tutorial.setBackground(new Table().getBackground());
         }
 
-        collegesTask.setChecked(screen.collegesCaptured < screen.colleges.size-1);
-        collegesTask.setText("Destroy all colleges:  "+Math.min(screen.collegesCaptured, screen.colleges.size-1)+"/"+(screen.colleges.size-1)+"  ");
+        if(screen.collegesCaptured >= screen.colleges.size-1){
+            collegesTask.setText("Return home to win.");
+        } else {
+            collegesTask.setText("Capture all colleges:  "+Math.min(screen.collegesCaptured, screen.colleges.size-1)+"/"+(screen.colleges.size-1)+"  ");
+        }
 
         movementTask.setChecked(screen.player.distance < DISTANCE_GOAL);
         movementTask.setText("Move "+DISTANCE_GOAL+"m:  "+Math.min((int)(screen.player.distance), DISTANCE_GOAL)+"/"+DISTANCE_GOAL+"  ");
@@ -180,5 +186,9 @@ public class HUD {
 
         Gdx.input.setInputProcessor(stage1);
         stage1.draw();
+    }
+
+    public void updateName(GameScreen screen){
+        message.setText(screen.playerName+"'s Tasks:");
     }
 }

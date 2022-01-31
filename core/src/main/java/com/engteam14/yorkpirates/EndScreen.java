@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class EndScreen extends ScreenAdapter {
     private final YorkPirates game;
     private final Stage EndStage;
+    private final GameScreen screen;
 
     /**
      * Initialises the title screen, as well as relevant textures and data it may contain.
@@ -26,13 +27,14 @@ public class EndScreen extends ScreenAdapter {
      * @param win       Passes in the win status.
      */
     public EndScreen(YorkPirates game, GameScreen screen, boolean win){
-
         this.game = game;
+        this.screen = screen;
+        screen.isPaused = true;
         int seconds = (int) screen.elapsedTime;
         String time = ((seconds / 60) == 0 ? "" : ((seconds / 60) + " Minutes, ")) + (seconds % 60) + " Seconds Elapsed";
         String points = screen.points.Get() == 0 ? "No Points Gained" : screen.points.GetString() + " Points Gained";
         String loot = screen.loot.Get() == 0 ? "No Loot Won" : screen.loot.GetString() + " Loot Won";
-        game.camera.position.lerp(new Vector3(game.camera.viewportWidth/2, game.camera.viewportHeight/2, 0f), 1f);
+        //game.camera.position.lerp(new Vector3(game.camera.viewportWidth/2, game.camera.viewportHeight/2, 0f), 1f);
         String imageN;
         if (win) {
             imageN="game_win.png";
@@ -109,7 +111,7 @@ public class EndScreen extends ScreenAdapter {
         table1.add(quitB).expand().size(200f);
         table1.add().expand();
         table1.add().expand();
-        table1.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("background.png")))));
+        table1.setBackground(skin.getDrawable("Selection"));
 
         EndStage.addActor(table1);
     }
@@ -122,23 +124,8 @@ public class EndScreen extends ScreenAdapter {
     public void render(float delta){
         update();
         ScreenUtils.clear(0.1f, 0.6f, 0.6f, 1.0f);
-
+        screen.render(delta);
         EndStage.draw();
-
-
-    /*        game.camera.update();
-        game.batch.setProjectionMatrix(game.camera.combined);
-        game.batch.begin();
-        if (win)    game.font.setColor(0.7f, 1.0f, 0.6f, 1f);
-        else        game.font.setColor(1.0f, 0.8f, 0.6f, 1f);
-        game.font.getData().setScale(1.2f);
-        game.font.draw(game.batch, win ? "Game Win" : "Game Over", game.camera.viewportWidth/2, game.camera.viewportHeight*0.8f+game.font.getLineHeight()/2, 1, Align.center, true);
-        game.font.setColor(1f, 1f, 1f, 1f);
-        game.font.getData().setScale(0.7f);
-        game.font.draw(game.batch, time, game.camera.viewportWidth/2, game.camera.viewportHeight*0.6f+game.font.getLineHeight()/2, 0.9f, Align.center, true);
-        game.font.draw(game.batch, points, game.camera.viewportWidth/2, game.camera.viewportHeight*0.5f+game.font.getLineHeight()/2, 0.9f, Align.center, true);
-        game.font.draw(game.batch, loot, game.camera.viewportWidth/2, game.camera.viewportHeight*0.4f+game.font.getLineHeight()/2, 0.9f, Align.center, true);
-        game.batch.end();*/
     }
 
     /**
