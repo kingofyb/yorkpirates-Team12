@@ -12,19 +12,17 @@ public class GameObject {
 
     float x;
     float y;
-
-    String team;
-
     float width;
     float height;
 
     int maxHealth;
     float currentHealth;
 
-    boolean isGrey;
+    boolean bloodSplash;
 
+    String team;
     Texture sprite;
-    Rectangle hitbox;
+    Rectangle hitBox;
     ShaderProgram shader;
     Animation<Texture> anim;
 
@@ -44,14 +42,14 @@ public class GameObject {
         this.x = x;
         this.y = y;
 
-        isGrey = false;
         this.team = team;
 
         this.width = width;
         this.height = height;
 
         setHitbox();
-        shader = new ShaderProgram(Gdx.files.internal("grey.vsh"), Gdx.files.internal("grey.fsh"));
+        bloodSplash = false;
+        shader = new ShaderProgram(Gdx.files.internal("red.vsh"), Gdx.files.internal("red.fsh"));
     }
 
     /**
@@ -81,7 +79,7 @@ public class GameObject {
      */
     void takeDamage(GameScreen screen, float damage, String projectileTeam){
         currentHealth -= damage;
-        isGrey = true;
+        bloodSplash = true;
     }
 
     /**
@@ -98,18 +96,18 @@ public class GameObject {
      * Sets the object's hit-box, based upon it's x, y, width and height values.
      */
     void setHitbox(){
-        hitbox = new Rectangle();
+        hitBox = new Rectangle();
         updateHitboxPos();
-        hitbox.width = width;
-        hitbox.height = height;
+        hitBox.width = width;
+        hitBox.height = height;
     }
 
     /**
      * Updates the object's hitbox location to match the object's rendered location.
      */
     void updateHitboxPos() {
-        hitbox.x = x - width/2;
-        hitbox.y = y - height/2;
+        hitBox.x = x - width/2;
+        hitBox.y = y - height/2;
     }
 
     /**
@@ -119,7 +117,7 @@ public class GameObject {
      */
     boolean overlaps(Rectangle rect){
         updateHitboxPos();
-        return hitbox.overlaps(rect);
+        return hitBox.overlaps(rect);
     }
 
     /**

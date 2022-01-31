@@ -15,6 +15,8 @@ public class Player extends GameObject {
     public float distance;
     private HealthBar playerHealth;
 
+    private float splashTime;
+
     private int previousDirectionX;
     private int previousDirectionY;
     private boolean moving = false;
@@ -37,6 +39,7 @@ public class Player extends GameObject {
     public Player(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
         super(frames, fps, x, y, width, height, team);
         lastMovementScore = 0;
+        splashTime = 0;
 
         setMaxHealth(200);
         Array<Texture> sprites = new Array<>();
@@ -84,6 +87,15 @@ public class Player extends GameObject {
 
         // Camera Calculations
         ProcessCamera(screen, camera);
+
+        if(bloodSplash){
+            if(splashTime > 1){
+                bloodSplash = false;
+                splashTime = 0;
+            }else{
+                splashTime += 1;
+            }
+        }
     }
 
     /**
@@ -121,6 +133,8 @@ public class Player extends GameObject {
     @Override
     public void takeDamage(GameScreen screen, float damage, String projectileTeam){
         currentHealth -= damage;
+        bloodSplash = true;
+
         if(currentHealth > 0){
             playerHealth.resize(currentHealth);
         }else{
@@ -150,9 +164,13 @@ public class Player extends GameObject {
         if (moving) {
             frame = anim.getKeyFrame(elapsedTime, true);
         }
+        if(bloodSplash){
+            batch.setShader(shader); // Set our grey-out shader to the batch
+        }
         float rotation = (float) Math.toDegrees(Math.atan2(previousDirectionY, previousDirectionX));
 
         batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
         if(!(playerHealth == null)) playerHealth.draw(batch, 0);
+        batch.setShader(null);
     }
 }

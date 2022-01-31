@@ -39,7 +39,7 @@ public class Projectile extends GameObject{
         dx = changeInX / scaleFactor;
         dy = changeInY / scaleFactor;
 
-        move(origin.hitbox.width * 2* dx, origin.hitbox.height * 2 * dy);
+        move(origin.hitBox.width * 2* dx, origin.hitBox.height * 2 * dy);
 
         distanceTravelled = 0;
         if(Objects.equals(team, GameScreen.playerTeam)){
@@ -60,7 +60,7 @@ public class Projectile extends GameObject{
 
         if(origin == screen.player){
             for(int i = 0; i < screen.colleges.size; i++) {
-                if (overlaps(screen.colleges.get(i).hitbox)){
+                if (overlaps(screen.colleges.get(i).hitBox)){
                     if(!Objects.equals(team, screen.colleges.get(i).team)){ // Checks if projectile and college are on the same time
                         screen.colleges.get(i).takeDamage(screen,projectileDamage,team);
                     }
@@ -68,7 +68,7 @@ public class Projectile extends GameObject{
                 }
             }
         }else{
-            if (overlaps(screen.player.hitbox)){
+            if (overlaps(screen.player.hitBox)){
                 if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if projectile and player are on the same time
                     screen.player.takeDamage(screen,projectileDamage,team);
                 }
