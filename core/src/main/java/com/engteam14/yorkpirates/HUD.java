@@ -29,6 +29,10 @@ public class HUD {
     private final CheckBox movementTask;
     private final CheckBox pointsTask;
 
+    private final Table tutorial;
+    private final Cell<Image> tutorialImg;
+    private final Label tutorialLabel;
+
     private final int DISTANCE_GOAL = 600;
     private final int POINT_GOAL = 150;
 
@@ -73,6 +77,10 @@ public class HUD {
         loot = new Label(screen.loot.GetString(), skin);
         score = new Label(screen.points.GetString(), skin);
 
+        Image tutorialImg = new Image(screen.game.keyboard.getKeyFrame(0f));
+        tutorialImg.setScaling(Scaling.fit);
+        tutorialLabel = new Label("WASD or Arrow Keys\n to Move.", skin);
+
         tasks.add(starI);
         score.setFontScale(1.2f);
         tasks.add(score).pad(5);
@@ -109,9 +117,15 @@ public class HUD {
         //row2
         table.row();
 
-        //table in second row for tasks
-        table.add();
+        // tutorial
+        tutorial = new Table();
+        tutorial.setBackground(tasks.getBackground());
+        this.tutorialImg = tutorial.add(tutorialImg).expand().fill().minSize(200f).maxSize(500f);
+        tutorial.row();
+        tutorial.add(tutorialLabel);
+        table.add(tutorial.pad(100f));
 
+        //table in second row for tasks
         table.add().expand();
 
         table.add(tasks).colspan(4);
@@ -140,6 +154,20 @@ public class HUD {
     public void renderStage(GameScreen screen){
         score.setText(screen.points.GetString());
         loot.setText(screen.loot.GetString());
+
+        if(screen.player.distance == 0){
+            Image newimg = new Image(screen.game.keyboard.getKeyFrame(screen.elapsedTime, true));
+            newimg.setScaling(Scaling.fit);
+            tutorialImg.setActor(newimg);
+        } else if(!screen.hasShot){
+            Image newimg = new Image(screen.game.mouse.getKeyFrame(screen.elapsedTime, true));
+            newimg.setScaling(Scaling.fit);
+            tutorialImg.setActor(newimg);
+            tutorialLabel.setText("Click to shoot.");
+        } else{
+            tutorial.clear();
+            tutorial.setBackground(new Table().getBackground());
+        }
 
         collegesTask.setChecked(screen.collegesCaptured < screen.colleges.size-1);
         collegesTask.setText("Destroy all colleges:  "+Math.min(screen.collegesCaptured, screen.colleges.size-1)+"/"+(screen.colleges.size-1)+"  ");

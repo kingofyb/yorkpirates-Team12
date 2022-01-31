@@ -19,6 +19,8 @@ public class YorkPirates extends Game {
 	BitmapFont font;
 	Array<Array<Boolean>> edges;
 	Animation<TextureRegion> logo;
+	Animation<TextureRegion> mouse;
+	Animation<TextureRegion> keyboard;
 
 	/**
 	 *	Initialises base game class.
@@ -37,6 +39,8 @@ public class YorkPirates extends Game {
 		font = skin.getFont("Raleway-Bold");
 
 		logo = getAnimator("logo.png", 10,8);
+		mouse = getAnimator("mouse.png",5, 5);
+		keyboard = getAnimator("keyboard.png",1, 16);
 
 		edges = new Array<>();
 		String data = Gdx.files.internal("edges.csv").readString();

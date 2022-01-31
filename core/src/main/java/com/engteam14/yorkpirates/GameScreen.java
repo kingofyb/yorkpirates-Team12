@@ -29,6 +29,7 @@ public class GameScreen extends ScreenAdapter {
     public int collegesCaptured;
     public Array<College> colleges;
     public Array<Projectile> projectiles;
+    public boolean hasShot;
 
     private final SpriteBatch HUDBatch;
     private final OrthographicCamera HUDCam;
@@ -173,6 +174,7 @@ public class GameScreen extends ScreenAdapter {
             Array<Texture> sprites = new Array<>();
             sprites.add(new Texture("tempProjectile.png"));
             projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
+            hasShot = true;
         }
         for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this, game.camera);
