@@ -65,7 +65,6 @@ public class Player extends GameObject {
                 - ((Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) ? 1 : 0);
 
         // Calculate collision && movement
-        boolean moving = false;
         if (horizontal != 0 || vertical != 0){
             move(SPEED *horizontal, SPEED *vertical);
             previousDirectionX = horizontal;
@@ -75,7 +74,6 @@ public class Player extends GameObject {
                     lastMovementScore = TimeUtils.millis();
                     screen.points.Add(1);
                 }
-                moving = true;
             } else {    // Collision
                 Vector2 newPos = new Vector2(x, y);
                 x = oldPos.x;
@@ -86,9 +84,8 @@ public class Player extends GameObject {
                         x = oldPos.x;
                     }
                 }
-                moving = false;
             }
-        } else moving = false;
+        }
         updateHitboxPos();
         // Track distance travelled
         distance += Math.pow((Math.pow((x - oldPos.x),2f) + Math.pow((y - oldPos.y),2f)),0.5f)/10f;
