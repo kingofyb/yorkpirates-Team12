@@ -46,7 +46,7 @@ public class TitleScreen extends ScreenAdapter {
         Table table = new Table();
         table.setFillParent(true);
         table.setBackground(skin.getDrawable("Selection"));
-        if(game.DEBUG_ON) table.setDebug(true);
+        if(YorkPirates.DEBUG_ON) table.setDebug(true);
 
         // Get title texture
         TextureRegion titleT = game.logo.getKeyFrame(0f);
@@ -86,7 +86,7 @@ public class TitleScreen extends ScreenAdapter {
         textBoxFiller.add().expand().padRight(stage.getWidth()/3);
         textBoxFiller.add(textBox).expand().fillX();
         textBoxFiller.add().expand().padLeft(stage.getWidth()/3);
-        if(game.DEBUG_ON) textBoxFiller.debug();
+        if(YorkPirates.DEBUG_ON) textBoxFiller.debug();
         table.add(textBoxFiller).expand().fill();
 
         // Add buttons to table
