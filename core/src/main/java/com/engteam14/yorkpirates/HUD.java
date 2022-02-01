@@ -23,6 +23,7 @@ public class HUD {
     private final Cell<Image> tutorialImg;
     private final Label tutorialLabel;
     private boolean tutorialComplete = false;
+    private boolean canEndGame = false;
 
     // Player counters
     private final Label score;
@@ -92,6 +93,9 @@ public class HUD {
         collegesTask.setChecked(true);
         movementTask.setChecked(true);
         pointsTask.setChecked(true);
+        collegesTask.setDisabled(true);
+        movementTask.setDisabled(true);
+        pointsTask.setDisabled(true);
 
         // Create player tracker
         Table tracker = new Table();
@@ -168,10 +172,17 @@ public class HUD {
             newimg.setScaling(Scaling.fit);
             tutorialImg.setActor(newimg);
             tutorialLabel.setText("Click to shoot.");
+        } else if(canEndGame) {
+            // Able to end the game
+            tutorial.setVisible(true);
+            Image newimg = new Image(screen.getMain().enter.getKeyFrame(screen.getElapsedTime(), true));
+            newimg.setScaling(Scaling.fit);
+            tutorialImg.setActor(newimg);
+            tutorialLabel.setText("Press Enter to end game.");
+            canEndGame = false;
         } else {
             // Tutorial complete
-            tutorial.clear();
-            tutorial.setBackground(new Table().getBackground());
+            tutorial.setVisible(false);
         }
 
         // Decide on and then display main player goal
@@ -195,4 +206,6 @@ public class HUD {
     public void updateName(GameScreen screen) { tasksTitle.setText(screen.getPlayerName() +"'s Tasks:"); }
 
     public void endTutorial() { tutorialComplete = true; }
+
+    public void setGameEndable() {canEndGame = true; }
 }

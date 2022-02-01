@@ -20,6 +20,7 @@ public class YorkPirates extends Game {
 	public Animation<TextureRegion> logo;
 	public Animation<TextureRegion> mouse;
 	public Animation<TextureRegion> keyboard;
+	public Animation<TextureRegion> enter;
 
 	// Constants
 	public static final boolean DEBUG_ON = false; // Determines if the game runs in DEBUG mode.
@@ -50,6 +51,7 @@ public class YorkPirates extends Game {
 		logo = getAnimator("logo.png", 20, 10,8);
 		mouse = getAnimator("mouse.png", 20,5, 5);
 		keyboard = getAnimator("keyboard.png", 20,1, 16);
+		enter = getAnimator("enter.png", 20,1, 10);
 
 		// Calculates collision array from edges csv
 		edges = new Array<>();

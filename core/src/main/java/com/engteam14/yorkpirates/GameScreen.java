@@ -261,6 +261,12 @@ public class GameScreen extends ScreenAdapter {
     public YorkPirates getMain() { return game; }
 
     /**
+     * Get the game's HUD.
+     * @return  The HUD.
+     */
+    public HUD getHUD() { return gameHUD; }
+
+    /**
      * Set whether the game is paused or not.
      * @param paused    Whether the game is paused.
      */
