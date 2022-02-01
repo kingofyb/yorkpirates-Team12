@@ -10,8 +10,8 @@ import static java.lang.Math.*;
 
 public class Projectile extends GameObject{
 
-    private Vector2 maxDistance; // Projectile max range.
-    private Vector2 distanceTravelled;
+    private final float maxDistance; // Projectile max range.
+    private float distanceTravelled;
     private final GameObject origin;
 
     private final float dx;
@@ -47,8 +47,9 @@ public class Projectile extends GameObject{
         dx = changeInX / scaleFactor;
         dy = changeInY / scaleFactor;
 
-        distanceTravelled = new Vector2(0,0);
-        maxDistance = new Vector2(origin.hitBox.width * projectileSpeed/2,origin.hitBox.height * projectileSpeed/2);
+        distanceTravelled = 0;
+        float rangeModifier = min(origin.hitBox.width,origin.hitBox.height);
+        maxDistance = rangeModifier * projectileSpeed;
         //move(origin.hitBox.width * 2 * dx, origin.hitBox.height * 2 * dy);
     }
 
@@ -60,8 +61,7 @@ public class Projectile extends GameObject{
         // Movement Calculations
         float xMove = projectileSpeed*dx;
         float yMove = projectileSpeed*dy;
-        distanceTravelled.x += xMove;
-        distanceTravelled.y += yMove;
+        distanceTravelled += projectileSpeed;
         move(xMove, yMove);
 
         // Hit calculations
@@ -84,7 +84,7 @@ public class Projectile extends GameObject{
         }
 
         // Destroys after max travel distance
-        if(distanceTravelled.x > maxDistance.x || distanceTravelled.y > maxDistance.y) destroy(screen);
+        if(distanceTravelled > maxDistance) destroy(screen);
     }
 
     /**
