@@ -143,7 +143,7 @@ public class Player extends GameObject {
         currentHealth -= damage;
         doBloodSplash = true;
 
-        // Healthbar reduction
+        // Health-bar reduction
         if(currentHealth > 0){
             playerHealth.resize(currentHealth);
         }else{
@@ -177,9 +177,12 @@ public class Player extends GameObject {
             batch.setShader(shader); // Set our grey-out shader to the batch
         } float rotation = (float) Math.toDegrees(Math.atan2(previousDirectionY, previousDirectionX));
 
-        // Draws sprite and healthbar
+        // Draws sprite and health-bar
         batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
         batch.setShader(null);
+    }
+
+    public void drawHealthBar(SpriteBatch batch){
         if(!(playerHealth == null)) playerHealth.draw(batch, 0);
     }
 

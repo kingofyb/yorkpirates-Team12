@@ -121,7 +121,8 @@ public class GameScreen extends ScreenAdapter {
      */
     @Override
     public void render(float delta){
-        if(!isPaused) { // Only update if not paused
+        // Only update if not paused
+        if(!isPaused) {
             elapsedTime += delta;
             update();
         }
@@ -133,23 +134,27 @@ public class GameScreen extends ScreenAdapter {
         game.batch.begin();
         tiledMapRenderer.setView(game.camera); // Draw map first so behind everything
         tiledMapRenderer.render();
+
+        // Draw Projectiles
         for(int i = 0; i < projectiles.size; i++) {
             projectiles.get(i).draw(game.batch, 0);
         }
-        player.draw(game.batch, elapsedTime); // Player is last entity, all else drawn before them
-        if(!isPaused) {
-            // Draw player name
-            HUDBatch.begin();
-            Vector3 pos = game.camera.project(new Vector3(player.x, player.y, 0f));
-            game.font.draw(HUDBatch, playerName, pos.x, pos.y + 170f, 1f, Align.center, true);
-            HUDBatch.end();
-        }
+
+        // Draw Player, Player Health and Player Name
+        player.drawHealthBar(game.batch);
+        player.draw(game.batch, elapsedTime);
+        HUDBatch.begin();
+        Vector3 pos = game.camera.project(new Vector3(player.x, player.y, 0f));
+        game.font.draw(HUDBatch, playerName, pos.x, pos.y + 170f, 1f, Align.center, true);
+        HUDBatch.end();
+
+        // Draw Colleges
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).draw(game.batch, 0);
         }
         game.batch.end();
 
-        // HUD drawing
+        // Draw HUD
         HUDBatch.setProjectionMatrix(HUDCam.combined);
         if(!isPaused) {
             // Draw UI
