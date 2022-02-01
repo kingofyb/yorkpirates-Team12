@@ -48,7 +48,7 @@ public class College extends GameObject {
         }
 
         splashTime = 0;
-        setMaxHealth(500);
+        setMaxHealth(2000);
         lastShotFired = 0;
         collegeName = name;
 
