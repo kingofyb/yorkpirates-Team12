@@ -106,11 +106,9 @@ public class GameScreen extends ScreenAdapter {
         collegeSprites.add( new Texture("alcuin.png"),
                             new Texture("alcuin_2.png"));
         newCollege = new College(collegeSprites, 1492, 665, 0.5f,"Alcuin", enemyTeam, player, "alcuin_boat.png");
-        newCollege.addBoat(50, 10, 45);
-        newCollege.addBoat(60, -20, -60);
-        newCollege.addBoat(-80, 50, 180);
-        newCollege.addBoat(-100, 30, 150);
-        newCollege.addBoat(-60, -60, -150);
+        newCollege.addBoat(30, -20, -60);
+        newCollege.addBoat(-50, -40, -150);
+        newCollege.addBoat(-40, -70, 0);
         colleges.add(newCollege);
         collegeSprites.clear();
 
@@ -118,11 +116,8 @@ public class GameScreen extends ScreenAdapter {
         collegeSprites.add( new Texture("derwent.png"),
                             new Texture("derwent_2.png"));
         newCollege = (new College(collegeSprites, 1815, 2105, 0.8f,"Derwent", enemyTeam, player, "derwent_boat.png"));
-        newCollege.addBoat(-60, 50, 60);
-        newCollege.addBoat(-160, -20, -60);
-        newCollege.addBoat(-80, 50, 230);
-        newCollege.addBoat(-200, 30, 300);
-        newCollege.addBoat(-150, -60, 135);
+        newCollege.addBoat(-70, -20, 60);
+        newCollege.addBoat(-70, -60, 70);
         colleges.add(newCollege);
         collegeSprites.clear();
 
@@ -130,11 +125,11 @@ public class GameScreen extends ScreenAdapter {
         collegeSprites.add( new Texture("langwith.png"),
                             new Texture("langwith_2.png"));
         newCollege = (new College(collegeSprites, 1300, 1530, 1.0f,"Langwith", enemyTeam, player, "langwith_boat.png"));
-        newCollege.addBoat(-150, 0, 60);
-        newCollege.addBoat(-120, 50, -60);
-        newCollege.addBoat(0, 150, 230);
-        newCollege.addBoat(130, 50, 300);
-        newCollege.addBoat(200, 70, 135);
+        newCollege.addBoat(-150, -50, 60);
+        newCollege.addBoat(-120, -10, -60);
+        newCollege.addBoat(-10, -40, 230);
+        newCollege.addBoat(140, 10, 300);
+        newCollege.addBoat(200, 35, 135);
         colleges.add(newCollege);
         collegeSprites.clear();
 
