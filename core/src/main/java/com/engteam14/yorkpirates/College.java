@@ -166,11 +166,9 @@ public class College extends GameObject {
      */
     @Override
     public void draw(SpriteBatch batch, float elapsedTime){
-        if(doBloodSplash){
-            batch.setShader(shader); // Set our grey-out shader to the batch
-        }
+        if(doBloodSplash)   batch.setShader(shader); // Set our grey-out shader to the batch
+        else                batch.setShader(null);
         batch.draw(anim.getKeyFrame(elapsedTime, true), x - width/2, y - height/2, width, height);
-        batch.setShader(null);
         collegeBar.draw(batch, 0);
         direction.draw(batch,0);
     }
