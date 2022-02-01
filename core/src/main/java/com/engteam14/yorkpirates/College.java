@@ -71,8 +71,7 @@ public class College extends GameObject {
         direction.move();
         float playerX = screen.getPlayer().x;
         float playerY = screen.getPlayer().y;
-        float detectionRadius = 90f;
-        boolean nearPlayer = abs(this.x - playerX) < (detectionRadius * 1.5) && abs(this.y - playerY) < detectionRadius;
+        boolean nearPlayer = abs(this.x - playerX) < (Gdx.graphics.getWidth()/(((9+16))*(9f/16))) && abs(this.y - playerY) < (Gdx.graphics.getHeight()/((16-9)*(16f/9)));
 
         if(nearPlayer){
             direction.setVisible(false);
