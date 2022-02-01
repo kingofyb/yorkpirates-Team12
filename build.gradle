@@ -51,7 +51,7 @@ configure(subprojects) {
 }
 
 subprojects {
-	version = '0.0.1'
+	version = '1.0.0'
 	ext.appName = 'yorkpirates'
 	repositories {
 		mavenCentral()
