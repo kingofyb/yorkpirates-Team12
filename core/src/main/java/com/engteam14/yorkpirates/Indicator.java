@@ -15,7 +15,7 @@ public class Indicator extends GameObject{
     private boolean visible;
 
     public Indicator(College college, Player player, Array<Texture> frames) {
-        super(frames, 0, player.x, player.y, 10f, 5f, college.team);
+        super(frames, 0, player.x, player.y, frames.get(0).getWidth()/50f, frames.get(0).getHeight()/50f, college.team);
 
         this.player = player;
         this.college = college;

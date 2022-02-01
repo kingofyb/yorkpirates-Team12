@@ -136,7 +136,7 @@ public class College extends GameObject {
                 Array<Texture> healthBarSprite = new Array<>();
                 Array<Texture> indicatorSprite = new Array<>();
                 healthBarSprite.add(new Texture("allyHealthBar.png"));
-                indicatorSprite.add(new Texture("homeArrow.png"));
+                indicatorSprite.add(new Texture("allyArrow.png"));
 
                 Array<Texture> sprites = new Array<>();
                 sprites.add(collegeImages.get(1));
