@@ -50,7 +50,6 @@ public class Projectile extends GameObject{
         distanceTravelled = 0;
         float rangeModifier = min(origin.hitBox.width,origin.hitBox.height);
         maxDistance = rangeModifier * projectileSpeed;
-        //move(origin.hitBox.width * 2 * dx, origin.hitBox.height * 2 * dy);
     }
 
     /**
