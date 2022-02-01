@@ -193,12 +193,12 @@ public class HUD {
         }
 
         // Distance related task calculations
-        if(screen.getPlayer().getDistance() < DISTANCE_GOAL && !movementTask.isChecked()) { screen.loot.Add(DISTANCE_REWARD); }
+        if(screen.getPlayer().getDistance() > DISTANCE_GOAL && movementTask.isChecked()) { screen.loot.Add(DISTANCE_REWARD); }
         movementTask.setChecked(screen.getPlayer().getDistance() < DISTANCE_GOAL);
         movementTask.setText("Move "+DISTANCE_GOAL+"m:  "+Math.min((int)(screen.getPlayer().getDistance()), DISTANCE_GOAL)+"/"+DISTANCE_GOAL+"  ");
 
         // Points related task calculations
-        if(screen.points.Get() < POINT_GOAL && !pointsTask.isChecked()) { screen.loot.Add(POINT_REWARD); }
+        if(screen.points.Get() > POINT_GOAL && pointsTask.isChecked()) { screen.loot.Add(POINT_REWARD); }
         pointsTask.setChecked(screen.points.Get() < POINT_GOAL);
         pointsTask.setText("Get "+POINT_GOAL+" points:  "+Math.min(screen.points.Get(), POINT_GOAL)+"/"+POINT_GOAL+"  ");
     }
