@@ -136,21 +136,22 @@ public class GameScreen extends ScreenAdapter {
         for(int i = 0; i < projectiles.size; i++) {
             projectiles.get(i).draw(game.batch, 0);
         }
-        for(int i = 0; i < colleges.size; i++) {
-            colleges.get(i).draw(game.batch, 0);
-        }
         player.draw(game.batch, elapsedTime); // Player is last entity, all else drawn before them
-        game.batch.end();
-
-        // HUD drawing
-        HUDBatch.setProjectionMatrix(HUDCam.combined);
         if(!isPaused) {
             // Draw player name
             HUDBatch.begin();
             Vector3 pos = game.camera.project(new Vector3(player.x, player.y, 0f));
             game.font.draw(HUDBatch, playerName, pos.x, pos.y + 170f, 1f, Align.center, true);
             HUDBatch.end();
+        }
+        for(int i = 0; i < colleges.size; i++) {
+            colleges.get(i).draw(game.batch, 0);
+        }
+        game.batch.end();
 
+        // HUD drawing
+        HUDBatch.setProjectionMatrix(HUDCam.combined);
+        if(!isPaused) {
             // Draw UI
             gameHUD.renderStage(this);
             HUDCam.update();
