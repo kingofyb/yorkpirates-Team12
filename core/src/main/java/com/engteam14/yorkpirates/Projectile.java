@@ -30,18 +30,18 @@ public class Projectile extends GameObject{
      */
     public Projectile(Array<Texture> frames, float fps, GameObject origin, float goal_x, float goal_y, String team) {
         super(frames, fps, origin.x, origin.y, 5f,5f,team);
-
         this.origin = origin;
 
+        // Movement calculations
         float changeInX = goal_x - origin.x;
         float changeInY = goal_y - origin.y;
         float scaleFactor = max(abs(changeInX),abs(changeInY));
         dx = changeInX / scaleFactor;
         dy = changeInY / scaleFactor;
-
         move(origin.hitBox.width * 2* dx, origin.hitBox.height * 2 * dy);
-
         distanceTravelled = 0;
+
+        // Speed calculations
         if(Objects.equals(team, GameScreen.playerTeam)){
             projectileSpeed = 150f;
         }else{
@@ -58,7 +58,8 @@ public class Projectile extends GameObject{
         move(projectileSpeed*dx, projectileSpeed*dy);
         distanceTravelled += projectileSpeed;
 
-        if(origin == screen.player){
+        // Hit calculations
+        if(origin == screen.getPlayer()){
             for(int i = 0; i < screen.colleges.size; i++) {
                 if (overlaps(screen.colleges.get(i).hitBox)){
                     if(!Objects.equals(team, screen.colleges.get(i).team)){ // Checks if projectile and college are on the same time
@@ -68,17 +69,16 @@ public class Projectile extends GameObject{
                 }
             }
         }else{
-            if (overlaps(screen.player.hitBox)){
+            if (overlaps(screen.getPlayer().hitBox)){
                 if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if projectile and player are on the same time
-                    screen.player.takeDamage(screen,projectileDamage,team);
+                    screen.getPlayer().takeDamage(screen,projectileDamage,team);
                 }
                 destroy(screen);
             }
         }
 
-        if(distanceTravelled > maxDistance){
-            destroy(screen);
-        }
+        // Destroys after max travel distance
+        if(distanceTravelled > maxDistance) destroy(screen);
     }
 
     /**

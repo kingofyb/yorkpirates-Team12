@@ -10,21 +10,20 @@ import com.badlogic.gdx.utils.Array;
 
 public class GameObject {
 
-    float x;
-    float y;
-    float width;
-    float height;
+    public float x;
+    public float y;
+    public float width;
+    public float height;
 
-    int maxHealth;
-    float currentHealth;
-
-    boolean bloodSplash;
+    public int maxHealth;
+    public float currentHealth;
 
     String team;
     Texture sprite;
     Rectangle hitBox;
-    ShaderProgram shader;
     Animation<Texture> anim;
+
+    ShaderProgram shader = new ShaderProgram(Gdx.files.internal("red.vsh"), Gdx.files.internal("red.fsh"));
 
     /**
      * Generates a generic object within the game with animated frame(s) and a hit-box.
@@ -38,18 +37,12 @@ public class GameObject {
      */
     GameObject(Array<Texture> frames, float fps, float x, float y, float width, float height, String team){
         changeImage(frames,fps);
-
         this.x = x;
         this.y = y;
-
         this.team = team;
-
         this.width = width;
         this.height = height;
-
         setHitbox();
-        bloodSplash = false;
-        shader = new ShaderProgram(Gdx.files.internal("red.vsh"), Gdx.files.internal("red.fsh"));
     }
 
     /**
@@ -79,7 +72,6 @@ public class GameObject {
      */
     void takeDamage(GameScreen screen, float damage, String projectileTeam){
         currentHealth -= damage;
-        bloodSplash = true;
     }
 
     /**

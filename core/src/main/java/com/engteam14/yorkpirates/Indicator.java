@@ -12,7 +12,7 @@ public class Indicator extends GameObject{
     private final College college;
 
     private Vector2 gradient;
-    public boolean visible;
+    private boolean visible;
 
     public Indicator(College college, Player player, Array<Texture> frames) {
         super(frames, 0, player.x, player.y, 10f, 5f, college.team);
@@ -31,18 +31,18 @@ public class Indicator extends GameObject{
      */
     @Override
     public void draw(SpriteBatch batch, float elapsedTime){
+        // Draw the indicator if visible
         if(visible){
-            Texture frame = sprite;
             float rotation = (float) Math.toDegrees(Math.atan2(gradient.y,gradient.x));
-
-            batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
+            batch.draw(sprite, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, sprite.getWidth(), sprite.getHeight(), false, false);
         }
     }
 
     /**
-     * Called when updating the gradient of the arrow.
+     * Called when updating the gradient of the Indicator.
      */
     public Vector2 updateGradient(){
+        // Calculate the gradient to draw the indicator at.
         float changeInX = college.x - player.x;
         float changeInY = college.y - player.y;
         float scaleFactor = max(abs(changeInX),abs(changeInY));
@@ -59,5 +59,13 @@ public class Indicator extends GameObject{
         gradient = updateGradient();
         this.x = player.x + (50 * gradient.x);
         this.y = player.y + (50 * gradient.y);
+    }
+
+    /**
+     * Set whether the indicator is visible.
+     * @param visible   Whether the indicator is visible.
+     */
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

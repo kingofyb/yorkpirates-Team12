@@ -11,20 +11,22 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 public class Player extends GameObject {
 
-    public Vector2 camDiff;
-    public float distance;
-    private HealthBar playerHealth;
+    // Player constants
+    private static final int POINT_FREQUENCY = 1000; // How often the player gains points by moving.
+    private static final double CAMERA_SLACK = 0.1; // What percentage of the screen the player can move in before the camera follows.
+    private static final float SPEED = 70f; // Player movement speed.
+    private static final int HEALTH = 200;
 
-    private float splashTime;
-
+    // Movement calculation values
     private int previousDirectionX;
     private int previousDirectionY;
-    private boolean moving = false;
+    private float distance;
     private long lastMovementScore;
+    private boolean moving = false;
 
-    private static final int pointFrequency = 1000; // How often the player gains points by moving.
-    private static final double cameraSlack = 0.1; // What percentage of the screen the player can move in before the camera follows.
-    private static final float speed = 70f; // Player movement speed.
+    private HealthBar playerHealth;
+    private float splashTime;
+    private boolean doBloodSplash = false;
 
     /**
      * Generates a generic object within the game with animated frame(s) and a hit-box.
@@ -41,9 +43,10 @@ public class Player extends GameObject {
         lastMovementScore = 0;
         splashTime = 0;
 
-        setMaxHealth(200);
+        // Generate health
         Array<Texture> sprites = new Array<>();
         sprites.add(new Texture("allyHealthBar.png"));
+        setMaxHealth(HEALTH);
         playerHealth = new HealthBar(this,sprites);
     }
 
@@ -53,18 +56,21 @@ public class Player extends GameObject {
      * @param camera    The player camera.
      */
     public void update(GameScreen screen, OrthographicCamera camera){
-        Vector2 oldPos = new Vector2(x,y);
-        // Movement Calculations
+        Vector2 oldPos = new Vector2(x,y); // Stored for next-frame calculations
+
+        // Get input movement
         int horizontal = ((Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) ? 1 : 0)
                 - ((Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) ? 1 : 0);
         int vertical = ((Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) ? 1 : 0)
                 - ((Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) ? 1 : 0);
+
+        // Calculate collision && movement
         if (horizontal != 0 || vertical != 0){
-            move(speed*horizontal, speed*vertical);
+            move(SPEED *horizontal, SPEED *vertical);
             previousDirectionX = horizontal;
             previousDirectionY = vertical;
-            if (safeMove(screen.game.edges)) {
-                if (TimeUtils.timeSinceMillis(lastMovementScore) > pointFrequency) {
+            if (safeMove(screen.getMain().edges)) {
+                if (TimeUtils.timeSinceMillis(lastMovementScore) > POINT_FREQUENCY) {
                     lastMovementScore = TimeUtils.millis();
                     screen.points.Add(1);
                 }
@@ -72,10 +78,10 @@ public class Player extends GameObject {
             } else {    // Collision
                 Vector2 newPos = new Vector2(x, y);
                 x = oldPos.x;
-                if (!safeMove(screen.game.edges)) {
+                if (!safeMove(screen.getMain().edges)) {
                     x = newPos.x;
                     y = oldPos.y;
-                    if (!safeMove(screen.game.edges)) {
+                    if (!safeMove(screen.getMain().edges)) {
                         x = oldPos.x;
                     }
                 }
@@ -83,14 +89,16 @@ public class Player extends GameObject {
             }
         } else moving = false;
         updateHitboxPos();
+        // Track distance travelled
         distance += Math.pow((Math.pow((x - oldPos.x),2f) + Math.pow((y - oldPos.y),2f)),0.5f)/10f;
 
         // Camera Calculations
         ProcessCamera(screen, camera);
 
-        if(bloodSplash){
+        // BLood splash calculations
+        if(doBloodSplash){
             if(splashTime > 1){
-                bloodSplash = false;
+                doBloodSplash = false;
                 splashTime = 0;
             }else{
                 splashTime += 1;
@@ -105,7 +113,7 @@ public class Player extends GameObject {
      */
     private Boolean safeMove(Array<Array<Boolean>> edges){
         return (
-                edges.get((int)((y+height/2)/16)).get((int)((x+width/2)/16)) &&
+                        edges.get((int)((y+height/2)/16)).get((int)((x+width/2)/16)) &&
                         edges.get((int)((y+height/2)/16)).get((int)((x-width/2)/16)) &&
                         edges.get((int)((y-height/2)/16)).get((int)((x+width/2)/16)) &&
                         edges.get((int)((y-height/2)/16)).get((int)((x-width/2)/16))
@@ -121,7 +129,7 @@ public class Player extends GameObject {
     public void move(float x, float y){
         this.x += x * Gdx.graphics.getDeltaTime();
         this.y += y * Gdx.graphics.getDeltaTime();
-        playerHealth.move(this.x, this.y + height/2 + 2f);
+        playerHealth.move(this.x, this.y + height/2 + 2f); // Healthbar moves with player
     }
 
     /**
@@ -133,8 +141,9 @@ public class Player extends GameObject {
     @Override
     public void takeDamage(GameScreen screen, float damage, String projectileTeam){
         currentHealth -= damage;
-        bloodSplash = true;
+        doBloodSplash = true;
 
+        // Healthbar reduction
         if(currentHealth > 0){
             playerHealth.resize(currentHealth);
         }else{
@@ -149,8 +158,8 @@ public class Player extends GameObject {
      * @param camera    The player camera.
      */
     private void ProcessCamera(GameScreen screen, OrthographicCamera camera) {
-        camDiff = new Vector2(x - camera.position.x, y - camera.position.y);
-        screen.followPlayer = Math.abs(camDiff.x) > camera.viewportWidth / 2 * cameraSlack || Math.abs(camDiff.y) > camera.viewportWidth / 2 * cameraSlack;
+        Vector2 camDiff = new Vector2(x - camera.position.x, y - camera.position.y);
+        screen.toggleFollowPlayer(Math.abs(camDiff.x) > camera.viewportWidth / 2 * CAMERA_SLACK || Math.abs(camDiff.y) > camera.viewportWidth / 2 * CAMERA_SLACK);
     }
 
     /**
@@ -160,17 +169,21 @@ public class Player extends GameObject {
      */
     @Override
     public void draw(SpriteBatch batch, float elapsedTime){
+        // Generates the sprite
         Texture frame = sprite;
         if (moving) {
             frame = anim.getKeyFrame(elapsedTime, true);
-        }
-        if(bloodSplash){
+        } if(doBloodSplash){
             batch.setShader(shader); // Set our grey-out shader to the batch
-        }
-        float rotation = (float) Math.toDegrees(Math.atan2(previousDirectionY, previousDirectionX));
+        } float rotation = (float) Math.toDegrees(Math.atan2(previousDirectionY, previousDirectionX));
 
+        // Draws sprite and healthbar
         batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
         if(!(playerHealth == null)) playerHealth.draw(batch, 0);
         batch.setShader(null);
+    }
+
+    public float getDistance() {
+        return distance;
     }
 }

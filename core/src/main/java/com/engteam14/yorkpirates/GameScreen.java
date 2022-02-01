@@ -17,79 +17,85 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class GameScreen extends ScreenAdapter {
-    public YorkPirates game;
-    public Player player;
+    // Team name constants
+    public static final String playerTeam = "PLAYER";
+    public static final String enemyTeam = "ENEMY";
 
-    public FitViewport viewport;
+    // Score managers
     public ScoreManager points;
     public ScoreManager loot;
 
-    public static Array<Texture> collegeSprites;
-    public int collegesCaptured;
+    // Colleges
     public Array<College> colleges;
     public Array<Projectile> projectiles;
-    public boolean hasShot;
 
+    // Sound
+    public Music music;
+
+    // Main classes
+    private final YorkPirates game;
+
+    // Player
+    private final Player player;
+    private String playerName;
+    private Vector3 followPos;
+    private boolean followPlayer = false;
+
+    // UI & Camera
+    private final HUD gameHUD;
     private final SpriteBatch HUDBatch;
     private final OrthographicCamera HUDCam;
+    private final FitViewport viewport;
+
+    // Tilemap
+    private final TiledMap tiledMap;
     private final OrthogonalTiledMapRenderer tiledMapRenderer;
-    public Music instrumental;
 
-    public float elapsedTime = 0;
-    private Vector3 followPos;
-    public boolean followPlayer = false;
-
-    public boolean isPaused = false;
-    public float lastPause = 0;
-
-    public String playerName;
-    public static final String playerTeam = "PLAYER";
-    public static final String enemyTeam = "ENEMY";
-    public TiledMap tiledMap;
-
-    public final HUD gameHUD;
+    // Trackers
+    private float elapsedTime = 0;
+    private boolean isPaused = false;
+    private float lastPause = 0;
 
     /**
      * Initialises the main game screen, as well as relevant entities and data.
      * @param game  Passes in the base game class for reference.
      */
-    public GameScreen(YorkPirates game, String playerName){
+    public GameScreen(YorkPirates game){
         this.game = game;
-        this.playerName = playerName;
+        playerName = "Player";
         followPos = game.camera.position;
-
-        // Initialise HUD
-        HUDBatch = new SpriteBatch();
-        HUDCam = new OrthographicCamera();
-        HUDCam.setToOrtho(false, game.camera.viewportWidth, game.camera.viewportHeight);
-        viewport = new FitViewport( Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), HUDCam); // change this to your needed viewport
-
-        //initialise sound
-        instrumental = Gdx.audio.newMusic(Gdx.files.internal("Pirate1_Theme1.ogg"));
-        instrumental.setLooping(true);
-        instrumental.setVolume(0);
-        instrumental.play();
 
         // Initialise points and loot managers
         points = new ScoreManager();
         loot = new ScoreManager();
 
+        // Initialise HUD
+        HUDBatch = new SpriteBatch();
+        HUDCam = new OrthographicCamera();
+        HUDCam.setToOrtho(false, game.camera.viewportWidth, game.camera.viewportHeight);
+        viewport = new FitViewport( Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), HUDCam);
+        gameHUD =  new HUD(this);
+
+        //initialise sound
+        music = Gdx.audio.newMusic(Gdx.files.internal("Pirate1_Theme1.ogg"));
+        music.setLooping(true);
+        music.setVolume(0);
+        music.play();
+
         // Initialise sprites array to be used generating GameObjects
         Array<Texture> sprites = new Array<>();
 
         // Initialise player
-        sprites.add(new Texture("ship (4).png"), new Texture("ship (4).png"));
+        sprites.add(new Texture("ship (4).png"));
         player = new Player(sprites, 2, game.camera.viewportWidth/2, game.camera.viewportHeight/2, 32, 16, playerTeam);
-        sprites.clear();
 
-        // Initialise map texture
+        // Initialise tilemap
         tiledMap = new TmxMapLoader().load("pirate12.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         // Initialise colleges
-        collegesCaptured = 0;
         colleges = new Array<>();
-        collegeSprites = new Array<>();
+        Array<Texture> collegeSprites = new Array<>();
         collegeSprites.add( new Texture("alcuin.png"),
                             new Texture("alcuin_2.png"));
         colleges.add(new College(collegeSprites, player.x+100f, player.y, 0.5f,"Alcuin",enemyTeam,player));
@@ -107,8 +113,6 @@ public class GameScreen extends ScreenAdapter {
 
         // Initialise projectiles array to be used storing live projectiles
         projectiles = new Array<>();
-
-        gameHUD =  new HUD(this);
     }
 
     /**
@@ -117,7 +121,7 @@ public class GameScreen extends ScreenAdapter {
      */
     @Override
     public void render(float delta){
-        if(!isPaused) {
+        if(!isPaused) { // Only update if not paused
             elapsedTime += delta;
             update();
         }
@@ -125,7 +129,8 @@ public class GameScreen extends ScreenAdapter {
         game.batch.setProjectionMatrix(game.camera.combined);
         ScreenUtils.clear(0.1f, 0.6f, 0.6f, 1.0f);
 
-        game.batch.begin(); // Begin drawing batch
+        // Gameplay drawing batch
+        game.batch.begin();
         tiledMapRenderer.setView(game.camera); // Draw map first so behind everything
         tiledMapRenderer.render();
         for(int i = 0; i < projectiles.size; i++) {
@@ -135,16 +140,18 @@ public class GameScreen extends ScreenAdapter {
             colleges.get(i).draw(game.batch, 0);
         }
         player.draw(game.batch, elapsedTime); // Player is last entity, all else drawn before them
-
-        game.font.getData().setScale(1f);
         game.batch.end();
+
+        // HUD drawing
         HUDBatch.setProjectionMatrix(HUDCam.combined);
-        // Start drawing HUD
         if(!isPaused) {
+            // Draw player name
             HUDBatch.begin();
             Vector3 pos = game.camera.project(new Vector3(player.x, player.y, 0f));
             game.font.draw(HUDBatch, playerName, pos.x, pos.y + 170f, 1f, Align.center, true);
             HUDBatch.end();
+
+            // Draw UI
             gameHUD.renderStage(this);
             HUDCam.update();
         }
@@ -154,7 +161,7 @@ public class GameScreen extends ScreenAdapter {
      * Is called once every frame. Used for game calculations that take place before rendering.
      */
     private void update(){
-        // Call updates for every individual object
+        // Call updates for all relevant objects
         player.update(this, game.camera);
         for(int i = 0; i < colleges.size; i++) {
             colleges.get(i).update(this);
@@ -164,14 +171,12 @@ public class GameScreen extends ScreenAdapter {
         if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             Vector3 mouseVector = new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
             Vector3 mousePos = game.camera.unproject(mouseVector);
-            System.out.println(new Vector3(Gdx.input.getX(), Gdx.input.getY(),0));
 
             Array<Texture> sprites = new Array<>();
             sprites.add(new Texture("tempProjectile.png"));
             projectiles.add(new Projectile(sprites, 0, player, mousePos.x, mousePos.y, playerTeam));
-            hasShot = true;
-        }
-        for(int i = projectiles.size - 1; i >= 0; i--) {
+            gameHUD.endTutorial();
+        } for(int i = projectiles.size - 1; i >= 0; i--) {
             projectiles.get(i).update(this);
         }
 
@@ -183,24 +188,14 @@ public class GameScreen extends ScreenAdapter {
 
         // Call to pause the game
         if(Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && elapsedTime - lastPause > 0.1f){
-            pauseGame();
+            gamePause();
         }
-    }
-
-    /**
-     * Disposes of disposables when game finishes execution.
-     */
-    @Override
-    public void dispose(){
-        HUDBatch.dispose();
-        tiledMap.dispose();
-        instrumental.dispose();
     }
 
     /**
      * Called to switch from the current screen to the pause screen, while retaining the current screen's information.
      */
-    public void pauseGame(){
+    public void gamePause(){
         isPaused = true;
         game.setScreen(new PauseScreen(game,this));
     }
@@ -216,8 +211,71 @@ public class GameScreen extends ScreenAdapter {
     /**
      * Called to switch from the current screen to the title screen.
      */
-    public void restart(){
+    public void gameReset(){
         game.setScreen(new TitleScreen(game));
     }
 
+    /**
+     * Used to encapsulate elapsedTime.
+     * @return  Time since the current session started.
+     */
+    public float getElapsedTime() { return elapsedTime; }
+
+    /**
+     * Used to toggle whether the camera follows the player.
+     * @param follow  Whether the camera will follow the player.
+     */
+    public void toggleFollowPlayer(boolean follow) { this.followPlayer = follow; }
+
+    /**
+     * Get the player's name for the current session.
+     * @return  Player's name.
+     */
+    public String getPlayerName() { return playerName; }
+
+    /**
+     * Set the player's name.
+     * @param playerName    Chosen player name.
+     */
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+        gameHUD.updateName(this);
+    }
+
+    /**
+     * Get the player.
+     * @return  The player.
+     */
+    public Player getPlayer() { return player; }
+
+    /**
+     * Get the main game class.
+     * @return  The main game class.
+     */
+    public YorkPirates getMain() { return game; }
+
+    /**
+     * Set whether the game is paused or not.
+     * @param paused    Whether the game is paused.
+     */
+    public void setPaused(boolean paused) {
+        if (!paused && isPaused) lastPause = elapsedTime;
+        isPaused = paused;
+    }
+
+    /**
+     * Get the viewport.
+     * @return  The viewport.
+     */
+    public FitViewport getViewport() { return viewport; }
+
+    /**
+     * Disposes of disposables when game finishes execution.
+     */
+    @Override
+    public void dispose(){
+        HUDBatch.dispose();
+        tiledMap.dispose();
+        music.dispose();
+    }
 }

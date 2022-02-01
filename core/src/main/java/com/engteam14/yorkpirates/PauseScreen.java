@@ -23,39 +23,37 @@ public class PauseScreen extends ScreenAdapter {
     public PauseScreen(YorkPirates game, GameScreen screen){
         this.game = game;
         this.screen = screen;
-        game.camera.update();
-        game.batch.setProjectionMatrix(game.camera.combined);
-        pauseStage = new Stage(screen.viewport);
-        Gdx.input.setInputProcessor(pauseStage);
 
-        Table table = new Table();
-        table.setFillParent(true);
-        table.setSize(screen.viewport.getScreenWidth(), screen.viewport.getScreenHeight());
-        table.setPosition(0, 0);
-        table.setTouchable(Touchable.enabled);
-
+        // Generate skin
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
         Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
         skin.addRegions(atlas);
 
-        TextButton resumeB = new TextButton("Resume", skin);
-        resumeB.addListener(new ClickListener() {
+        // Generate stage and table
+        pauseStage = new Stage(screen.getViewport());
+        Gdx.input.setInputProcessor(pauseStage);
+        Table table = new Table();
+        table.setFillParent(true);
+        table.setTouchable(Touchable.enabled);
+        table.setBackground(skin.getDrawable("Selection"));
+        if(screen.getMain().DEBUG_ON) table.setDebug(true);
+
+        // Generate title texture
+        Texture titleT = new Texture(Gdx.files.internal("paused.png"));
+        Image title = new Image(titleT);
+        title.setScaling(Scaling.fit);
+
+        // Generate buttons
+        TextButton resume = new TextButton("Resume", skin);
+        resume.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 continueGame();
             }
         });
 
-        TextButton quitB = new TextButton("Quit", skin);
-        quitB.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit();
-
-            }
-        });
-
-        TextButton restartB = new TextButton("End Game", skin);
-        restartB.addListener(new ClickListener() {
+        TextButton restart = new TextButton("End Game", skin);
+        restart.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 screen.gameEnd(false);
 
@@ -63,68 +61,45 @@ public class PauseScreen extends ScreenAdapter {
         });
 
         TextButton music = new TextButton("", skin);
-        if (screen.instrumental.getVolume() == 0) {
-            music.setText("Turn Music ON");
-        } else {
-            music.setText("Turn Music OFF");
-
-        }
+        if (screen.music.getVolume() == 0)  music.setText("Turn Music ON");
+        else                                music.setText("Turn Music OFF");
         music.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                if (screen.instrumental.getVolume() == 0) {
-                    screen.instrumental.setVolume(1);
+                if (screen.music.getVolume() == 0) {
+                    screen.music.setVolume(1);
                     music.setText("Turn Music OFF");
                 } else {
-                    screen.instrumental.setVolume(0);
+                    screen.music.setVolume(0);
                     music.setText("Turn Music ON");
 
                 }
             }
         });
 
-        Texture titleT = new Texture(Gdx.files.internal("paused.png"));
-        Image title = new Image(titleT);
-        title.setScaling(Scaling.fit);
+        TextButton quit = new TextButton("Quit", skin);
+        quit.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
 
-        table.columnDefaults(0).width(screen.viewport.getScreenWidth()/5f);
-        table.columnDefaults(5).width(screen.viewport.getScreenWidth()/5f);
+            }
+        });
 
-        table.row().pad(10);
-        table.add().expand();
-        table.add(title).colspan(4).fill().expand().pad(50f);
-
-        table.add().expand();
-
+        // Add title to table
         table.row();
-        table.add().expand();
-        table.add().expand();
-        table.add(resumeB).expand().fillX().expand().colspan(2).padLeft(40).padRight(40);
-        table.add().expand();
-        table.add().expand();
+        table.add(title).expand();
 
+        // Add buttons to table
         table.row();
-        table.add().expand();
-        table.add().expand();
-        table.add(restartB).expand().fillX().colspan(2).padLeft(40).padRight(40);
-        table.add().expand();
-        table.add().expand();
+        table.add(resume).expand();
         table.row();
-        table.add().expand();
-        table.add().expand();
-        table.add(music).expand().fillX().colspan(2).padLeft(40).padRight(40);
-        table.add().expand();
-        table.add().expand();
+        table.add(restart).expand();
         table.row();
-        table.add().expand();
-        table.add().expand();
-        table.add(quitB).expand().fillX().colspan(2).padLeft(40).padRight(40);
-        table.add().expand();
-        table.add().expand();
-        table.setBackground(skin.getDrawable("Selection"));
+        table.add(music).expand();
+        table.row();
+        table.add(quit).expand();
 
+        // Add table to the stage
         pauseStage.addActor(table);
-        pauseStage.draw();
-        Gdx.input.setInputProcessor(pauseStage);
     }
 
     /**
@@ -133,11 +108,11 @@ public class PauseScreen extends ScreenAdapter {
      */
     @Override
     public void render(float delta){
+        Gdx.input.setInputProcessor(pauseStage);
         update();
         ScreenUtils.clear(0.6f, 0.6f, 1.0f, 1.0f);
-        screen.render(delta);
-        Gdx.input.setInputProcessor(pauseStage);
-        pauseStage.draw();
+        screen.render(delta); // Draws the gameplay screen as a background
+        pauseStage.draw(); // Draws the stage
     }
 
     /**
@@ -153,8 +128,7 @@ public class PauseScreen extends ScreenAdapter {
      * Generates a HUD object within the game that controls elements of the UI.
      */
     private void continueGame() {
-        screen.isPaused = false;
-        screen.lastPause = screen.elapsedTime;
+        screen.setPaused(false);
         game.setScreen(screen);
     }
 }
