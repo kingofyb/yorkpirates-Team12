@@ -4,24 +4,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class TitleScreen extends ScreenAdapter {
     private final YorkPirates game;
     private final GameScreen nextGame;
     private final Stage stage;
-    private final TextField nameText;
+
+    private final TextField textBox;
     private final Cell<Image> titleCell;
-    private final Animation<TextureRegion> anim;
 
     private float elapsedTime = 0f;
 
@@ -31,92 +28,74 @@ public class TitleScreen extends ScreenAdapter {
      */
     public TitleScreen(YorkPirates game){
         this.game = game;
-        nextGame = new GameScreen(game, null);
-        nextGame.isPaused = true;
-        nextGame.playerName = "Player";
 
-        stage = new Stage();
+        // Generates main gameplay for use as background
+        nextGame = new GameScreen(game);
+        nextGame.setPaused(true);
+        nextGame.setPlayerName("Player");
 
-        TiledMap tiledMap = new TmxMapLoader().load("pirate12.tmx");
-        TiledMapRenderer tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-
-        anim = game.logo;
-        TextureRegion titleT = anim.getKeyFrame(0f);
-        Image title = new Image(titleT);
-        title.scaleBy(0.25f);
-
-        Table table = new Table();
-        table.setFillParent(true);
-        //table.debug();
-
+        // Generates skin
         TextureAtlas atlas;
         atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
         Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
-        Gdx.input.setInputProcessor(stage);
         skin.addRegions(atlas);
 
-        table.add().expandX();
-        titleCell = table.add(title);
-        titleCell.fill().prefHeight(game.camera.viewportHeight+40).prefWidth(game.camera.viewportWidth).colspan(5).expand();
+        // Generates stage and table
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
+        Table table = new Table();
+        table.setFillParent(true);
+        table.setBackground(skin.getDrawable("Selection"));
+        if(game.DEBUG_ON) table.setDebug(true);
 
-        table.add().expandX();
-        //new row
-        table.row();
-        table.add().expand();
-        table.add().expand();
-        nameText = new TextField("Name (optional)", skin, "edges");
-        nameText.setAlignment(Align.center);
-        nameText.setOnlyFontChars(true);
-        nameText.addListener(new ClickListener() {
+        // Get title texture
+        TextureRegion titleT = game.logo.getKeyFrame(0f);
+        Image title = new Image(titleT);
+        title.setScaling(Scaling.fit);
+
+        // Generate textbox
+        textBox = new TextField("Name (optional)", skin, "edges");
+        textBox.setAlignment(Align.center);
+        textBox.setOnlyFontChars(true);
+        textBox.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                nameText.setText("");
+                textBox.setText("");
             }});
-        table.add().expand();
 
-        table.add(nameText).fillX().pad(80).padBottom(-30);
-        table.add().expand();
-
-        table.add().expandY();
-        table.add().expand();
-        //
-        table.row();
-        table.add();
-        table.add();
-
-        table.add();
+        // Generate buttons
         ImageTextButton startButton = new ImageTextButton("Play", skin);
-        table.add(startButton);
-        table.add();
-        table.add();
-        table.add();
-
-        table.row();
-
-        table.add().expand();
-        table.add().expand();
-
-        table.add().expand();
         ImageTextButton quitButton = new ImageTextButton("Exit Game", skin, "Quit");
-        table.add(quitButton);
-        table.add().expand();
-        table.add().expand();
-        table.add().expand();
-
-        table.row();
 
         startButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 newGame();
             }
         });
-
         quitButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 quitGame();
             }
         });
 
-        table.setBackground(skin.getDrawable("Selection"));
+        // Add title to table
+        titleCell = table.add(title).expand();
+
+        // Add textbox to table
+        table.row();
+        Table textBoxFiller = new Table();
+        textBoxFiller.add().expand().padRight(stage.getWidth()/3);
+        textBoxFiller.add(textBox).expand().fillX();
+        textBoxFiller.add().expand().padLeft(stage.getWidth()/3);
+        if(game.DEBUG_ON) textBoxFiller.debug();
+        table.add(textBoxFiller).expand().fill();
+
+        // Add buttons to table
+        table.row();
+        table.add(startButton).expand();
+        table.row();
+        table.add(quitButton).expand();
+
+        // Add table to the stage
         stage.addActor(table);
     }
 
@@ -126,16 +105,21 @@ public class TitleScreen extends ScreenAdapter {
      */
     @Override
     public void render(float delta){
+        // Update values
         elapsedTime += delta;
         update();
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
+
+        // Render background
         ScreenUtils.clear(0f, 0f, 0f, 1.0f);
-        //tiledMapRenderer.setView(game.camera); // Draw map first so behind everything
-        //tiledMapRenderer.render();
         nextGame.render(delta);
-        TextureRegion frame = anim.getKeyFrame(elapsedTime, true);
+
+        // Animate title
+        TextureRegion frame = game.logo.getKeyFrame(elapsedTime, true);
         titleCell.setActor(new Image(frame));
+
+        // Draw UI over the top
         stage.draw();
     }
 
@@ -152,16 +136,17 @@ public class TitleScreen extends ScreenAdapter {
      * Is called to create a new game screen.
      */
     private void newGame(){
+        // Get player name
         String playerName;
-        if ( nameText.getText().equals("Name (optional)") || nameText.getText().equals("")) {
+        if ( textBox.getText().equals("Name (optional)") || textBox.getText().equals("")) {
             playerName = "Player";
 
         } else{
-            playerName = nameText.getText();
+            playerName = textBox.getText();
         }
-        nextGame.isPaused = false;
-        nextGame.playerName = playerName;
-        nextGame.gameHUD.updateName(nextGame);
+        // Set player name and unpause game
+        nextGame.setPaused(false);
+        nextGame.setPlayerName(playerName);
         game.setScreen(nextGame);
     }
 

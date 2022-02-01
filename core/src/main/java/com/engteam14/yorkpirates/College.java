@@ -13,17 +13,17 @@ import static java.lang.Math.abs;
 
 public class College extends GameObject {
 
-    public boolean nearPlayer = false;
+    public static int capturedCount = 0;
+
     private HealthBar collegeBar;
     private Indicator direction;
 
+    private float splashTime;
     private long lastShotFired;
     private final String collegeName;
     private final Array<Texture> collegeImages;
 
-    private static final int lootGained = 15;
-    private static final int pointsGained = 50;
-    private static final int shootFrequency = 1000; // How often the college can shoot.
+    private boolean doBloodSplash = false;
 
     /**
      * Generates a college object within the game with animated frame(s) and a hit-box.
@@ -40,6 +40,7 @@ public class College extends GameObject {
             collegeImages.add(sprites.get(i));
         }
 
+        splashTime = 0;
         setMaxHealth(500);
         lastShotFired = 0;
         collegeName = name;
@@ -63,15 +64,17 @@ public class College extends GameObject {
      */
     public void update(GameScreen screen){
         direction.move();
-        float playerX = screen.player.x;
-        float playerY = screen.player.y;
+        float playerX = screen.getPlayer().x;
+        float playerY = screen.getPlayer().y;
         float detectionRadius = 90f;
-        nearPlayer = abs(this.x - playerX) < (detectionRadius*1.5) && abs(this.y - playerY) < detectionRadius;
+        boolean nearPlayer = abs(this.x - playerX) < (detectionRadius * 1.5) && abs(this.y - playerY) < detectionRadius;
 
         if(nearPlayer){
-            direction.visible = false;
+            direction.setVisible(false);
 
             if(!Objects.equals(team, GameScreen.playerTeam)) { // Checks if the college is an enemy of the player
+                // How often the college can shoot.
+                int shootFrequency = 1000;
                 if (TimeUtils.timeSinceMillis(lastShotFired) > shootFrequency){
                     lastShotFired = TimeUtils.millis();
                     Array<Texture> sprites = new Array<>();
@@ -92,7 +95,16 @@ public class College extends GameObject {
                 }
             }
         }else{
-            direction.visible = true;
+            direction.setVisible(true);
+        }
+
+        if(doBloodSplash){
+            if(splashTime > 1){
+                doBloodSplash = false;
+                splashTime = 0;
+            }else{
+                splashTime += 1;
+            }
         }
     }
 
@@ -105,11 +117,15 @@ public class College extends GameObject {
     @Override
     public void takeDamage(GameScreen screen, float damage, String projectileTeam){
         currentHealth -= damage;
+        doBloodSplash = true;
+
         if(currentHealth > 0){
             collegeBar.resize(currentHealth);
         }else{
             if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if the college is an enemy of the player
+                int pointsGained = 50;
                 screen.points.Add(pointsGained);
+                int lootGained = 15;
                 screen.loot.Add(lootGained);
 
                 Array<Texture> healthBarSprite = new Array<>();
@@ -124,7 +140,7 @@ public class College extends GameObject {
                 collegeBar.changeImage(healthBarSprite,0);
                 currentHealth = maxHealth;
                 collegeBar.resize(currentHealth);
-                screen.collegesCaptured += 1;
+                College.capturedCount++;
                 direction.changeImage(indicatorSprite,0);
                 team = GameScreen.playerTeam;
             }else{
@@ -150,7 +166,11 @@ public class College extends GameObject {
      */
     @Override
     public void draw(SpriteBatch batch, float elapsedTime){
+        if(doBloodSplash){
+            batch.setShader(shader); // Set our grey-out shader to the batch
+        }
         batch.draw(anim.getKeyFrame(elapsedTime, true), x - width/2, y - height/2, width, height);
+        batch.setShader(null);
         collegeBar.draw(batch, 0);
         direction.draw(batch,0);
     }

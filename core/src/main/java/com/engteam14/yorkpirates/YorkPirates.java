@@ -10,39 +10,48 @@ import com.badlogic.gdx.utils.Array;
 
 public class YorkPirates extends Game {
 
+	// Global values
 	public BitmapFont font;
 	public SpriteBatch batch;
 	public OrthographicCamera camera;
 	public Array<Array<Boolean>> edges;
-	public Animation<TextureRegion> logo;
 
-	private static final int screenToPixelRatio = 16; // Determines the pixel ratio of the game.
+	// Animations
+	public Animation<TextureRegion> logo;
+	public Animation<TextureRegion> mouse;
+	public Animation<TextureRegion> keyboard;
+
+	// Constants
+	public final boolean DEBUG_ON = false; // Determines if the game runs in DEBUG mode.
+	private static final int SCREEN_TO_PIXEL_RATIO = 16; // Determines the pixel ratio of the game.
 
 	/**
 	 * Initialises base game class.
 	 */
 	@Override
 	public void create () {
+		// Graphics settings
+		Gdx.graphics.setForegroundFPS(30);
 		Gdx.graphics.setVSync(true);
+
+		// Initialise objects
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 16*screenToPixelRatio, 9*screenToPixelRatio);
+		camera.setToOrtho(false, 16* SCREEN_TO_PIXEL_RATIO, 9* SCREEN_TO_PIXEL_RATIO);
 		batch = new SpriteBatch();
+
+		// Get font from skin
 		TextureAtlas atlas;
 		atlas = new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas"));
 		Skin skin = new Skin(Gdx.files.internal("Skin/YorkPiratesSkin.json"), new TextureAtlas(Gdx.files.internal("Skin/YorkPiratesSkin.atlas")));
 		skin.addRegions(atlas);
 		font = skin.getFont("Raleway-Bold");
 
-		Texture logoSheet = new Texture(Gdx.files.internal("logo.png"));
-		TextureRegion[][] split = TextureRegion.split(logoSheet, logoSheet.getWidth() / 8, logoSheet.getHeight() / 10);
-		Array<TextureRegion> frames = new Array<>();
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 8; j++) {
-				frames.add(split[i][j]);
-			}
-		}
-		logo = new Animation<>(0.05f, frames);
+		// Long animations loaded in at start of the game for better performance
+		logo = getAnimator("logo.png", 20, 10,8);
+		mouse = getAnimator("mouse.png", 20,5, 5);
+		keyboard = getAnimator("keyboard.png", 20,1, 16);
 
+		// Calculates collision array from edges csv
 		edges = new Array<>();
 		String data = Gdx.files.internal("edges.csv").readString();
 		for(String row: data.split("\n")){
@@ -53,7 +62,29 @@ public class YorkPirates extends Game {
 			}
 			edges.insert(0, newRow);
 		}
+
+		// Sets the screen to the title screen
 		setScreen(new TitleScreen(this));
+	}
+
+	/**
+	 * Splits a sheet of frames into an animator.
+	 * @param path		The file to split.
+	 * @param fps		The framerate of the animation.
+	 * @param rows		The number of rows.
+	 * @param columns	The number of columns.
+	 * @return			The animation.
+	 */
+	private Animation<TextureRegion> getAnimator(String path, float fps, int rows, int columns) {
+		Texture logosheet = new Texture(Gdx.files.internal(path));
+		TextureRegion[][] split = TextureRegion.split(logosheet, logosheet.getWidth() / columns, logosheet.getHeight() / rows);
+		Array<TextureRegion> frames = new Array<>();
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				frames.add(split[i][j]);
+			}
+		}
+		return new Animation<>(fps==0?0:(1f/fps), frames);
 	}
 
 	/**
