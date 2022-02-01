@@ -95,7 +95,7 @@ public class Player extends GameObject {
         // Camera Calculations
         ProcessCamera(screen, camera);
 
-        // BLood splash calculations
+        // Blood splash calculations
         if(doBloodSplash){
             if(splashTime > 1){
                 doBloodSplash = false;
@@ -179,8 +179,8 @@ public class Player extends GameObject {
 
         // Draws sprite and healthbar
         batch.draw(frame, x - width/2, y - height/2, width/2, height/2, width, height, 1f, 1f, rotation, 0, 0, frame.getWidth(), frame.getHeight(), false, false);
-        if(!(playerHealth == null)) playerHealth.draw(batch, 0);
         batch.setShader(null);
+        if(!(playerHealth == null)) playerHealth.draw(batch, 0);
     }
 
     public float getDistance() {
