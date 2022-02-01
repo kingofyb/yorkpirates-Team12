@@ -11,8 +11,13 @@ uniform float grayscale;
 void main() {
     vec4 texColor = texture2D(u_texture, vTexCoord);
 
-    float gray = dot(texColor.rgb, vec3(0.96, 0.96, 0.96));
-    texColor.rgb = mix(vec3(gray), texColor.rgb, grayscale);
+    // v Make Grayscale v
+    //float gray = dot(texColor.rgb, vec3(0.96, 0, 0));
+    //texColor.rgb = mix(vec3(gray), texColor.rgb, grayscale);
+
+    // v Make Color Tint v
+    vec3 red = vec3(1., 0., 0.);
+    texColor.rgb = mix(red, texColor.rgb, 0.7);
 
     gl_FragColor = texColor * vColor;
 }
