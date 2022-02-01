@@ -92,6 +92,9 @@ public class HUD {
         collegesTask.setChecked(true);
         movementTask.setChecked(true);
         pointsTask.setChecked(true);
+        collegesTask.setDisabled(true);
+        movementTask.setDisabled(true);
+        pointsTask.setDisabled(true);
 
         // Create player tracker
         Table tracker = new Table();
