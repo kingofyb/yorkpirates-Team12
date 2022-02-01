@@ -95,7 +95,7 @@ public class GameObject {
     }
 
     /**
-     * Updates the object's hitbox location to match the object's rendered location.
+     * Updates the object's hit-box location to match the object's rendered location.
      */
     void updateHitboxPos() {
         hitBox.x = x - width/2;

@@ -48,8 +48,13 @@ public class College extends GameObject {
         Array<Texture> healthBarSprite = new Array<>();
         Array<Texture> indicatorSprite = new Array<>();
         if(Objects.equals(team, GameScreen.playerTeam)){
+            if(Objects.equals(name, "Home")){
+                indicatorSprite.add(new Texture("homeArrow.png"));
+            }else{
+                indicatorSprite.add(new Texture("allyArrow.png"));
+            }
             healthBarSprite.add(new Texture("allyHealthBar.png"));
-            indicatorSprite.add(new Texture("homeArrow.png"));
+
         }else{
             healthBarSprite.add(new Texture("enemyHealthBar.png"));
             indicatorSprite.add(new Texture("questArrow.png"));
