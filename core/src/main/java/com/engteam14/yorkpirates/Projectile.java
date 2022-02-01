@@ -1,6 +1,7 @@
 package com.engteam14.yorkpirates;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Objects;
@@ -9,7 +10,8 @@ import static java.lang.Math.*;
 
 public class Projectile extends GameObject{
 
-    private float distanceTravelled;
+    private Vector2 maxDistance; // Projectile max range.
+    private Vector2 distanceTravelled;
     private final GameObject origin;
 
     private final float dx;
@@ -17,7 +19,6 @@ public class Projectile extends GameObject{
     private final float projectileSpeed; // Projectile movement speed.
 
     private static final float projectileDamage = 20f; // Projectile damage.
-    private static final float maxDistance = 7500f; // Projectile max range.
 
     /**
      * Generates a projectile object within the game with animated frame(s) and a hit-box.
@@ -32,21 +33,23 @@ public class Projectile extends GameObject{
         super(frames, fps, origin.x, origin.y, 5f,5f,team);
         this.origin = origin;
 
-        // Movement calculations
-        float changeInX = goal_x - origin.x;
-        float changeInY = goal_y - origin.y;
-        float scaleFactor = max(abs(changeInX),abs(changeInY));
-        dx = changeInX / scaleFactor;
-        dy = changeInY / scaleFactor;
-        move(origin.hitBox.width * 2* dx, origin.hitBox.height * 2 * dy);
-        distanceTravelled = 0;
-
         // Speed calculations
         if(Objects.equals(team, GameScreen.playerTeam)){
             projectileSpeed = 150f;
         }else{
             projectileSpeed = 50f;
         }
+
+        // Movement calculations
+        float changeInX = goal_x - origin.x;
+        float changeInY = goal_y - origin.y;
+        float scaleFactor = max(abs(changeInX),abs(changeInY));
+        dx = changeInX / scaleFactor;
+        dy = changeInY / scaleFactor;
+
+        distanceTravelled = new Vector2(0,0);
+        maxDistance = new Vector2(origin.hitBox.width * projectileSpeed/2,origin.hitBox.height * projectileSpeed/2);
+        //move(origin.hitBox.width * 2 * dx, origin.hitBox.height * 2 * dy);
     }
 
     /**
@@ -55,8 +58,11 @@ public class Projectile extends GameObject{
      */
     public void update(GameScreen screen){
         // Movement Calculations
-        move(projectileSpeed*dx, projectileSpeed*dy);
-        distanceTravelled += projectileSpeed;
+        float xMove = projectileSpeed*dx;
+        float yMove = projectileSpeed*dy;
+        distanceTravelled.x += xMove;
+        distanceTravelled.y += yMove;
+        move(xMove, yMove);
 
         // Hit calculations
         if(origin == screen.getPlayer()){
@@ -78,7 +84,7 @@ public class Projectile extends GameObject{
         }
 
         // Destroys after max travel distance
-        if(distanceTravelled > maxDistance) destroy(screen);
+        if(distanceTravelled.x > maxDistance.x || distanceTravelled.y > maxDistance.y) destroy(screen);
     }
 
     /**
