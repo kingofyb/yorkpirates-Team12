@@ -26,6 +26,7 @@ public class Player extends GameObject {
 
     private HealthBar playerHealth;
     private float splashTime;
+    private long timeLastHit;
     private boolean doBloodSplash = false;
 
     /**
@@ -104,6 +105,12 @@ public class Player extends GameObject {
                 splashTime += 1;
             }
         }
+
+        if (TimeUtils.timeSinceMillis(timeLastHit) > 10000){
+            currentHealth += 0.03;
+            if(currentHealth > maxHealth) currentHealth = maxHealth;
+            playerHealth.resize(currentHealth);
+        }
     }
 
     /**
@@ -140,6 +147,7 @@ public class Player extends GameObject {
      */
     @Override
     public void takeDamage(GameScreen screen, float damage, String projectileTeam){
+        timeLastHit = TimeUtils.millis();
         currentHealth -= damage;
         doBloodSplash = true;
 
