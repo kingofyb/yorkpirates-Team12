@@ -87,16 +87,15 @@ public class College extends GameObject {
                     screen.projectiles.add(new Projectile(sprites, 0, this, playerX, playerY, team));
                 }
             }else if(Objects.equals(collegeName, "Home")){
-                if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
-                    boolean victory = true;
-                    for(int i = 0; i < screen.colleges.size; i++) {
-                        if(!Objects.equals(screen.colleges.get(i).team, GameScreen.playerTeam)){
-                            victory = false;
-                        }
+                boolean victory = true;
+                for(int i = 0; i < screen.colleges.size; i++) {
+                    if(!Objects.equals(screen.colleges.get(i).team, GameScreen.playerTeam)){
+                        victory = false;
                     }
-                    if(victory){
-                        screen.gameEnd(true);
-                    }
+                }
+                if(victory){
+                    screen.getHUD().setGameEndable();
+                    if(Gdx.input.isKeyPressed(Input.Keys.ENTER)) screen.gameEnd(true);
                 }
             }
         }else{
