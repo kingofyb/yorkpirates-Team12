@@ -37,7 +37,7 @@ public class PauseScreen extends ScreenAdapter {
         table.setFillParent(true);
         table.setTouchable(Touchable.enabled);
         table.setBackground(skin.getDrawable("Selection"));
-        if(screen.getMain().DEBUG_ON) table.setDebug(true);
+        if(YorkPirates.DEBUG_ON) table.setDebug(true);
 
         // Generate title texture
         Texture titleT = new Texture(Gdx.files.internal("paused.png"));

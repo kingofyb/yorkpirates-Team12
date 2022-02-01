@@ -57,7 +57,7 @@ public class HUD {
         Table table = new Table();
         table.setFillParent(true);
         table.setTouchable(Touchable.enabled);
-        if(screen.getMain().DEBUG_ON) table.setDebug(true);
+        if(YorkPirates.DEBUG_ON) table.setDebug(true);
 
         // Create menu button
         ImageButton menuButton = new ImageButton(skin, "Menu");
@@ -96,7 +96,7 @@ public class HUD {
         // Create player tracker
         Table tracker = new Table();
         tracker.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("transparent.png"))));
-        if(screen.getMain().DEBUG_ON) tracker.debug();
+        if(YorkPirates.DEBUG_ON) tracker.debug();
 
         // Add score to player tracker
         Table scores = new Table();
@@ -104,6 +104,7 @@ public class HUD {
         scores.add(score).padRight(20);
         scores.add(coin).padRight(20);
         scores.add(loot).padRight(20);
+        if(YorkPirates.DEBUG_ON) scores.setDebug(true);
         tracker.add(scores);
 
         // Add tasks to player tracker
@@ -122,6 +123,7 @@ public class HUD {
         this.tutorialImg = tutorial.add(tutorialImg).expand().fill().minSize(200f).maxSize(500f);
         tutorial.row();
         tutorial.add(tutorialLabel);
+        if(YorkPirates.DEBUG_ON) tutorial.setDebug(true);
 
         // Start main table
 

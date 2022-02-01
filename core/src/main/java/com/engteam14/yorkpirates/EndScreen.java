@@ -47,7 +47,7 @@ public class EndScreen extends ScreenAdapter {
         table.setFillParent(true);
         Gdx.input.setInputProcessor(endStage);
         table.setBackground(skin.getDrawable("Selection"));
-        if(game.DEBUG_ON) table.setDebug(true);
+        if(YorkPirates.DEBUG_ON) table.setDebug(true);
 
         // Calculate stats
         int seconds = (int) screen.getElapsedTime();
@@ -89,6 +89,7 @@ public class EndScreen extends ScreenAdapter {
         Table buttons = new Table();
         buttons.add(restartB).expand().size(200f).pad(100f);
         buttons.add(quitB).expand().size(200f).pad(100f);
+        if(YorkPirates.DEBUG_ON) buttons.setDebug(true);
         table.add(buttons);
 
         // Add table to the stage

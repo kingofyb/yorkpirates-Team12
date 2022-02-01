@@ -86,7 +86,7 @@ public class GameScreen extends ScreenAdapter {
         Array<Texture> sprites = new Array<>();
 
         // Initialise player
-        sprites.add(new Texture("ship (4).png"));
+        sprites.add(new Texture("ship1.png"), new Texture("ship2.png"), new Texture("ship3.png"));
         player = new Player(sprites, 2, game.camera.viewportWidth/2, game.camera.viewportHeight/2, 32, 16, playerTeam);
 
         // Initialise tilemap

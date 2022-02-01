@@ -170,10 +170,8 @@ public class Player extends GameObject {
     @Override
     public void draw(SpriteBatch batch, float elapsedTime){
         // Generates the sprite
-        Texture frame = sprite;
-        if (moving) {
-            frame = anim.getKeyFrame(elapsedTime, true);
-        } if(doBloodSplash){
+        Texture frame = anim.getKeyFrame((currentHealth/maxHealth > 0.66f) ? 0 : ((currentHealth/maxHealth > 0.33f) ? 2 : 1), true);
+        if(doBloodSplash){
             batch.setShader(shader); // Set our grey-out shader to the batch
         } float rotation = (float) Math.toDegrees(Math.atan2(previousDirectionY, previousDirectionX));
 
