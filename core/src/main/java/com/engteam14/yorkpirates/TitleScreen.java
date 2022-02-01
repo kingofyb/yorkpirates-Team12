@@ -68,12 +68,12 @@ public class TitleScreen extends ScreenAdapter {
 
         startButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                newGame();
+                gameStart();
             }
         });
         quitButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                quitGame();
+                game.closeGame();
             }
         });
 
@@ -128,14 +128,14 @@ public class TitleScreen extends ScreenAdapter {
      */
     private void update(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER)){
-            newGame();
+            gameStart();
         }
     }
 
     /**
      * Is called to create a new game screen.
      */
-    private void newGame(){
+    private void gameStart(){
         // Get player name
         String playerName;
         if ( textBox.getText().equals("Name (optional)") || textBox.getText().equals("")) {
@@ -148,12 +148,5 @@ public class TitleScreen extends ScreenAdapter {
         nextGame.setPaused(false);
         nextGame.setPlayerName(playerName);
         game.setScreen(nextGame);
-    }
-
-    /**
-     * Calls the close game function in the main game class.
-     */
-    private void quitGame() {
-        game.closeGame();
     }
 }

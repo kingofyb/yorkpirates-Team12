@@ -48,7 +48,7 @@ public class PauseScreen extends ScreenAdapter {
         TextButton resume = new TextButton("Resume", skin);
         resume.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                continueGame();
+                gameContinue();
             }
         });
 
@@ -120,14 +120,14 @@ public class PauseScreen extends ScreenAdapter {
      */
     private void update(){
         if(Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || Gdx.input.isKeyJustPressed(Input.Keys.SPACE) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)){
-            continueGame();
+            gameContinue();
         }
     }
 
     /**
      * Generates a HUD object within the game that controls elements of the UI.
      */
-    private void continueGame() {
+    private void gameContinue() {
         screen.setPaused(false);
         game.setScreen(screen);
     }
