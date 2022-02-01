@@ -96,6 +96,7 @@ public class GameScreen extends ScreenAdapter {
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         // Initialise colleges
+        College.capturedCount = 0;
         colleges = new Array<>();
         Array<Texture> collegeSprites = new Array<>();
         collegeSprites.add( new Texture("alcuin.png"),
