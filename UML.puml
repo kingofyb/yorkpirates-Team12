@@ -1,0 +1,211 @@
+@startuml
+class com.engteam14.yorkpirates.GameScreen {
++ {static} String playerTeam
++ {static} String enemyTeam
++ ScoreManager points
++ ScoreManager loot
++ Array<College> colleges
++ Array<Projectile> projectiles
++ Music music
+- YorkPirates game
+- Player player
+- String playerName
+- Vector3 followPos
+- boolean followPlayer
+- HUD gameHUD
+- SpriteBatch HUDBatch
+- OrthographicCamera HUDCam
+- FitViewport viewport
+- TiledMap tiledMap
+- OrthogonalTiledMapRenderer tiledMapRenderer
+- float elapsedTime
+- boolean isPaused
+- float lastPause
++ void render(float)
+- void update()
++ void gamePause()
++ void gameEnd(boolean)
++ void gameReset()
++ float getElapsedTime()
++ void toggleFollowPlayer(boolean)
++ String getPlayerName()
++ void setPlayerName(String)
++ Player getPlayer()
++ YorkPirates getMain()
++ HUD getHUD()
++ void setPaused(boolean)
++ boolean isPaused()
++ FitViewport getViewport()
++ void dispose()
+}
+class com.engteam14.yorkpirates.YorkPirates {
++ BitmapFont font
++ SpriteBatch batch
++ OrthographicCamera camera
++ Array<Array<Boolean>> edges
++ Animation<TextureRegion> logo
++ Animation<TextureRegion> mouse
++ Animation<TextureRegion> keyboard
++ Animation<TextureRegion> enter
++ {static} boolean DEBUG_ON
+- {static} int SCREEN_TO_PIXEL_RATIO
++ void create()
+- Animation<TextureRegion> getAnimator(String,float,int,int)
++ void dispose()
++ void closeGame()
+}
+class com.engteam14.yorkpirates.GameObject {
++ float x
++ float y
++ float width
++ float height
++ int maxHealth
++ float currentHealth
+~ String team
+~ Texture sprite
+~ Rectangle hitBox
+~ Animation<Texture> anim
+~ ShaderProgram shader
+~ void changeImage(Array<Texture>,float)
+~ void setMaxHealth(int)
+~ void takeDamage(GameScreen,float,String)
+~ void move(float,float)
+~ void setHitbox()
+~ void updateHitboxPos()
+~ boolean overlaps(Rectangle)
+~ void draw(SpriteBatch,float)
+}
+class com.engteam14.yorkpirates.ScoreManager {
+- int score
++ void Add(int)
++ int Get()
++ String GetString()
+}
+class com.engteam14.yorkpirates.HUD {
++ Stage stage
+- Table tutorial
+- Cell<Image> tutorialImg
+- Label tutorialLabel
+- boolean tutorialComplete
+- boolean canEndGame
+- Label score
+- Label loot
+- Label tasksTitle
+- CheckBox collegesTask
+- CheckBox movementTask
+- CheckBox pointsTask
+- int DISTANCE_GOAL
+- int POINT_GOAL
+- int DISTANCE_REWARD
+- int POINT_REWARD
++ void renderStage(GameScreen)
++ void updateName(GameScreen)
++ void endTutorial()
++ void setGameEndable()
+}
+class com.engteam14.yorkpirates.College {
++ {static} int capturedCount
+- HealthBar collegeBar
+- Indicator direction
+- float splashTime
+- long lastShotFired
+- String collegeName
+- Array<Texture> collegeImages
+- Array<Texture> boatTexture
+- Array<GameObject> boats
+- Array<Float> boatRotations
+- boolean doBloodSplash
++ void update(GameScreen)
++ void takeDamage(GameScreen,float,String)
+- void destroy(GameScreen)
++ void draw(SpriteBatch,float)
++ void addBoat(float,float,float)
+}
+class com.engteam14.yorkpirates.TitleScreen {
+- YorkPirates game
+- GameScreen nextGame
+- Stage stage
+- TextField textBox
+- Cell<Image> titleCell
+- float elapsedTime
++ void render(float)
+- void update()
+- void newGame()
+- void quitGame()
+}
+class com.engteam14.yorkpirates.HealthBar {
+- float startWidth
++ void resize(float)
++ void move(float,float)
+}
+class com.engteam14.yorkpirates.EndScreen {
+- YorkPirates game
+- Stage endStage
+- GameScreen screen
++ void render(float)
+- void update()
+}
+class com.engteam14.yorkpirates.Player {
+- {static} int POINT_FREQUENCY
+- {static} double CAMERA_SLACK
+- {static} float SPEED
+- {static} int HEALTH
+- int previousDirectionX
+- int previousDirectionY
+- float distance
+- long lastMovementScore
+- HealthBar playerHealth
+- float splashTime
+- long timeLastHit
+- boolean doBloodSplash
++ void update(GameScreen,OrthographicCamera)
+- Boolean safeMove(Array<Array<Boolean>>)
++ void move(float,float)
++ void takeDamage(GameScreen,float,String)
+- void ProcessCamera(GameScreen,OrthographicCamera)
++ void draw(SpriteBatch,float)
++ void drawHealthBar(SpriteBatch)
++ float getDistance()
+}
+class com.engteam14.yorkpirates.PauseScreen {
+- YorkPirates game
+- GameScreen screen
+- Stage pauseStage
++ void render(float)
+- void update()
+- void continueGame()
+}
+class com.engteam14.yorkpirates.Indicator {
+- Player player
+- College college
+- Vector2 gradient
+- boolean visible
++ void draw(SpriteBatch,float)
++ Vector2 updateGradient()
+~ void move()
++ void setVisible(boolean)
+}
+class com.engteam14.yorkpirates.Projectile {
+- float maxDistance
+- float distanceTravelled
+- GameObject origin
+- float dx
+- float dy
+- float projectileSpeed
+- {static} float projectileDamage
++ void update(GameScreen)
+- void destroy(GameScreen)
+}
+
+
+com.badlogic.gdx.ScreenAdapter <|-- com.engteam14.yorkpirates.GameScreen
+com.badlogic.gdx.Game <|-- com.engteam14.yorkpirates.YorkPirates
+com.engteam14.yorkpirates.GameObject <|-- com.engteam14.yorkpirates.College
+com.badlogic.gdx.ScreenAdapter <|-- com.engteam14.yorkpirates.TitleScreen
+com.engteam14.yorkpirates.GameObject <|-- com.engteam14.yorkpirates.HealthBar
+com.badlogic.gdx.ScreenAdapter <|-- com.engteam14.yorkpirates.EndScreen
+com.engteam14.yorkpirates.GameObject <|-- com.engteam14.yorkpirates.Player
+com.badlogic.gdx.ScreenAdapter <|-- com.engteam14.yorkpirates.PauseScreen
+com.engteam14.yorkpirates.GameObject <|-- com.engteam14.yorkpirates.Indicator
+com.engteam14.yorkpirates.GameObject <|-- com.engteam14.yorkpirates.Projectile
+@enduml
