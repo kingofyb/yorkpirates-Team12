@@ -20,7 +20,7 @@ public class Indicator extends GameObject{
         this.player = player;
         this.college = college;
         gradient = updateGradient();
-        visible = true;
+        visible = false;
         move();
     }
 

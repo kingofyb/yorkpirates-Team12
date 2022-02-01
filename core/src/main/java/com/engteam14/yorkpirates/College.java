@@ -74,7 +74,7 @@ public class College extends GameObject {
         float detectionRadius = 90f;
         boolean nearPlayer = abs(this.x - playerX) < (detectionRadius * 1.5) && abs(this.y - playerY) < detectionRadius;
 
-        if(nearPlayer){
+        if(nearPlayer || screen.isPaused()){
             direction.setVisible(false);
 
             if(!Objects.equals(team, GameScreen.playerTeam)) { // Checks if the college is an enemy of the player

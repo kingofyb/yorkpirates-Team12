@@ -55,7 +55,7 @@ public class YorkPirates extends Game {
 
 		// Calculates collision array from edges csv
 		edges = new Array<>();
-		String data = Gdx.files.internal("edges.csv").readString();
+		String data = Gdx.files.internal("FINAL_MAP_Terrain.csv").readString();
 		for(String row: data.split("\n")){
 			Array<Boolean> newRow = new Array<>();
 			for(String num: row.split(",")){
