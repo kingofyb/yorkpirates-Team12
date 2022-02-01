@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -63,7 +64,6 @@ public class GameScreen extends ScreenAdapter {
     public GameScreen(YorkPirates game){
         this.game = game;
         playerName = "Player";
-        followPos = game.camera.position;
 
         // Initialise points and loot managers
         points = new ScoreManager();
@@ -87,29 +87,32 @@ public class GameScreen extends ScreenAdapter {
 
         // Initialise player
         sprites.add(new Texture("ship1.png"), new Texture("ship2.png"), new Texture("ship3.png"));
-        player = new Player(sprites, 2, game.camera.viewportWidth/2, game.camera.viewportHeight/2, 32, 16, playerTeam);
+        player = new Player(sprites, 2, 821, 489, 32, 16, playerTeam);
+        followPos = new Vector3(player.x, player.y, 0f);
+        game.camera.position.lerp(new Vector3(760, 510, 0f), 1f);
 
         // Initialise tilemap
-        tiledMap = new TmxMapLoader().load("pirate12.tmx");
+        tiledMap = new TmxMapLoader().load("FINAL_MAP.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
 
         // Initialise colleges
+        College.capturedCount = 0;
         colleges = new Array<>();
         Array<Texture> collegeSprites = new Array<>();
         collegeSprites.add( new Texture("alcuin.png"),
                             new Texture("alcuin_2.png"));
-        colleges.add(new College(collegeSprites, player.x+100f, player.y, 0.5f,"Alcuin",enemyTeam,player));
+        colleges.add(new College(collegeSprites, 1492, 665, 0.5f,"Alcuin",enemyTeam,player));
         collegeSprites.clear();
         collegeSprites.add( new Texture("derwent.png"),
                             new Texture("derwent_2.png"));
-        colleges.add(new College(collegeSprites, player.x+250f, player.y+200f, 0.5f,"Derwent",enemyTeam,player));
+        colleges.add(new College(collegeSprites, 1815, 2105, 0.8f,"Derwent",enemyTeam,player));
         collegeSprites.clear();
         collegeSprites.add( new Texture("langwith.png"),
                             new Texture("langwith_2.png"));
-        colleges.add(new College(collegeSprites, player.x+100f, player.y+250f, 0.5f,"Langwith",enemyTeam,player));
+        colleges.add(new College(collegeSprites, 1300, 1530, 1.0f,"Langwith",enemyTeam,player));
         collegeSprites.clear();
         collegeSprites.add( new Texture("goodricke.png"));
-        colleges.add(new College(collegeSprites, player.x-100f, player.y, 0.5f,"Home",playerTeam,player));
+        colleges.add(new College(collegeSprites, 700, 525, 0.7f,"Home",playerTeam,player));
 
         // Initialise projectiles array to be used storing live projectiles
         projectiles = new Array<>();
@@ -141,12 +144,14 @@ public class GameScreen extends ScreenAdapter {
         }
 
         // Draw Player, Player Health and Player Name
-        player.drawHealthBar(game.batch);
-        player.draw(game.batch, elapsedTime);
-        HUDBatch.begin();
-        Vector3 pos = game.camera.project(new Vector3(player.x, player.y, 0f));
-        game.font.draw(HUDBatch, playerName, pos.x, pos.y + 170f, 1f, Align.center, true);
-        HUDBatch.end();
+        if(!isPaused) {
+            player.drawHealthBar(game.batch);
+            player.draw(game.batch, elapsedTime);
+            HUDBatch.begin();
+            Vector3 pos = game.camera.project(new Vector3(player.x, player.y, 0f));
+            game.font.draw(HUDBatch, playerName, pos.x, pos.y + 170f, 1f, Align.center, true);
+            HUDBatch.end();
+        }
 
         // Draw Colleges
         for(int i = 0; i < colleges.size; i++) {
@@ -274,6 +279,12 @@ public class GameScreen extends ScreenAdapter {
         if (!paused && isPaused) lastPause = elapsedTime;
         isPaused = paused;
     }
+
+    /**
+     * Gets whether the game is paused.
+     * @return  True if the game is paused.
+     */
+    public boolean isPaused() { return  isPaused; }
 
     /**
      * Get the viewport.

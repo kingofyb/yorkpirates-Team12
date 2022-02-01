@@ -22,7 +22,6 @@ public class Player extends GameObject {
     private int previousDirectionY;
     private float distance;
     private long lastMovementScore;
-    private boolean moving = false;
 
     private HealthBar playerHealth;
     private float splashTime;
@@ -66,6 +65,7 @@ public class Player extends GameObject {
                 - ((Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) ? 1 : 0);
 
         // Calculate collision && movement
+        boolean moving = false;
         if (horizontal != 0 || vertical != 0){
             move(SPEED *horizontal, SPEED *vertical);
             previousDirectionX = horizontal;
