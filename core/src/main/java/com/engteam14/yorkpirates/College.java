@@ -22,6 +22,9 @@ public class College extends GameObject {
     private long lastShotFired;
     private final String collegeName;
     private final Array<Texture> collegeImages;
+    private Array<Texture> boatTexture;
+    private Array<GameObject> boats;
+    private Array<Float> boatRotations;
 
     private boolean doBloodSplash = false;
 
@@ -32,9 +35,13 @@ public class College extends GameObject {
      * @param name      The name of the college.
      * @param team      The team the college is on.
      */
-    public College(Array<Texture> sprites, float x, float y, float scale, String name, String team, Player player){
+    public College(Array<Texture> sprites, float x, float y, float scale, String name, String team, Player player, String boatTexture){
         super(sprites, 0, x, y, sprites.get(0).getWidth()*scale, sprites.get(0).getHeight()*scale, team);
 
+        this.boatTexture = new Array<>();
+        this.boats = new Array<>();
+        this.boatRotations = new Array<>();
+        this.boatTexture.add(new Texture(Gdx.files.internal(boatTexture)));
         collegeImages = new Array<>();
         for(int i = 0; i < sprites.size; i++) {
             collegeImages.add(sprites.get(i));
@@ -126,6 +133,7 @@ public class College extends GameObject {
             collegeBar.resize(currentHealth);
         }else{
             if(!Objects.equals(team, GameScreen.playerTeam)){ // Checks if the college is an enemy of the player
+                // College taken over
                 int pointsGained = 50;
                 screen.points.Add(pointsGained);
                 int lootGained = 15;
@@ -135,6 +143,8 @@ public class College extends GameObject {
                 Array<Texture> indicatorSprite = new Array<>();
                 healthBarSprite.add(new Texture("allyHealthBar.png"));
                 indicatorSprite.add(new Texture("allyArrow.png"));
+                boatTexture.clear();
+                boatTexture.add(screen.getPlayer().anim.getKeyFrame(0f));
 
                 Array<Texture> sprites = new Array<>();
                 sprites.add(collegeImages.get(1));
@@ -147,6 +157,7 @@ public class College extends GameObject {
                 direction.changeImage(indicatorSprite,0);
                 team = GameScreen.playerTeam;
             }else{
+                // Destroy college
                 collegeBar = null;
                 direction = null;
                 destroy(screen);
@@ -171,8 +182,24 @@ public class College extends GameObject {
     public void draw(SpriteBatch batch, float elapsedTime){
         if(doBloodSplash)   batch.setShader(shader); // Set our grey-out shader to the batch
         else                batch.setShader(null);
+        // Draw boats before college so under
+        for(int i = 0; i < boats.size; i++){
+            GameObject boat = boats.get(i);
+            batch.draw(boatTexture.get(0), boat.x+boat.height, boat.y, 0,0, boat.width, boat.height, 1f, 1f, boatRotations.get(i), 0, 0, boatTexture.get(0).getWidth(), boatTexture.get(0).getHeight(), false, false);
+        }
+        // Draw college
         batch.draw(anim.getKeyFrame(elapsedTime, true), x - width/2, y - height/2, width, height);
         collegeBar.draw(batch, 0);
         direction.draw(batch,0);
+    }
+
+    /**
+     * Add a boat to this college.
+     * @param x The x position of the new boat relative to the college.
+     * @param y The y position of the new boat relative to the college.
+     */
+    public void addBoat(float x, float y, float rotation){
+        boats.add(new GameObject(boatTexture, 0, this.x+x, this.y+y, 25, 12, team));
+        boatRotations.add(rotation);
     }
 }

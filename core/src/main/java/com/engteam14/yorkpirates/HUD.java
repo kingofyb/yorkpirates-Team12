@@ -160,7 +160,7 @@ public class HUD {
         loot.setText(screen.loot.GetString());
 
         // Calculate which part of the tutorial to show
-        if(screen.getPlayer().getDistance() == 0){
+        if(screen.getPlayer().getDistance() < 2){
             // Movement tutorial
             Image newimg = new Image(screen.getMain().keyboard.getKeyFrame(screen.getElapsedTime(), true));
             newimg.setScaling(Scaling.fit);
