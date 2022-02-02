@@ -119,6 +119,19 @@ The software [Tiled](https://www.mapeditor.org) can be used to produce levels, w
 <br/>![Tiled](https://www.mapeditor.org/img/screenshot-front.png)
 <br/><br/>Maps from Tiled can be easily imported into LibGDX, and we've even implemented our own collision system around it - ready out of the box!
 
+## Downloads
+
+The most recent version of the game can be downloaded from the releases tab.
+
+## Team Members
+
+- [Felix French](https://github.com/orgs/engteam14/people/FelixRizzo)
+- [Joachim Jones](https://github.com/orgs/engteam14/people/JoachimJones)
+- [Saud Kidwai](https://github.com/orgs/engteam14/people/Saud1906)
+- [Katie Maison](https://github.com/orgs/engteam14/people/katie291100)
+- [Jacob Poulton](https://github.com/orgs/engteam14/people/jacobpoulton)
+- [Cody Spinks](https://github.com/orgs/engteam14/people/Cdsspnks96)
+
 ## Attribution
 
 - [libGDX](https://libgdx.com/)
