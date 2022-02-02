@@ -79,7 +79,7 @@ table.add(button).expand();
 ```
 But that's not all...
 
-![Debug Mode](https://engteam14.github.io//media/Debug.gif)
+![Debug Mode](https://github.com/engteam14/engteam14.github.io/blob/4eec4ebe7497bdd52e685b58480de33d258af742/media/Debug.gif)
 Featuring a UI debug mode! All at the flip of a boolean.
 
 <hr/>
