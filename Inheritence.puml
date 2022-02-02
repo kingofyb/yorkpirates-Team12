@@ -120,10 +120,4 @@ com.badlogic.gdx.ScreenAdapter <|-- com.engteam14.yorkpirates.PauseScreen
 com.engteam14.yorkpirates.GameObject <|-- com.engteam14.yorkpirates.Indicator
 com.engteam14.yorkpirates.GameObject <|-- com.engteam14.yorkpirates.Projectile
 
-com.engteam14.yorkpirates.GameObject <|-- com.engteam14.yorkpirates.College
-com.engteam14.yorkpirates.GameObject <|-- com.engteam14.yorkpirates.HealthBar
-com.engteam14.yorkpirates.GameObject <|-- com.engteam14.yorkpirates.Player
-com.engteam14.yorkpirates.GameObject <|-- com.engteam14.yorkpirates.Indicator
-com.engteam14.yorkpirates.GameObject <|-- com.engteam14.yorkpirates.Projectile
-
 @enduml
