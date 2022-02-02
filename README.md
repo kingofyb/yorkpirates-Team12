@@ -5,6 +5,12 @@ A University of York Computer Science Engineering 1 group project.
 
 Move around the lake and fight opposing colleges!
 
+1. [The Game](#the-game)
+2. [The Code](#the-code)
+3. [Downloads](#downloads)
+4. [Team Members](#team-members)
+5. [Attribution](#attribution)
+
 ## The Game
 
 ### Animated Title Screen
