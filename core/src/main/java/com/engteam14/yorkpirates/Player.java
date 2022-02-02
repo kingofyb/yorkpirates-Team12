@@ -13,7 +13,7 @@ public class Player extends GameObject {
 
     // Player constants
     private static final int POINT_FREQUENCY = 1000; // How often the player gains points by moving.
-    private static final double CAMERA_SLACK = 0.1; // What percentage of the screen the player can move in before the camera follows.
+    private static final float CAMERA_SLACK = 0.1f; // What percentage of the screen the player can move in before the camera follows.
     private static final float SPEED =70f; // Player movement speed.
     private static final int HEALTH = 200;
 

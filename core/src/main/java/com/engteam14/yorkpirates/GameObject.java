@@ -70,7 +70,7 @@ public class GameObject {
      * @param damage            The damage dealt by the projectile.
      * @param projectileTeam    The team of the projectile.
      */
-    void takeDamage(GameScreen screen, float damage, String projectileTeam){
+    public void takeDamage(GameScreen screen, float damage, String projectileTeam){
         currentHealth -= damage;
     }
 
@@ -79,7 +79,7 @@ public class GameObject {
      * @param x     The amount to move the object within the x-axis.
      * @param y     The amount to move the object within the y-axis.
      */
-    void move(float x, float y){
+    public void move(float x, float y){
         this.x += x * Gdx.graphics.getDeltaTime();
         this.y += y * Gdx.graphics.getDeltaTime();
     }
@@ -87,7 +87,7 @@ public class GameObject {
     /**
      * Sets the object's hit-box, based upon it's x, y, width and height values.
      */
-    void setHitbox(){
+    private void setHitbox(){
         hitBox = new Rectangle();
         updateHitboxPos();
         hitBox.width = width;
@@ -117,7 +117,7 @@ public class GameObject {
      * @param batch         The batch to draw the object within.
      * @param elapsedTime   The current time the game has been running for.
      */
-    void draw(SpriteBatch batch, float elapsedTime){
+    public void draw(SpriteBatch batch, float elapsedTime){
         batch.draw(anim.getKeyFrame(elapsedTime, true), x - width/2, y - height/2, width, height);
     }
 }

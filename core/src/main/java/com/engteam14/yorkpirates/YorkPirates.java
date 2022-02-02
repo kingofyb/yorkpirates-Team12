@@ -101,7 +101,7 @@ public class YorkPirates extends Game {
 	/**
 	 * Closes the application
 	 */
-	public void closeGame(){
+	public void quit(){
 		Gdx.app.exit();
 	}
 }

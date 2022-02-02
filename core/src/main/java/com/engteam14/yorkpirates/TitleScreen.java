@@ -73,7 +73,7 @@ public class TitleScreen extends ScreenAdapter {
         });
         quitButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                game.closeGame();
+                game.quit();
             }
         });
 
