@@ -122,7 +122,7 @@ public class ScreenName extends ScreenAdapter {
 ### TiledMap
 Using LibGDX's package for Tiled maps is the easiest way to rapidly produce gameplay levels.
 The software [Tiled](https://www.mapeditor.org) can be used to produce levels, with easy to use wide-ranging functionality, it's the industry's best for a reason!
-<br/>![Tiled](https://www.mapeditor.org/img/screenshot-front.png)
+<br/>![Tiled](https://github.com/engteam14/engteam14.github.io/blob/4eec4ebe7497bdd52e685b58480de33d258af742/media/tiled.gif)
 <br/><br/>Maps from Tiled can be easily imported into LibGDX, and we've even implemented our own collision system around it - ready out of the box!
 
 ## Downloads
