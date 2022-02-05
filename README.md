@@ -86,6 +86,7 @@ table.add(button).expand();
 But that's not all...
 
 ![Debug Mode](https://github.com/engteam14/engteam14.github.io/blob/4eec4ebe7497bdd52e685b58480de33d258af742/media/Debug.gif)
+
 Featuring a UI debug mode! All at the flip of a boolean.
 
 <hr/>
@@ -123,7 +124,7 @@ public class ScreenName extends ScreenAdapter {
 Using LibGDX's package for Tiled maps is the easiest way to rapidly produce gameplay levels.
 The software [Tiled](https://www.mapeditor.org) can be used to produce levels, with easy to use wide-ranging functionality, it's the industry's best for a reason!
 
-![Tiled](https://github.com/engteam14/engteam14.github.io/blob/4eec4ebe7497bdd52e685b58480de33d258af742/media/tiled.gif)
+![Tiled](https://github.com/engteam14/engteam14.github.io/blob/8bcd1e29772d236150961fb6efaf845062fdc000/media/tiled.gif)
 
 Maps from Tiled can be easily imported into LibGDX, and we've even implemented our own collision system around it - ready out of the box!
 
