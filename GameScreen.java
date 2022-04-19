@@ -31,7 +31,7 @@ public class GameScreen extends ScreenAdapter {
     public Array<Projectile> projectiles;
 
     //PowerUps
-    public Array<PowerUps> powers;
+    public Array<InitialisePU> powers; //PowerUps
 
     // Sound
     public Music music;
@@ -59,6 +59,15 @@ public class GameScreen extends ScreenAdapter {
     private float elapsedTime = 0;
     private boolean isPaused = false;
     private float lastPause = 0;
+
+    //PowerUps
+    public Array<InitialisePU> powerups;
+    public static final String puSpeed = "Speed";
+    public static final String puMoreDamage = "GiveMoreDamage";
+    public static final String puHealthrestore = "HealthRestore";
+    public static final String puImmunity = "Immunity";
+    public static final String puTakeMoreDamage = "TakeMoreDamage";
+
 
     /**
      * Initialises the main game screen, as well as relevant entities and data.
@@ -105,63 +114,78 @@ public class GameScreen extends ScreenAdapter {
         College newCollege;
         Array<Texture> collegeSprites = new Array<>();
 
+        //Testing PowerUp on screen
+
         //Initialise powerups
-        PowerUps.capturedPowerUpsCount = 0;
-        powers = new Array<>();
-        PowerUps newPower;
-        Array<Texture> powerSprites = new Array<>();
+        //PowerUps.capturedPowerUpsCount = 0;
+        //powers = new Array<>();
+        //PowerUps newPower;
+        //Array<Texture> powerSprites = new Array<>();
+        
+        // //Add Take More Damage PowerUp
+        // powerSprites.add( new Texture("take_more_damage.png"),
+        //                   new Texture("take_more_damage_grey.png"));
+        // newPower = new PowerUps(powerSprites, 1000, 1000, 0.5f, "Take More Damage", player, "take_more_damage.png");
+        // newPower.addPower(35, -15, 0);
+        // newPower.addPower(-60, -70, 0);
+        // powers.add(newPower);
+        // powerSprites.clear();
 
-        //Add Take More Damage PowerUp
-        powerSprites.add( new Texture("take_more_damage.png"),
-                          new Texture("take_more_damage_grey.png"));
-        newPower = new PowerUps(powerSprites, 1000, 1000, 0.5f, "Take More Damage", player, "take_more_damage.png");
-        newPower.addPower(35, -15, 0);
-        newPower.addPower(-60, -70, 0);
-        powers.add(newPower);
-        powerSprites.clear();
+        // //Add Speed Powerup
+        // powerSprites.add( new Texture("speed.png"),
+        //                   new Texture("speed_grey.png"));
+        // newPower = new PowerUps(powerSprites, 1000, 1000, 0.5f, "Speed", player, "speed.png");
+        // newPower.addPower(50, -15, 0);
+        // newPower.addPower(-70, -70, 0);
+        // powers.add(newPower);
+        // powerSprites.clear();
 
-        //Add Speed Powerup
-        powerSprites.add( new Texture("speed.png"),
-                          new Texture("speed_grey.png"));
-        newPower = new PowerUps(powerSprites, 1000, 1000, 0.5f, "Speed", player, "speed.png");
-        newPower.addPower(50, -15, 0);
-        newPower.addPower(-70, -70, 0);
-        powers.add(newPower);
-        powerSprites.clear();
+        // //Add Immunity Powerup
+        // powerSprites.add( new Texture("immunity.png"),
+        //                   new Texture("immunity_grey.png"));
+        // newPower = new PowerUps(powerSprites, 1000, 1000, 0.5f, "Immunity", player, "immunity.png");
+        // newPower.addPower(40, -15, 0);
+        // newPower.addPower(-50, -70, 0);
+        // powers.add(newPower);
+        // powerSprites.clear();
 
-        //Add Immunity Powerup
-        powerSprites.add( new Texture("immunity.png"),
-                          new Texture("immunity_grey.png"));
-        newPower = new PowerUps(powerSprites, 1000, 1000, 0.5f, "Immunity", player, "immunity.png");
-        newPower.addPower(40, -15, 0);
-        newPower.addPower(-50, -70, 0);
-        powers.add(newPower);
-        powerSprites.clear();
+        // //Add Health Restore
+        // powerSprites.add( new Texture("health_restore.png"),
+        //                   new Texture("health_restore_grey.png"));
+        // newPower = new PowerUps(powerSprites, 1000, 1000, 0.5f, "Health Restore", player, "health_restore.png");
+        // newPower.addPower(30, -15, 0);
+        // newPower.addPower(-30, -70, 0);
+        // powers.add(newPower);
+        // powerSprites.clear();
 
-        //Add Health Restore
-        powerSprites.add( new Texture("health_restore.png"),
-                          new Texture("health_restore_grey.png"));
-        newPower = new PowerUps(powerSprites, 1000, 1000, 0.5f, "Health Restore", player, "health_restore.png");
-        newPower.addPower(30, -15, 0);
-        newPower.addPower(-30, -70, 0);
-        powers.add(newPower);
-        powerSprites.clear();
+        // //Add Take More Damage
+        // powerSprites.add( new Texture("take_more_damage.png"),
+        //                   new Texture("take_more_damage_grey.png"));
+        // newPower = new PowerUps(powerSprites, 1000, 1000, 0.5f, "Take More Damage", player, "take_more_damage.png");
+        // newPower.addPower(20, -15, 0);
+        // powers.add(newPower);
+        // powerSprites.clear();
 
-        //Add Take More Damage
-        powerSprites.add( new Texture("take_more_damage.png"),
-                          new Texture("take_more_damage_grey.png"));
-        newPower = new PowerUps(powerSprites, 1000, 1000, 0.5f, "Take More Damage", player, "take_more_damage.png");
-        newPower.addPower(20, -15, 0);
-        powers.add(newPower);
-        powerSprites.clear();
+        InitialisePU newPower;
+        Array<Texture> powerSprite = new Array<>();
+        
+        powerups = new Array<>();
 
         //Add Give More Damage
-        powerSprites.add( new Texture("give_more_damage.png"),
-                          new Texture("give_more_damage_grey.png"));
-        newPower = new PowerUps(powerSprites, 1000, 1000, 0.5f, "Give More Damage", player, "give_more_damage.png");
-        newPower.addPower(10, -15, 0);
+
+        powerSprite.add( new Texture("give_more_damage.png"),
+                        new Texture("give_more_damage_grey.png"));
+        newPower = new InitialisePU(game, powerSprite, 600, 600, 0.5f, "give_more_damage.png");
+        newPower.addPower(10.0f, -15.0f, 0.0f);
         powers.add(newPower);
-        powerSprites.clear();
+        powerSprite.clear();
+
+        // powerSprites.add( new Texture("give_more_damage.png"),
+        //                   new Texture("give_more_damage_grey.png"));
+        // newPower = new GiveMoreDamage(powerSprites, 1000, 1000, 0.5f, "Give More Damage", "give_more_damage.png");
+        // newPower.addPower(10.0f, -15.0f, 0.0f);
+        // powers.add(newPower);
+        // powerSprites.clear();
 
         // Add alcuin
         collegeSprites.add( new Texture("alcuin.png"),
