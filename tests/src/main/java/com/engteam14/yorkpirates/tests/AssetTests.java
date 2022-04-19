@@ -10,6 +10,8 @@ public class AssetTests {
 
     @Test
     public void testShipAssetExists() {
-        assertTrue(true);
+
+        assertTrue("Testing ships exist",
+                Gdx.files.internal("assets/ship1.png").exists());
     }
 }
