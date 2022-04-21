@@ -26,6 +26,9 @@ public class GameScreen extends ScreenAdapter {
     public ScoreManager points;
     public ScoreManager loot;
 
+    //PowerUps
+    public Array<Power> powerups;
+
     // Colleges
     public Array<College> colleges;
     public Array<Projectile> projectiles;
@@ -95,6 +98,27 @@ public class GameScreen extends ScreenAdapter {
         // Initialise tilemap
         tiledMap = new TmxMapLoader().load("FINAL_MAP.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
+
+        //PowerUps
+        powerups = new Array<>();
+        Power newPower;
+        Array<Texture> powerSprites = new Array<>();
+
+        //Add Give More Damage PowerUp
+        powerSprites.add(new Texture("give_more_damage.png"),
+                new Texture("give_more_damage_grey.png"));
+        newPower = new Power(powerSprites, 700, 525, 0.7f, "GiveMoreDamage");
+        //newPower.addPower(-70, -20, 60); Think this was to add separately - do not want this.
+        powerups.add(newPower);
+        powerSprites.clear();
+
+        //Add Take More Damage PowerUp
+//        powerSprites.add(new Texture("take_more_damage.png"),
+//                new Texture("take_more_damage_grey.png"));
+//        newPower = new Power(powerSprites, 700, 525, 0.7f, "TakeMoreDamage");
+//        powerups.add(newPower);
+//        powerSprites.clear();
+
 
         // Initialise colleges
         College.capturedCount = 0;
